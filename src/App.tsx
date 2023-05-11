@@ -1,9 +1,4 @@
-import { useState } from 'react'
 
-import { store } from './store';
-
-//import reactLogo from './assets/react.svg'
-//import viteLogo from '/vite.svg'
 import { AppRouter } from './router/AppRouter'
 import { AppLayout } from './shared/layouts/template'
 

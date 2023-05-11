@@ -1,13 +1,10 @@
 import { useState } from "react";
 import '../../App.css'
-
 import { useMutation } from "react-query";
 import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
-import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
 import 'animate.css';
 
 import { Button, Card, CardContent, CardHeader,  Chip, Grid, MenuItem, Select, TextField } from "@mui/material";
@@ -28,16 +25,16 @@ export const Consulta = () => {
   const { getValues, register} = useForm(modelo);
   
 
-  const checkes = ["Apple", "Banana", "Tea", "Coffee"];
+  //const checkes = ["Apple", "Banana", "Tea", "Coffee"];
   const [checked, setChecked] = useState<any[]>([]);
   const [checkList, setCheckList] = useState<any[]>([]);
   const [unCheckList, setUnCheckList] = useState<any[]>([]);
 
-  function GetSubmit(event) {
-    event.preventDefault();
+  // function GetSubmit(event) {
+  //   event.preventDefault();
 
-    return <h1>I've rendered times!</h1>;
-  }
+  //   return <h1>I've rendered times!</h1>;
+  // }
   const {
     mutate: getRegistros,
     isLoading,

@@ -22,7 +22,8 @@ const modelo = {defaultValues:{
 
 export const Registro = () => {
   
-  const { formState, setValue, getValues, register} = useForm(modelo);
+  //const { formState, setValue, getValues, register} = useForm(modelo);
+  const { getValues, register} = useForm(modelo);
  
   const registerSubmit = async (event) => {
     event.preventDefault();
