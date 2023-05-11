@@ -1,23 +1,10 @@
-//import { useEffect } from "react";
 
 import { useForm } from "react-hook-form";
-//import { useAuthStore } from "../../hooks/useAuthStore";
-//import Image from '@mui/material/ImageList'
-
 
 import { Box, Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import RegistrosService from "../../services/RegistrosService";
 
 
-// const registerFormFields = {
-//   registerNombre: "",
-//   registerCedula: "",
-//   registerEmail: "",
-//   registerTelefono: "",
-//   registerMunicipio: "",
-//   registerDireccion: "",
-//   registerBoleta: "",
-// };
 
 const modelo = {defaultValues:{
   nombre:"",

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import '../../App.css'
-import "../Registros/RegistroPage.css";
+
 import { useMutation } from "react-query";
 import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
