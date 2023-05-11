@@ -17,6 +17,9 @@ const modelo = {defaultValues:{
   responsable:"",
   status:1
 }}
+
+
+
 export const Registro = () => {
   
   const { formState, setValue, getValues, register} = useForm(modelo);
@@ -24,22 +27,32 @@ export const Registro = () => {
   const registerSubmit = async (event) => {
     event.preventDefault();
     
-   
+   try {
+    
+  
 
     const objeto = getValues();
-   
+
+  
     objeto.status = 1;
+    
+
     const response = await RegistrosService.crearRegistros(objeto);
-    console.log(response.status)
+
+    console.log("Hola "+response)
     if(response.status == 201){
       alert("Registro Exitoso");
       
     }
-    if(response.status !== 201){
+    if(response.status == 500){
       alert("Verifique los campos");
     }
 
     console.log(response.status)
+
+  } catch (error) {
+    console.log(error)
+  }
   };
   
 
