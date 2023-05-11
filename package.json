@@ -40,6 +40,9 @@
     "typescript": "^5.0.2",
     "vite": "^4.3.2"
   },
+  "engines": {
+    "node": ">=14 <15"
+  },
   "resolutions": {
     "package-a": "2.0.0",
     "package-b": "5.0.0",
