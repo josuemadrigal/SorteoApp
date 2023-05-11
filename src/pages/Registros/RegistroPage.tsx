@@ -9,15 +9,15 @@ import { Box, Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem,
 import RegistrosService from "../../services/RegistrosService";
 
 
-const registerFormFields = {
-  registerNombre: "",
-  registerCedula: "",
-  registerEmail: "",
-  registerTelefono: "",
-  registerMunicipio: "",
-  registerDireccion: "",
-  registerBoleta: "",
-};
+// const registerFormFields = {
+//   registerNombre: "",
+//   registerCedula: "",
+//   registerEmail: "",
+//   registerTelefono: "",
+//   registerMunicipio: "",
+//   registerDireccion: "",
+//   registerBoleta: "",
+// };
 
 const modelo = {defaultValues:{
   nombre:"",
@@ -27,6 +27,7 @@ const modelo = {defaultValues:{
   boleta:"",
   municipio:"la-romana",
   direccion:"",
+  responsable:"",
   status:1
 }}
 export const Registro = () => {
@@ -84,7 +85,8 @@ export const Registro = () => {
       </Select>
       <TextField type="text" placeholder="Dirección" color='success' label="Dirección"{...register("direccion", {required: true, maxLength: 80})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
       <TextField type="text" placeholder="Boleta" color='success' label="No. Boleto" inputProps={{ maxLength: 5 }} required {...register("boleta", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
-      
+      <TextField type="text" placeholder="Responsable" color='success' label="Responsable" inputProps={{ maxLength: 40 }}  {...register("responsable", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
+
       <Button href="http://localhost:5174/consulta" variant="contained" color='success' onClick={registerSubmit} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>Registrar</Button>
 
 
