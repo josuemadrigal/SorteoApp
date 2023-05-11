@@ -1,0 +1,104 @@
+//import { useEffect } from "react";
+
+import { useForm } from "react-hook-form";
+//import { useAuthStore } from "../../hooks/useAuthStore";
+import Image from '@mui/material/ImageList'
+
+
+import { Box, Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import RegistrosService from "../../services/RegistrosService";
+
+
+const registerFormFields = {
+  registerNombre: "",
+  registerCedula: "",
+  registerEmail: "",
+  registerTelefono: "",
+  registerMunicipio: "",
+  registerDireccion: "",
+  registerBoleta: "",
+};
+
+const modelo = {defaultValues:{
+  nombre:"",
+  cedula :"",
+  email:"",
+  telefono:"",
+  boleta:"",
+  municipio:"la-romana",
+  direccion:"",
+  status:1
+}}
+export const Registro = () => {
+  
+  const { formState, setValue, getValues, register} = useForm(modelo);
+ 
+  const registerSubmit = async (event) => {
+    event.preventDefault();
+    
+   
+
+    const objeto = getValues();
+   
+    objeto.status = 1;
+    const response = await RegistrosService.crearRegistros(objeto);
+    console.log(response.status)
+    if(response.status == 201){
+      alert("Registro Exitoso");
+      
+    }
+    if(response.status !== 201){
+      alert("Verifique los campos");
+    }
+
+    console.log(response.status)
+  };
+  
+
+
+  return (
+    < >
+    
+    <Grid container spacing={6} columns={10} justifyContent="center" alignItems="center" >
+      <Grid  item xs={8} md={8}>
+      
+      <Card sx={{padding:"5%", margin:"5%", minWidth:"100px", maxWidth:"500px"}}>
+      <Box component="img" src="src/assets/foto eduard.jpg" alt="hola" sx={{ height: "auto", width: "100%", borderRadius:"10px" }} />
+      <CardHeader title="Registro" sx={{alignContent:"center"}}/>
+      <CardContent>
+      
+
+      <TextField type="text" color='success'  placeholder="Nombre" label="Nombre" inputProps={{ maxLength: 40 }} required {...register("nombre", {required: true, maxLength: 80})} sx={{minWidth:"100%", margin:"5px 5px 15px 0px" }}/>
+      <TextField type="text" color='success' placeholder="Cédula" label="Cédula" inputProps={{ maxLength: 11 }} required {...register("cedula", {required: true, maxLength: 10})} sx={{minWidth:"100%", margin:"5px 5px 15px 0px" }}/>
+      <TextField type="email" color='success' placeholder="Correo Eléctronico"  label="Correo eléctronico"  {...register("email", {required: true, pattern: /^\S+@\S+$/i})} sx={{minWidth:"100%", margin:"5px 5px 15px 0px"}}/>
+      <TextField type="tel" color='success' placeholder="Teléfono" label="Teléfono" inputProps={{ maxLength: 10 }} required {...register("telefono", {required: true, maxLength: 12})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
+      <InputLabel id="demo-multiple-name-label">Municipio</InputLabel>
+      
+      <Select   {...register("municipio", { required: true })} color='success' sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>
+
+
+        <MenuItem value="la-romana">La Romana</MenuItem>
+        <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
+        <MenuItem value="caleta">Caleta</MenuItem>
+        <MenuItem value="guaymate">Guaymate</MenuItem>
+      </Select>
+      <TextField type="text" placeholder="Dirección" color='success' label="Dirección"{...register("direccion", {required: true, maxLength: 80})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
+      <TextField type="text" placeholder="Boleta" color='success' label="No. Boleto" inputProps={{ maxLength: 5 }} required {...register("boleta", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
+      
+      <Button href="http://localhost:5174/consulta" variant="contained" color='success' onClick={registerSubmit} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>Registrar</Button>
+
+
+
+
+
+      </CardContent>
+      </Card>
+      </Grid>
+
+    </Grid>
+    </>
+
+  );
+};
+
+//export default Registro;

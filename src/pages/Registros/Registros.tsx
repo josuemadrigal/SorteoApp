@@ -6,7 +6,7 @@ import { Card, CardContent, Grid } from '@mui/material';
 
 export const Registros = ()=>{
     
-    const { mutate: getRegistros, isLoading, data } = useMutation<any>(registrosService.getRegistros);
+    const { mutate: getRegistros, isLoading, data } = useMutation<any>(()=>registrosService.getRegistros(1,""));
 useEffect(() => {
     getRegistros();
 }, [])
