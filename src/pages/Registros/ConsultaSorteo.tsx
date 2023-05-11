@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import '../../App.css'
 
 import { useMutation } from "react-query";
@@ -109,16 +109,7 @@ const isChecked:any = (item:any) =>
   checked.includes(item) ? "checked-item" : "not-checked-item";
 
 
-  //controll Item
-
-  const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#2e7d32',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    flexGrow: 1,
-  }));
+ 
 
   return (
     <>
