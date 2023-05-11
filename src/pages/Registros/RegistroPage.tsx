@@ -65,7 +65,7 @@ export const Registro = () => {
       <Grid  item xs={8} md={8}>
       
       <Card sx={{padding:"5%", margin:"5%", minWidth:"100px", maxWidth:"500px"}}>
-      <Box component="img" src="src/assets/foto eduard.jpg" alt="hola" sx={{ height: "auto", width: "100%", borderRadius:"10px" }} />
+      <Box component="img" src="src/assets/foto-eduard.jpg" alt="hola" sx={{ height: "auto", width: "100%", borderRadius:"10px" }} />
       <CardHeader title="Registro" sx={{alignContent:"center"}}/>
       <CardContent>
       
