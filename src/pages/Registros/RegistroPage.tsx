@@ -102,7 +102,7 @@ export const Registro = () => {
       <TextField type="text" placeholder="Dirección" color='success' label="Dirección"{...register("direccion", {required: true, maxLength: 80})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
       <TextField type="text" placeholder="Boleta" color='success' label="No. Boleto" inputProps={{ maxLength: 5 }} required {...register("boleta", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
       <TextField type="text" placeholder="Responsable" color='success' label="Responsable" inputProps={{ maxLength: 40 }}  {...register("responsable", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
-      <TextField type="password" placeholder="codigo" color='success' label="Codigo" inputProps={{ maxLength: 5 }}  {...register("codigo", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
+      <TextField type="password" placeholder="codigo" color='success' label="Codigo" inputProps={{ maxLength: 6 }}  {...register("codigo", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
 
 
       <Button href="http://localhost:5174/consulta" variant="contained" color='success' onClick={registerSubmit} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>Registrar</Button>
