@@ -7,6 +7,7 @@ import RegistrosService from "../../services/RegistrosService";
 
 
 const modelo = {defaultValues:{
+  
   nombre:"",
   cedula :"",
   email:"",
@@ -15,6 +16,7 @@ const modelo = {defaultValues:{
   municipio:"la-romana",
   direccion:"",
   responsable:"",
+  codigo:"",
   status:1
 }}
 
@@ -40,19 +42,32 @@ export const Registro = () => {
 
     const response = await RegistrosService.crearRegistros(objeto);
 
-    console.log("Hola "+response)
+    console.log(response);
+    
+    
+    
+    // if(response.status == 400){
+    //   alert("Verifique los campos");
+    //   console.log("400 "+response.status)
+    // }
+
     if(response.status == 201){
       alert("Registro Exitoso");
+
+      console.log("200 "+response.status)
       
     }
     if(response.status == 500){
       alert("Verifique los campos");
+      console.log("500 "+response.status)
     }
+
+    
 
     console.log(response.status)
 
   } catch (error) {
-    console.log(error)
+    console.log("Cath "+error)
   }
   };
   
@@ -87,6 +102,8 @@ export const Registro = () => {
       <TextField type="text" placeholder="Dirección" color='success' label="Dirección"{...register("direccion", {required: true, maxLength: 80})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
       <TextField type="text" placeholder="Boleta" color='success' label="No. Boleto" inputProps={{ maxLength: 5 }} required {...register("boleta", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
       <TextField type="text" placeholder="Responsable" color='success' label="Responsable" inputProps={{ maxLength: 40 }}  {...register("responsable", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
+      <TextField type="password" placeholder="codigo" color='success' label="Codigo" inputProps={{ maxLength: 5 }}  {...register("codigo", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
+
 
       <Button href="http://localhost:5174/consulta" variant="contained" color='success' onClick={registerSubmit} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>Registrar</Button>
 

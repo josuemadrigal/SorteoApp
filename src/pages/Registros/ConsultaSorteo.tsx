@@ -170,8 +170,8 @@ const isChecked:any = (item:any) =>
               ) : (
                 data?.data?.registros.map((datos) => (
                     <Chip  key={datos._id} label={datos.boleta +" " + datos.nombre} 
-                    sx={{fontSize:"4rem", backgroundColor:"#388e3c", 
-                    color:"white", margin:"5px", padding:"50px", borderRadius:"100px"}} />
+                    sx={{fontSize:"2rem", backgroundColor:"#388e3c", 
+                    color:"white", margin:"5px", padding:"80px", borderRadius:"100px"}} />
                 ))
               )}
             </CardContent>

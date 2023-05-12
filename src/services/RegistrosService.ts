@@ -12,6 +12,8 @@ class RegistrosService{
 
     public async crearRegistros(param:any){
         const response = await http.post<any>("/registros",param);
+
+        console.log( response);
         return response;
     }
 
