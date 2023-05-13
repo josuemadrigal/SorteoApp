@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "babel src -d lib",
+    "test": "jest",
+
+
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "some command to be run",
-    "test": "(eslint lib || true) && jest"
+    "start": "some command to be run"
   },
   "dependencies": {
     "@emotion/react": "^11.10.8",
