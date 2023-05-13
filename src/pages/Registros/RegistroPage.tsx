@@ -98,6 +98,7 @@ export const Registro = () => {
         <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
         <MenuItem value="caleta">Caleta</MenuItem>
         <MenuItem value="guaymate">Guaymate</MenuItem>
+        <MenuItem value="guaymate">Cumayasa</MenuItem>
       </Select>
       <TextField type="text" placeholder="Dirección" color='success' label="Dirección"{...register("direccion", {required: true, maxLength: 80})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
       <TextField type="text" placeholder="Boleta" color='success' label="No. Boleto" inputProps={{ maxLength: 5 }} required {...register("boleta", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
