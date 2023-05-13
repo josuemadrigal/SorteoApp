@@ -1,5 +1,6 @@
 
-import {  createTheme, ThemeProvider } from '@mui/material/styles';
+import {  ThemeProvider } from '@mui/material/styles';
+import {  createTheme } from '@mui/material';
 
 import Container from '@mui/material/Container';
 
