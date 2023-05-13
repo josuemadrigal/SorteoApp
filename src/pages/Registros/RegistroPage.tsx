@@ -1,7 +1,7 @@
 
 import { useForm } from "react-hook-form";
-
-import { Box, Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import Box from "@mui/material/Box";
+import { Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import RegistrosService from "../../services/RegistrosService";
 
 
@@ -106,7 +106,7 @@ export const Registro = () => {
       <TextField type="password" placeholder="codigo" color='success' label="Codigo" inputProps={{ maxLength: 6 }}  {...register("codigo", {required: true, maxLength:8})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
 
 
-      <Button href="http://localhost:5174/consulta" variant="contained" color='success' onClick={registerSubmit} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>Registrar</Button>
+      <Button variant="contained" color='success' onClick={registerSubmit} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>Registrar</Button>
 
 
 
