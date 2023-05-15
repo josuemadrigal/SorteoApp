@@ -37,6 +37,55 @@ export const Registro = () => {
 
     const objeto = getValues();
 
+    if (objeto.nombre.length < 3) {
+      return  Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Verifique el nombre',
+        showConfirmButton: false,
+        timer: 7000
+      })
+    }
+
+    if (objeto.cedula.length < 11) {
+      return  Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Verifique el numero de cédula',
+        showConfirmButton: false,
+        timer: 7000
+      })
+    }
+
+    if (objeto.telefono.length < 10) {
+      return  Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Verifique el numero de teléfono',
+        showConfirmButton: false,
+        timer: 7000
+      })
+    }
+
+    if (objeto.boleta.length < 4) {
+      return  Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Verifique el numero de boleta',
+        showConfirmButton: false,
+        timer: 7000
+      })
+    }
+
+    if (objeto.responsable.length < 1) {
+      return  Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Ingrese el responsable',
+        showConfirmButton: false,
+        timer: 7000
+      })
+    }
   
     objeto.status = 1;
     
