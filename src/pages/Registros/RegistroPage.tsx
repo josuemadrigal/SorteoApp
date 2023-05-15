@@ -112,10 +112,10 @@ export const Registro = () => {
     }
 
 
-    console.log(response.status)
+   
 
   } catch (error) {
-    console.log("Cath "+error)
+    //console.log("Cath "+error)
   }
   };
   
