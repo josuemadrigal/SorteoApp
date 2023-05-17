@@ -2,8 +2,10 @@
 import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2'
 import Box from '@mui/material/Box';
-import { Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Select, Snackbar, TextField, Alert, AlertTitle } from "@mui/material";
 import RegistrosService from "../../services/RegistrosService";
+import { useState } from "react";
+import { enqueueSnackbar } from "notistack";
 
 
 
@@ -33,7 +35,6 @@ export const Registro = () => {
     
    try {
     
-  
 
     const objeto = getValues();
 
@@ -88,10 +89,17 @@ export const Registro = () => {
     }
   
     objeto.status = 1;
-    
 
     const response = await RegistrosService.crearRegistros(objeto);
 
+    console.log("Hola " + response.data);
+
+    if(response.status == 400){
+      alert("Cedula o boleta ya existen en nuestra base de datos");
+    }
+    if(response.status == 500){
+      alert("Verifique los campos");
+    }
 
     if(response.status == 201){
 
@@ -106,19 +114,23 @@ export const Registro = () => {
       window.location.replace('https://www.instagram.com/eduardespiritusanto/');
       
     }
-    if(response.status == 500){
-      alert("Verifique los campos");
-      //console.log("500 "+response.status)
-    }
+
 
 
    
 
   } catch (error) {
+    alert("Verifique los campos");
+    Swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: 'Verifique los datos',
+      showConfirmButton: false,
+      timer: 7000
+    })
     //console.log("Cath "+error)
   }
   };
-  
 
 
   return (
@@ -134,9 +146,9 @@ export const Registro = () => {
       
 
       <TextField type="text" color='success'  placeholder="Nombre" label="Nombre" inputProps={{ maxLength: 60 }} required {...register("nombre", {required: true, maxLength: 80})} sx={{minWidth:"100%", margin:"5px 5px 15px 0px" }}/>
-      <TextField type="text" color='success' placeholder="Cédula" label="Cédula" inputProps={{minlength: 11, maxLength: 11 }} required {...register("cedula", {required: true, maxLength: 10})} sx={{minWidth:"100%", margin:"5px 5px 15px 0px" }}/>
+      <TextField type="text" color='success' placeholder="Cédula" label="Cédula" inputProps={{maxLength: 11 }} required {...register("cedula", {required: true, maxLength: 10})} sx={{minWidth:"100%", margin:"5px 5px 15px 0px" }}/>
       <TextField type="email" color='success' placeholder="Correo Eléctronico"  label="Correo eléctronico"  {...register("email", {required: false, pattern: /^\S+@\S+$/i})} sx={{minWidth:"100%", margin:"5px 5px 15px 0px"}}/>
-      <TextField type="tel" color='success' placeholder="Teléfono" label="Teléfono" inputProps={{ maxLength: 10 }} required {...register("telefono", {required: true, maxLength: 12})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
+      <TextField type="tel" color='success' placeholder="Teléfono" label="Teléfono" inputProps={{ maxLength: 10 }} required {...register("telefono", {required: true, minLength: 10,  maxLength: 11})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
       <InputLabel id="demo-multiple-name-label">Municipio / Distrito</InputLabel>
       
       <Select   {...register("municipio", { required: true })} color='success' sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>
@@ -155,15 +167,9 @@ export const Registro = () => {
 
 
       <Button variant="contained" color='success' onClick={registerSubmit} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>Registrar</Button>
-
-   
-
-
-
       </CardContent>
       </Card>
       </Grid>
-
     </Grid>
     </>
 

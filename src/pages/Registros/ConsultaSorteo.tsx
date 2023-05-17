@@ -62,7 +62,7 @@ const CustomGetRegistros = async()=>{
   //console.log({dataa})
   const a = dataa?.data?.registros?.map(m=> { return m.boleta});
   //console.log({a})
-
+  
   setCheckList(a);
   
 }
@@ -163,7 +163,7 @@ const checkedItems = checked.length
         
 
         {/* Gestion de ganadores ======================================*/}
-          <Grid container spacing={8} columns={10} justifyContent="center" alignItems="center" maxWidth="90%" marginTop="20px">
+     <Grid container spacing={8} columns={10}  justifyContent="center" alignItems="center" maxWidth="90%" marginTop="20px">
         <Grid item md={12} lg={12} sm={12}>
           <div className="checkList">
           <div className="title">Listado De Boletas:</div>
@@ -182,14 +182,13 @@ const checkedItems = checked.length
           </div>
           <Button onClick={()=>ActualizarRegistros()} variant="contained" color='info' endIcon={<SaveIcon />}>Actualizar Registros</Button>
         </Grid>
-      </Grid>
-        </Card>
-
-      </Grid>
+    </Grid>
+    </Card>
+    </Grid>
 
       {/* Caja Resultados ================================================*/}
 
-      <Grid item spacing={1}  md={1} lg={2} sm={2}>
+      <Grid item spacing={3}  md={3} lg={2} sm={2}>
           <Card  sx={{padding:"50px", marginTop:"10px", minWidth:"500"}}>
             <CardHeader title="Listado de Numeros"/>
             <CardContent>
@@ -199,7 +198,7 @@ const checkedItems = checked.length
                 data?.data?.registros.map((datos) => (
                     <Chip  key={datos._id} label={datos.boleta} 
                     sx={{fontSize:"2rem", backgroundColor:"#388e3c", 
-                    color:"white", margin:"5px", padding:"80px", borderRadius:"100px"}} />
+                    color:"white", margin:"5px", padding:"20%", borderRadius:"100px"}} />
                   
                     
                 ))
