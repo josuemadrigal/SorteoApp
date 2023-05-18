@@ -26,10 +26,12 @@ const modelo = {defaultValues:{
 
 
 
-export const Registro = () => {
+export const Registro = (props) => {
   
   //const { formState, setValue, getValues, register} = useForm(modelo);
   const { getValues, register} = useForm(modelo);
+
+  const { swal, ...rest } = props;
  
   const registerSubmit = async (event) => {
     event.preventDefault();
@@ -40,7 +42,7 @@ export const Registro = () => {
     const objeto = getValues();
 
     if (objeto.nombre.length < 3) {
-      return  Swal.fire({
+      return   Swal.fire({
         position: 'center',
         icon: 'error',
         title: 'Verifique el nombre',
