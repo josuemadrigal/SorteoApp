@@ -118,7 +118,7 @@ export const Registro = () => {
    
 
   } catch (error) {
-    alert("Verifique los campos");
+  
     Swal.fire({
       position: 'center',
       icon: 'error',
