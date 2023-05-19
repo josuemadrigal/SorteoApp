@@ -2,6 +2,7 @@ import axios from "axios";
 import { getEnvVariables } from "./helpers/getEnvVariables";
 
 export const http = axios.create({
+    // baseURL: getEnvVariables().VITE_API_URL,
     baseURL: getEnvVariables().VITE_API_URL,
     headers: {
          'Access-Control-Allow-Origin': '*',
