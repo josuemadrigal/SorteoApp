@@ -98,9 +98,7 @@ export const Registro = () => {
     if(response.status == 400){
       alert("Cedula o boleta ya existen en nuestra base de datos");
     }
-    if(response.status == 500){
-      alert("Verifique los campos");
-    }
+    
 
     if(response.status == 201){
       Swal.fire({
