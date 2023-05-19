@@ -110,8 +110,8 @@ export const Registro = () => {
       })
 
       setTimeout(() => {
-        window.open('https://www.instagram.com/eduardespiritusanto/', '_blank');
-      }, 3000);
+        window.location.replace('https://www.instagram.com/eduardespiritusanto/', '_blank');
+      }, 2000);
       
     }
 
