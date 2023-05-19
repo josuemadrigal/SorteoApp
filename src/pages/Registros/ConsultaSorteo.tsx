@@ -1,5 +1,7 @@
 import { useState } from "react";
 import '../../App.css'
+
+import {motion} from 'framer-motion'
 import { useMutation } from "react-query";
 import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
@@ -7,15 +9,9 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import 'animate.css';
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 
-import { Button, Card, CardContent, CardHeader,  Chip, Grid, MenuItem, Select, TextField } from "@mui/material";
+
+import { Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, styled } from "@mui/material";
 
 import registrosService from "../../services/RegistrosService";
 import { useForm } from "react-hook-form";
@@ -116,40 +112,48 @@ const checkedItems = checked.length
   const isChecked:any = (item:any) =>
   checked.includes(item) ? "checked-item" : "not-checked-item";
 
-  function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-  ) {
-    return { name, calories, fat, carbs, protein };
-  }
-  
-  const rows = [
-    
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-  ];
+  const draw = {
+    hidden: { pathLength: 0, opacity: 0 },
+    visible: (i) => {
+      const delay = 1 + i * 0.5;
+      return {
+        pathLength: 1,
+        opacity: 1,
+        transition: {
+          pathLength: { delay, type: "spring", duration: 1.5, bounce: 0 },
+          opacity: { delay, duration: 0.01 }
+        }
+      };
+    }
+  };
+
+  const Item = styled(Paper)(({ theme }) => ({
+    // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    // ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    // color: theme.palette.text.secondary,
+  }));
  
+  function template({ rotate, x }) {
+    return `rotate(${rotate}) translateX(${x})`
+  }
 
   return (
-    <>
-    <Box>
-    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 2, sm: 8, md: 10 }}>
-    
-    {/* Controlador search ================================================*/}
-    <Grid item md={12} lg={12} sm={2}>
-      <Card  sx={{padding:"50px", marginTop:"10px"}}>
-        <CardHeader title="Buscar"/>
+    <Grid container my={4} rowSpacing={2} columnSpacing={1}>
+      <Grid item md={3} sm={12}>
+      <Card >
+        <CardContent >
+        <Typography gutterBottom variant="h5" component="div">
+          Buscar 
+        </Typography>
+        <InputLabel>Municipio / Distrito</InputLabel>
         <Select {...register("municipio", { required: true })} sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
             <MenuItem value="la-romana">La Romana</MenuItem>
             <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
             <MenuItem value="caleta">Caleta</MenuItem>
             <MenuItem value="guaymate">Guaymate</MenuItem>
+            <MenuItem value="Cumayasa">Cumayasa</MenuItem>
           </Select>
           <TextField type="number" placeholder="Cantidad" label="cantidad" {...register("cantidad", {required: true, maxLength: 10}) } sx={{minWidth:"20%", width:"100%", margin:"5px 5px 15px 0px" }}/>
           
@@ -159,89 +163,89 @@ const checkedItems = checked.length
             <MenuItem value="NEVERA">NEVERA</MenuItem>
             <MenuItem value="ESTUFA">ESTUFA</MenuItem>
           </Select>
-          <Button onClick={()=>CustomGetRegistros()} variant="contained" color='success' size="large" endIcon={<SearchIcon />} sx={{margin:"10px"}}>Obtener Registros</Button>
-        
-
-        {/* Gestion de ganadores ======================================*/}
-     <Grid container spacing={8} columns={10}  justifyContent="center" alignItems="center" maxWidth="90%" marginTop="20px">
-        <Grid item md={12} lg={12} sm={12}>
+          <Button onClick={()=>CustomGetRegistros()} variant="contained" color='success' size="large" endIcon={<SearchIcon />} sx={{width:"90%", margin:"10px"}}>Obtener Registros</Button>
+          
+          
           <div className="checkList">
-          <div className="title">Listado De Boletas:</div>
-          <div className="list-container">
-            {checkList && checkList.map((item, index) => (
-              <div key={index}>
-              <input value={item} type="checkbox" onChange={handleCheck} />
-              <span className={isChecked(item)}>{item}</span>
-              </div>
-            ))}
+            <div className="title">Listado De Boletas:</div>
+              <div className="list-container">
+                {checkList && checkList.map((item, index) => (
+                  <div key={index}>
+                    <input value={item} type="checkbox" onChange={handleCheck} />
+                    <span className={isChecked(item)}>{item}</span>
+                  </div>
+                ))}
+            </div>
           </div>
-          </div>
+
           <div>
-          <p>{`Numeros Seleccionados:  ${checkedItems}`}</p>
-          <p>{`Numeros NO Seleccionados:  ${JSON.stringify( unCheckList)}`}</p>
+            <p>{`Numeros Seleccionados:  ${checkedItems}`}</p>
+            <p>{`Numeros NO Seleccionados:  ${JSON.stringify( unCheckList)}`}</p>
+            <Button onClick={()=>ActualizarRegistros()} variant="contained" color='info' endIcon={<SaveIcon />}>Actualizar Registros</Button>
           </div>
-          <Button onClick={()=>ActualizarRegistros()} variant="contained" color='info' endIcon={<SaveIcon />}>Actualizar Registros</Button>
-        </Grid>
-    </Grid>
-    </Card>
-    </Grid>
+          
 
-      {/* Caja Resultados ================================================*/}
-
-      <Grid item spacing={3}  md={3} lg={2} sm={2}>
-          <Card  sx={{padding:"50px", marginTop:"10px", minWidth:"500"}}>
-            <CardHeader title="Listado de Numeros"/>
-            <CardContent>
-              {isLoading ? (
-                <p>Cargando...</p>
-              ) : (
-                data?.data?.registros.map((datos) => (
-                    <Chip  key={datos._id} label={datos.boleta} 
-                    sx={{fontSize:"2rem", backgroundColor:"#388e3c", 
-                    color:"white", margin:"5px", padding:"20%", borderRadius:"100px"}} />
-                  
-                    
-                ))
-              )}
-            </CardContent>
-          </Card>
-        </Grid>
-</Stack>
-<TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    
-</Box>
+        </CardContent>
+        </Card>
+      </Grid>
       
+      
+      
+      
+      
+      <Grid item md={9} >
+      <Item sx={{minHeight:'100%'}}>
+      <Typography gutterBottom variant="h5" component="div">
+          Ganadores de 
+        </Typography>
+        <Grid container rowSpacing={1} columnSpacing={1} >
+       
 
+            {isLoading ? (
+                <p>Cargando...</p>
+                ) : (
+                data?.data?.registros.map((datos) => (
 
-    </>
+                <Grid item md={3}>
+                <motion.div  
+                className='box'
+                initial={{ scale: 1}}
+                transition={{ duration: 5}}
+                variants={draw}
+                custom={5}
+                animate={{ 
+                    scale: [1, 2, 2, 1, 1, 1], 
+                    borderRadius: ["20%", "20%", "50%", "80%", "20%", "50%"], 
+                    rotate: [0, 0, 270, 0,-270, -190, 0],
+                    x: [-900, 400, -100, 90, 0, 0]
+                    
+                    }}>
+
+                      <motion.h2 initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1, rotate: [600, -400, 870, 0,-870, 990, 0] }}
+                          transition={{ duration: 6 }}>
+                          {datos.boleta}</motion.h2>
+
+                      <motion.h3 initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: [0,0,0,0,0,0,1], scale: 1,}}
+                          transition={{ duration: 6 }}
+                          >{datos.municipio}</motion.h3>
+
+                      {/* <motion.h3 initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: 1, scale: 1, rotate: [600, -400, 870, 0,-870, 990, 0] }}
+                          transition={{ duration: 6 }}
+                          >{datos.municipio}</motion.h3> */}
+
+                  </motion.div>
+                  </Grid>
+                ))
+            )}    
+          
+
+        </Grid>
+      </Item>
+      </Grid>
+    </Grid>
   );
 };
 

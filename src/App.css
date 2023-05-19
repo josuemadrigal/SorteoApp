@@ -1,0 +1,25 @@
+body{
+    margin: 0;
+    /* background: #09f; */
+    /* display: grid; */
+    /* place-content: center; */
+    /* margin-top: 100px; */
+}
+
+.box {
+    width: 110px;
+    height: 110px;
+    padding: 20%;
+    font-size: 1.5rem;
+    background-color: #2e7d32;
+    color: aliceblue;
+    display: grid;
+    place-content: center;
+    margin: 3px;
+    align-items: center;
+  }
+
+  h3{
+    font-size: 0.5rem;
+    color: aliceblue;
+  }

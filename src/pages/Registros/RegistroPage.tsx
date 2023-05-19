@@ -105,7 +105,6 @@ export const Registro = (props) => {
     }
 
     if(response.status == 201){
-
       Swal.fire({
         position: 'center',
         icon: 'success',
@@ -114,8 +113,8 @@ export const Registro = (props) => {
         timer: 7000
       })
 
-      window.location.replace('https://www.instagram.com/eduardespiritusanto/');
-      
+      //window.location.replace('https://www.instagram.com/eduardespiritusanto/');
+      window.open('https://www.google.com.ar/', '_blank');
     }
 
 
