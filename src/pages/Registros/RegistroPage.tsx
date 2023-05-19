@@ -3,10 +3,8 @@ import { useForm } from "react-hook-form";
 //import Swal from 'sweetalert2'
 import Swal from 'sweetalert2/dist/sweetalert2.all.js'
 import Box from '@mui/material/Box';
-import { Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Select, Snackbar, TextField, Alert, AlertTitle } from "@mui/material";
+import { Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import RegistrosService from "../../services/RegistrosService";
-import { useState } from "react";
-import { enqueueSnackbar } from "notistack";
 
 
 
@@ -31,7 +29,7 @@ export const Registro = (props) => {
   //const { formState, setValue, getValues, register} = useForm(modelo);
   const { getValues, register} = useForm(modelo);
 
-  const { swal, ...rest } = props;
+ 
  
   const registerSubmit = async (event) => {
     event.preventDefault();

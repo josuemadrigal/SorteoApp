@@ -5,13 +5,12 @@ import {motion} from 'framer-motion'
 import { useMutation } from "react-query";
 import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
+
 import 'animate.css';
 
 
 
-import { Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, styled } from "@mui/material";
+import { Button, Card, CardContent, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, styled } from "@mui/material";
 
 import registrosService from "../../services/RegistrosService";
 import { useForm } from "react-hook-form";
@@ -135,9 +134,6 @@ const checkedItems = checked.length
     // color: theme.palette.text.secondary,
   }));
  
-  function template({ rotate, x }) {
-    return `rotate(${rotate}) translateX(${x})`
-  }
 
   return (
     <Grid container my={4} rowSpacing={2} columnSpacing={1}>
