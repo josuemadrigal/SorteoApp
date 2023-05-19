@@ -24,7 +24,7 @@ const modelo = {defaultValues:{
 
 
 
-export const Registro = (props) => {
+export const Registro = () => {
   
   //const { formState, setValue, getValues, register} = useForm(modelo);
   const { getValues, register} = useForm(modelo);
