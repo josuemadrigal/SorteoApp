@@ -111,20 +111,20 @@ const checkedItems = checked.length
   const isChecked:any = (item:any) =>
   checked.includes(item) ? "checked-item" : "not-checked-item";
 
-  const draw = {
-    hidden: { pathLength: 0, opacity: 0 },
-    visible: (i) => {
-      const delay = 1 + i * 0.5;
-      return {
-        pathLength: 1,
-        opacity: 1,
-        transition: {
-          pathLength: { delay, type: "spring", duration: 1.5, bounce: 0 },
-          opacity: { delay, duration: 0.01 }
-        }
-      };
-    }
-  };
+  // const draw = {
+  //   hidden: { pathLength: 0, opacity: 0 },
+  //   visible: (i) => {
+  //     const delay = 1 + i * 0.5;
+  //     return {
+  //       pathLength: 1,
+  //       opacity: 1,
+  //       transition: {
+  //         pathLength: { delay, type: "spring", duration: 1.5, bounce: 0 },
+  //         opacity: { delay, duration: 0.01 }
+  //       }
+  //     };
+  //   }
+  // };
 
   const Item = styled(Paper)(({ theme }) => ({
     // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -207,7 +207,6 @@ const checkedItems = checked.length
                 className='box'
                 initial={{ scale: 1}}
                 transition={{ duration: 5}}
-                variants={draw}
                 custom={5}
                 animate={{ 
                     scale: [1, 2, 2, 1, 1, 1], 
