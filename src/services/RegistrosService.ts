@@ -3,7 +3,7 @@ import { http } from "../http-common"
 
 class RegistrosService{
 
-    public async getRegistros(status:number, municipio:string, cantidad:number){
+    public async getRegistros(status:number, municipio:string, cantidad:number, ){
         const jsonPar:any = {status:status,municipio:municipio, cantidad};
         const params = new URLSearchParams(jsonPar)
         const response = await http.get<any[]>(`/registros?${params}`);
@@ -17,8 +17,8 @@ class RegistrosService{
         return response;
     }
 
-     async startUpdate (boleta:any, status:number) {
-        return await http.put(`registros/`+boleta, {status} );
+     async startUpdate (boleta:any, status:number, premio:string) {
+        return await http.put(`registros/`+boleta, {status , premio});
     }
 
 

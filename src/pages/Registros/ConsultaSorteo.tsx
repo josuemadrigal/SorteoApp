@@ -11,12 +11,15 @@ import 'animate.css';
 
 
 import { Button, Card, CardContent, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, styled } from "@mui/material";
+import { SelectChangeEvent } from '@mui/material/Select';
+
 
 import registrosService from "../../services/RegistrosService";
 import { useForm } from "react-hook-form";
 
 
 import RegistrosService from "../../services/RegistrosService";
+import Swal from "sweetalert2";
 const modelo = {defaultValues:{
   municipio:"la-romana",
   status :1,
@@ -32,12 +35,13 @@ export const Consulta = () => {
   const [checked, setChecked] = useState<any[]>([]);
   const [checkList, setCheckList] = useState<any[]>([]);
   const [unCheckList, setUnCheckList] = useState<any[]>([]);
+  const [premio, setPremio] = useState('');
 
-  // function GetSubmit(event) {
-  //   event.preventDefault();
-
-  //   return <h1>I've rendered times!</h1>;
-  // }
+  const handleChange = (event: SelectChangeEvent) => {
+    setPremio(event.target.value);
+    console.log(premio);
+  };
+  
   const {
     mutate: getRegistros,
     isLoading,
@@ -52,13 +56,47 @@ const CustomGetRegistros = async()=>{
 
   
   const param:any = getValues();
+
+  if (param.cantidad <=0 ) {
+    return  Swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: 'La cantidad no puede ser 0',
+      showConfirmButton: false,
+      timer: 7000
+    })
+  }
+
+
+
+
+
+  if (param.cantidad > 0 && param.municipio != "") {
+
   const dataa:any = await registrosService.getRegistros(param.status,param.municipio, param.cantidad);
   await getRegistros(param);
   //console.log({dataa})
+
+
   const a = dataa?.data?.registros?.map(m=> { return m.boleta});
-  //console.log({a})
+  
   
   setCheckList(a);
+    
+  } else {
+
+    return  Swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: 'Seleccione el municipio',
+      showConfirmButton: false,
+      timer: 7000
+    })
+  }
+
+
+
+  
   
 }
 
@@ -86,21 +124,22 @@ const EvaluarCheced = (checkeditemsss)=>{
   setUnCheckList(unCheckedElemets);
 }
 const ActualizarRegistros = ()=>{
+  
   //Seleccionado
   for (let index = 0; index < checked.length; index++) {
     const element = checked[index];
-    RegistrosService.startUpdate(element,2);
+    RegistrosService.startUpdate(element,2, premio);
   }
   //No seleccionado
   for (let index = 0; index < unCheckList.length; index++) {
     const element = unCheckList[index];
-    RegistrosService.startUpdate(element,0);
+    RegistrosService.startUpdate(element,0,"No presente");
   }
   setCheckList([]);
   setChecked([]);
   setUnCheckList([]);
 }
-// Generate string of checked items
+// Obteniendo los checks
 const checkedItems = checked.length
   ? checked.reduce((total, item) => {
       return total + ", " + item;
@@ -111,35 +150,23 @@ const checkedItems = checked.length
   const isChecked:any = (item:any) =>
   checked.includes(item) ? "checked-item" : "not-checked-item";
 
-  // const draw = {
-  //   hidden: { pathLength: 0, opacity: 0 },
-  //   visible: (i) => {
-  //     const delay = 1 + i * 0.5;
-  //     return {
-  //       pathLength: 1,
-  //       opacity: 1,
-  //       transition: {
-  //         pathLength: { delay, type: "spring", duration: 1.5, bounce: 0 },
-  //         opacity: { delay, duration: 0.01 }
-  //       }
-  //     };
-  //   }
-  // };
+
 
   const Item = styled(Paper)(({ theme }) => ({
-    // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    // ...theme.typography.body2,
+  
     padding: theme.spacing(1),
     textAlign: 'center',
-    // color: theme.palette.text.secondary,
+
   }));
- 
+
+
 
   return (
     <Grid container my={4} rowSpacing={2} columnSpacing={1}>
-      <Grid item md={3} sm={12}>
+      <Grid item md={3} sm={12} >
       <Card >
         <CardContent >
+          
         <Typography gutterBottom variant="h5" component="div">
           Buscar 
         </Typography>
@@ -153,36 +180,54 @@ const checkedItems = checked.length
           </Select>
           <TextField type="number" placeholder="Cantidad" label="cantidad" {...register("cantidad", {required: true, maxLength: 10}) } sx={{minWidth:"20%", width:"100%", margin:"5px 5px 15px 0px" }}/>
           
-          <Select sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
-            <MenuItem value="PLANCHA">PLANCHA</MenuItem>
-            <MenuItem value="LICUADORA">LICUADORA</MenuItem>
-            <MenuItem value="NEVERA">NEVERA</MenuItem>
-            <MenuItem value="ESTUFA">ESTUFA</MenuItem>
+          <Select value={premio}  onChange={handleChange}
+                  
+                  sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
+
+            <MenuItem value="plancha">PLANCHA</MenuItem>
+            <MenuItem value="licuadora">LICUADORA</MenuItem>
+            <MenuItem value="nevera">NEVERA</MenuItem>
+            <MenuItem value="estufa">ESTUFA</MenuItem>
           </Select>
+          
           <Button onClick={()=>CustomGetRegistros()} variant="contained" color='success' size="large" endIcon={<SearchIcon />} sx={{width:"90%", margin:"10px"}}>Obtener Registros</Button>
           
           
-          <div className="checkList">
-            <div className="title">Listado De Boletas:</div>
-              <div className="list-container">
-                {checkList && checkList.map((item, index) => (
-                  <div key={index}>
-                    <input value={item} type="checkbox" onChange={handleCheck} />
-                    <span className={isChecked(item)}>{item}</span>
-                  </div>
-                ))}
-            </div>
-          </div>
 
-          <div>
-            <p>{`Numeros Seleccionados:  ${checkedItems}`}</p>
-            <p>{`Numeros NO Seleccionados:  ${JSON.stringify( unCheckList)}`}</p>
-            <Button onClick={()=>ActualizarRegistros()} variant="contained" color='info' endIcon={<SaveIcon />}>Actualizar Registros</Button>
-          </div>
+          
           
 
         </CardContent>
         </Card>
+        <Grid container rowSpacing={40} >
+          <Grid item >
+            <motion.div animate={{ opacity: 1, scale: 1, x: [-900, 400, -100, 90, 0, 0] }}
+                          transition={{ duration: 6 }}>
+
+            <img src={`src/assets/premios/${premio}.png`} width={"100%"}></img>
+
+
+            </motion.div>
+
+              <div className="checkList">
+                <div className="title">Listado De Boletas:</div>
+                  <div className="list-container">
+                    {checkList && checkList.map((item, index) => (
+                      <div key={index}>
+                        <input value={item} type="checkbox" onChange={handleCheck} />
+                        <span className={isChecked(item)}>{item}</span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              <div>
+                <p>{`Boletas presentes:  ${checkedItems}`}</p>
+                <p>{`Boletas ausentes:  ${JSON.stringify( unCheckList)}`}</p>
+                <Button onClick={()=>ActualizarRegistros()} variant="contained" color='info' endIcon={<SaveIcon />}>Actualizar Registros</Button>
+              </div>
+              </Grid>
+              </Grid>
       </Grid>
       
       
@@ -191,9 +236,9 @@ const checkedItems = checked.length
       
       <Grid item md={9} >
       <Item sx={{minHeight:'100%'}}>
-      <Typography gutterBottom variant="h5" component="div">
-          Ganadores de 
-        </Typography>
+      {/* <Typography gutterBottom variant="h5" component="div">
+          Ganadores
+        </Typography> */}
         <Grid container rowSpacing={1} columnSpacing={1} >
        
 
@@ -215,6 +260,7 @@ const checkedItems = checked.length
                     x: [-900, 400, -100, 90, 0, 0]
                     
                     }}>
+                      
 
                       <motion.h2 initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1, rotate: [600, -400, 870, 0,-870, 990, 0] }}
@@ -223,8 +269,13 @@ const checkedItems = checked.length
 
                       <motion.h3 initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: [0,0,0,0,0,0,1], scale: 1,}}
-                          transition={{ duration: 6 }}
-                          >{datos.municipio}</motion.h3>
+                          transition={{ duration: 7 }}>
+                            {datos.cedula}</motion.h3>
+                      
+                      <motion.h3 initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: [0,0,0,0,0,0,1], scale: 1,}}
+                          transition={{ duration: 7 }}>
+                            {datos.nombre}</motion.h3>
 
                       {/* <motion.h3 initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1, rotate: [600, -400, 870, 0,-870, 990, 0] }}
