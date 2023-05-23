@@ -24,3 +24,9 @@ body{
     font-size: 0.5rem;
     color: aliceblue;
   }
+
+  .title {
+    font-size: 1.2rem;
+    font-style: oblique;
+    font-weight: 800;
+  }

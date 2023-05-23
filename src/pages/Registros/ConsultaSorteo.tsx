@@ -197,7 +197,8 @@ const checkedItems = checked.length
           <motion.div animate={{ opacity: 1, scale: 1, x: [-900, 400, -100, 90, 0, 0] }}
                           transition={{ duration: 6 }}>
 
-            <img src={`src/assets/premios/${premio}.png`} width={"80%"}></img>
+            <img src={`/premios/${premio}.png`} width={"80%"}></img>
+
 
             </motion.div>
             <hr />
@@ -222,7 +223,8 @@ const checkedItems = checked.length
                         variant="contained" 
                         color='error'
                         size="large"
-                        endIcon={<SaveIcon />}>
+                        endIcon={<SaveIcon />}
+                        sx={{width:"90%", margin:"10px"}}>
                           Guardar listado</Button>
               </div>
         </CardContent>
