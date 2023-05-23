@@ -1,14 +1,15 @@
-import { useState } from "react";
-import '../../App.css'
+import { useRef, useState } from "react";
+import '../../App.css';
 
-import {motion} from 'framer-motion'
+import Lottie, {LottieRefCurrentProps} from 'lottie-react';
+import animationData from '../../assets/65849-emos-spin.json'
+
+import {motion} from 'framer-motion';
 import { useMutation } from "react-query";
 import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
 
 import 'animate.css';
-
-
 
 import { Button, Card, CardContent, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, styled } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -20,6 +21,7 @@ import { useForm } from "react-hook-form";
 
 import RegistrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
+
 const modelo = {defaultValues:{
   municipio:"la-romana",
   status :1,
@@ -27,11 +29,10 @@ const modelo = {defaultValues:{
 }}
 export const Consulta = () => {
 
-  
   const { getValues, register} = useForm(modelo);
-  
 
-  //const checkes = ["Apple", "Banana", "Tea", "Coffee"];
+  const spinRef = useRef<LottieRefCurrentProps>(null);
+  
   const [checked, setChecked] = useState<any[]>([]);
   const [checkList, setCheckList] = useState<any[]>([]);
   const [unCheckList, setUnCheckList] = useState<any[]>([]);
@@ -67,19 +68,12 @@ const CustomGetRegistros = async()=>{
     })
   }
 
-
-
-
-
   if (param.cantidad > 0 && param.municipio != "") {
 
   const dataa:any = await registrosService.getRegistros(param.status,param.municipio, param.cantidad);
   await getRegistros(param);
-  //console.log({dataa})
-
 
   const a = dataa?.data?.registros?.map(m=> { return m.boleta});
-  
   
   setCheckList(a);
     
@@ -94,10 +88,6 @@ const CustomGetRegistros = async()=>{
     })
   }
 
-
-
-  
-  
 }
 
 // Add/Remove checked item from list
@@ -113,9 +103,13 @@ const handleCheck = (event):any => {
 };
 const EvaluarCheced = (checkeditemsss)=>{
   const elementsChecked = checkeditemsss;
+
   let unCheckedElemets:any = [];
+
   for (let index = 0; index < checkList.length; index++) {
+
     const element = checkList[index];
+
     const a = elementsChecked.map(m=>m.trim()).includes(element.trim());
     if(!a){
      unCheckedElemets = [...unCheckedElemets,element.trim()];
@@ -150,8 +144,6 @@ const checkedItems = checked.length
   const isChecked:any = (item:any) =>
   checked.includes(item) ? "checked-item" : "not-checked-item";
 
-
-
   const Item = styled(Paper)(({ theme }) => ({
   
     padding: theme.spacing(1),
@@ -159,28 +151,50 @@ const checkedItems = checked.length
 
   }));
 
+  const style = {
+    height: 300,
+  };
 
+  const container = {
+    hidden: { opacity: 1, scale: 0 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        delayChildren: 0.3,
+        staggerChildren: 0.2
+      }
+    }
+  }
+    
+  const item = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1
+    }
+  }
 
   return (
     <Grid container my={4} rowSpacing={2} columnSpacing={1}>
-      <Grid item md={3} sm={12} >
-      <Card >
+      <Grid item md={2} sm={12} >
+      <Card>
         <CardContent >
           
         <Typography gutterBottom variant="h5" component="div">
           Buscar 
         </Typography>
         <InputLabel>Municipio / Distrito</InputLabel>
-        <Select {...register("municipio", { required: true })} sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
+        <Select {...register("municipio", { required: true })} color='success'  sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
             <MenuItem value="la-romana">La Romana</MenuItem>
             <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
             <MenuItem value="caleta">Caleta</MenuItem>
             <MenuItem value="guaymate">Guaymate</MenuItem>
             <MenuItem value="Cumayasa">Cumayasa</MenuItem>
           </Select>
-          <TextField type="number" placeholder="Cantidad" label="cantidad" {...register("cantidad", {required: true, maxLength: 10}) } sx={{minWidth:"20%", width:"100%", margin:"5px 5px 15px 0px" }}/>
+          <TextField type="number" placeholder="Cantidad" label="cantidad" color='success'  {...register("cantidad", {required: true, maxLength: 10}) } sx={{minWidth:"20%", width:"100%", margin:"5px 5px 15px 0px" }}/>
           
-          <Select value={premio}  onChange={handleChange}
+          <Select value={premio} color='success'   onChange={handleChange}
                   
                   sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
 
@@ -190,25 +204,22 @@ const checkedItems = checked.length
             <MenuItem value="estufa">ESTUFA</MenuItem>
           </Select>
           
-          <Button onClick={()=>CustomGetRegistros()} variant="contained" color='success' size="large" endIcon={<SearchIcon />} sx={{width:"90%", margin:"10px"}}>Obtener Registros</Button>
-          
-          
+          <Button onClick={()=>CustomGetRegistros()} 
+                  variant="contained" 
+                  color='success' 
+                  size="large" 
+                  endIcon={<SearchIcon />} 
+                  sx={{width:"90%", margin:"10px"}}>
+                    Buscar</Button>
 
-          
-          
-
-        </CardContent>
-        </Card>
-        <Grid container rowSpacing={40} >
-          <Grid item >
-            <motion.div animate={{ opacity: 1, scale: 1, x: [-900, 400, -100, 90, 0, 0] }}
+          <motion.div animate={{ opacity: 1, scale: 1, x: [-900, 400, -100, 90, 0, 0] }}
                           transition={{ duration: 6 }}>
 
-            <img src={`src/assets/premios/${premio}.png`} width={"100%"}></img>
-
+            <img src={`src/assets/premios/${premio}.png`} width={"80%"}></img>
 
             </motion.div>
-
+            <hr />
+            <hr />
               <div className="checkList">
                 <div className="title">Listado De Boletas:</div>
                   <div className="list-container">
@@ -224,43 +235,52 @@ const checkedItems = checked.length
               <div>
                 <p>{`Boletas presentes:  ${checkedItems}`}</p>
                 <p>{`Boletas ausentes:  ${JSON.stringify( unCheckList)}`}</p>
-                <Button onClick={()=>ActualizarRegistros()} variant="contained" color='info' endIcon={<SaveIcon />}>Actualizar Registros</Button>
+                
+                <Button onClick={()=>ActualizarRegistros()} 
+                        variant="contained" 
+                        color='error'
+                        size="large"
+                        endIcon={<SaveIcon />}>
+                          Guardar listado</Button>
               </div>
-              </Grid>
-              </Grid>
+        </CardContent>
+
+        </Card>
+
       </Grid>
-      
-      
-      
-      
-      
-      <Grid item md={9} >
+
+      <Grid item md={10} >
       <Item sx={{minHeight:'100%'}}>
+
+
+
+      <Lottie onComplete={() => {
+        spinRef.current?.goToAndPlay(45, true)
+      }} lottieRef={spinRef} loop={false} style={style} animationData={animationData}/>
+
       {/* <Typography gutterBottom variant="h5" component="div">
           Ganadores
         </Typography> */}
         <Grid container rowSpacing={1} columnSpacing={1} >
-       
 
             {isLoading ? (
                 <p>Cargando...</p>
                 ) : (
                 data?.data?.registros.map((datos) => (
 
-                <Grid item md={3}>
+                <Grid item md={2}>
                 <motion.div  
                 className='box'
-                initial={{ scale: 1}}
-                transition={{ duration: 5}}
+                initial={{ scale: 0}}
+                transition={{ duration: 3}}
                 custom={5}
                 animate={{ 
-                    scale: [1, 2, 2, 1, 1, 1], 
+                    scale: [0, 1, 2, 1, 1, 1], 
                     borderRadius: ["20%", "20%", "50%", "80%", "20%", "50%"], 
                     rotate: [0, 0, 270, 0,-270, -190, 0],
-                    x: [-900, 400, -100, 90, 0, 0]
+                    y: [-300, 400, -100, 90, 0, 0]
                     
-                    }}>
-                      
+                    }}>   
 
                       <motion.h2 initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1, rotate: [600, -400, 870, 0,-870, 990, 0] }}
@@ -277,17 +297,11 @@ const checkedItems = checked.length
                           transition={{ duration: 7 }}>
                             {datos.nombre}</motion.h3>
 
-                      {/* <motion.h3 initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1, rotate: [600, -400, 870, 0,-870, 990, 0] }}
-                          transition={{ duration: 6 }}
-                          >{datos.municipio}</motion.h3> */}
-
                   </motion.div>
                   </Grid>
                 ))
             )}    
           
-
         </Grid>
       </Item>
       </Grid>
