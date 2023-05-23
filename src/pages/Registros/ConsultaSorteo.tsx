@@ -244,16 +244,10 @@ const checkedItems = checked.length
                           Guardar listado</Button>
               </div>
         </CardContent>
-
         </Card>
-
       </Grid>
-
       <Grid item md={10} >
       <Item sx={{minHeight:'100%'}}>
-
-
-
       <Lottie onComplete={() => {
         spinRef.current?.goToAndPlay(45, true)
       }} lottieRef={spinRef} loop={false} style={style} animationData={animationData}/>
@@ -281,7 +275,6 @@ const checkedItems = checked.length
                     y: [-300, 400, -100, 90, 0, 0]
                     
                     }}>   
-
                       <motion.h2 initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1, rotate: [600, -400, 870, 0,-870, 990, 0] }}
                           transition={{ duration: 6 }}>
