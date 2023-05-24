@@ -124,7 +124,7 @@ export const Registro = () => {
     Swal.fire({
       position: 'center',
       icon: 'error',
-      title: 'Verifique los datos',
+      title: 'Esta persona o boleta ya fue registrada',
       showConfirmButton: false,
       timer: 7000
     })

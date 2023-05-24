@@ -144,6 +144,11 @@ const checkedItems = checked.length
   const isChecked:any = (item:any) =>
   checked.includes(item) ? "checked-item" : "not-checked-item";
 
+  
+
+
+
+
   const Item = styled(Paper)(({ theme }) => ({
   
     padding: theme.spacing(1),
@@ -159,7 +164,7 @@ const checkedItems = checked.length
 
   return (
     <Grid container my={4} rowSpacing={2} columnSpacing={1}>
-      <Grid item md={2} sm={12} >
+      <Grid item md={2} sm={10} >
       <Card>
         <CardContent >
           
@@ -208,6 +213,7 @@ const checkedItems = checked.length
                   <div className="list-container">
                     {checkList && checkList.map((item, index) => (
                       <div key={index}>
+                        
                         <input value={item} type="checkbox" onChange={handleCheck} />
                         <span className={isChecked(item)}>{item}</span>
                       </div>
@@ -232,6 +238,7 @@ const checkedItems = checked.length
       </Grid>
       <Grid item md={10} >
       <Item sx={{minHeight:'100%'}}>
+        
       <Lottie onComplete={() => {
         spinRef.current?.goToAndPlay(45, true)
       }} lottieRef={spinRef} loop={false} style={style} animationData={animationData}/>
@@ -246,7 +253,15 @@ const checkedItems = checked.length
                 ) : (
                 data?.data?.registros.map((datos) => (
 
+                  
+                
                 <Grid item md={2}>
+
+                      {/* <div key={datos.index}>
+                        <input value={datos.boleta} type="checkbox" onChange={handleCheck} />
+                        <span className={isChecked(datos.boleta)}>{datos.boleta}</span>
+                      </div> */}
+                  
                 <motion.div  
                 className='box'
                 initial={{ scale: 0}}
@@ -259,6 +274,7 @@ const checkedItems = checked.length
                     y: [-300, 400, -100, 90, 0, 0]
                     
                     }}>   
+                    
                       <motion.h2 initial={{ opacity: 0, scale: 0.5 }}
                           animate={{ opacity: 1, scale: 1, rotate: [600, -400, 870, 0,-870, 990, 0] }}
                           transition={{ duration: 6 }}>
