@@ -11,7 +11,7 @@ import SaveIcon from '@mui/icons-material/Save';
 
 import 'animate.css';
 
-import { Box, Button, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, styled } from "@mui/material";
+import { Button, Card, CardContent, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, styled } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
 
 
@@ -23,13 +23,10 @@ import RegistrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
 
 const modelo = {defaultValues:{
-  municipio:"",
-  premio:"",
+  municipio:"la-romana",
   status :1,
   cantidad:0
 }}
-
-
 export const Consulta = () => {
 
   const { getValues, register} = useForm(modelo);
@@ -39,16 +36,12 @@ export const Consulta = () => {
   const [checked, setChecked] = useState<any[]>([]);
   const [checkList, setCheckList] = useState<any[]>([]);
   const [unCheckList, setUnCheckList] = useState<any[]>([]);
-  const [boletas, setBoletas] = useState<any[]>([]);
   const [premio, setPremio] = useState('');
 
-
-  const handlePremio = (event: SelectChangeEvent) => {
+  const handleChange = (event: SelectChangeEvent) => {
     setPremio(event.target.value);
     console.log(premio);
   };
-
- 
   
   const {
     mutate: getRegistros,
@@ -80,18 +73,12 @@ const CustomGetRegistros = async()=>{
   const dataa:any = await registrosService.getRegistros(param.status,param.municipio, param.cantidad);
   await getRegistros(param);
 
-  
   const a = dataa?.data?.registros?.map(m=> { return m.boleta});
-  const b = data?.data?.registros.map((datos) => { return datos.cedula});
-  
-
-
-  
   
   setCheckList(a);
-  setChecked(a);
     
   } else {
+
     return  Swal.fire({
       position: 'center',
       icon: 'error',
@@ -100,6 +87,7 @@ const CustomGetRegistros = async()=>{
       timer: 7000
     })
   }
+
 }
 
 // Add/Remove checked item from list
@@ -113,7 +101,6 @@ const handleCheck = (event):any => {
   setChecked(updatedList);
   EvaluarCheced(updatedList);
 };
-
 const EvaluarCheced = (checkeditemsss)=>{
   const elementsChecked = checkeditemsss;
 
@@ -157,6 +144,11 @@ const checkedItems = checked.length
   const isChecked:any = (item:any) =>
   checked.includes(item) ? "checked-item" : "not-checked-item";
 
+  
+
+
+
+
   const Item = styled(Paper)(({ theme }) => ({
   
     padding: theme.spacing(1),
@@ -173,13 +165,14 @@ const checkedItems = checked.length
   return (
     <Grid container my={4} rowSpacing={2} columnSpacing={1}>
       <Grid item md={2} sm={10} >
-      <Item sx={{minHeight:'100%'}}>
+      <Card>
+        <CardContent >
           
         <Typography gutterBottom variant="h5" component="div">
           Buscar 
         </Typography>
         <InputLabel>Municipio / Distrito</InputLabel>
-        <Select {...register("municipio", {required: true, maxLength: 10}) } color='success'  sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
+        <Select {...register("municipio", { required: true })} color='success'  sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
             <MenuItem value="la-romana">La Romana</MenuItem>
             <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
             <MenuItem value="caleta">Caleta</MenuItem>
@@ -188,7 +181,7 @@ const checkedItems = checked.length
           </Select>
           <TextField type="number" placeholder="Cantidad" label="cantidad" color='success'  {...register("cantidad", {required: true, maxLength: 10}) } sx={{minWidth:"20%", width:"100%", margin:"5px 5px 15px 0px" }}/>
           
-          <Select value={premio} color='success'   onChange={handlePremio}
+          <Select value={premio} color='success'   onChange={handleChange}
                   
                   sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
 
@@ -203,11 +196,11 @@ const checkedItems = checked.length
                   color='success' 
                   size="large" 
                   endIcon={<SearchIcon />} 
-                  sx={{width:"100%"}}>
+                  sx={{width:"90%", margin:"10px"}}>
                     Buscar</Button>
 
-          <motion.div animate={{ opacity: 1, scale: 1, x: [-150, 0] }}
-                          transition={{ duration: 2 }}>
+          <motion.div animate={{ opacity: 1, scale: 1, x: [-900, 400, -100, 90, 0, 0] }}
+                          transition={{ duration: 6 }}>
 
             <img src={`/premios/${premio}.png`} width={"80%"}></img>
 
@@ -237,76 +230,65 @@ const checkedItems = checked.length
                         color='error'
                         size="large"
                         endIcon={<SaveIcon />}
-                        sx={{width:"100%"}}>
-                          Guardar
-                  </Button>
+                        sx={{width:"90%", margin:"10px"}}>
+                          Guardar listado</Button>
               </div>
-       </Item>
+        </CardContent>
+        </Card>
       </Grid>
-       {/* END CONTROLES */}
-
-       {/* START  Column 2 */}
-      <Grid item md={3}>
-        <Item sx={{minHeight:'100%'}}>
-        <Grid container rowSpacing={5} columnSpacing={1} >
-                      
-          <Grid item md={12}>
-              <Lottie onComplete={() => {
-                spinRef.current?.goToAndPlay(45, true)
-              }} lottieRef={spinRef} loop={false} style={style} animationData={animationData}/>
-          </Grid>
-
-          <Grid item md={12}>
-                <Box component="img" src="/foto-eduard2.jpg" alt="hola" sx={{ height: "auto", width: "90%", borderRadius:"10px" }} />
-          </Grid>
-
-        </Grid>
-        </Item>
-      </Grid>
-
-      {/* END  Column 2 */}
-
-
-
-      <Grid item md={7} >
+      <Grid item md={10} >
       <Item sx={{minHeight:'100%'}}>
-      <Typography gutterBottom variant="h5" component="div">
-            GANADORAS 
-          </Typography>
+        
+      <Lottie onComplete={() => {
+        spinRef.current?.goToAndPlay(45, true)
+      }} lottieRef={spinRef} loop={false} style={style} animationData={animationData}/>
 
-        <Grid container rowSpacing={1} columnSpacing={4} >
+      {/* <Typography gutterBottom variant="h5" component="div">
+          Ganadores
+        </Typography> */}
+        <Grid container rowSpacing={1} columnSpacing={1} >
 
             {isLoading ? (
                 <p>Cargando...</p>
                 ) : (
-                //  data?.data?.registros.map((datos) => (
-                checkList.map((item, index) => (
-                <Grid item md={4}>
+                data?.data?.registros.map((datos) => (
 
+                  
+                
+                <Grid item md={2}>
+
+                      {/* <div key={datos.index}>
+                        <input value={datos.boleta} type="checkbox" onChange={handleCheck} />
+                        <span className={isChecked(datos.boleta)}>{datos.boleta}</span>
+                      </div> */}
+                  
                 <motion.div  
                 className='box'
                 initial={{ scale: 0}}
                 transition={{ duration: 3}}
-             
+                custom={5}
                 animate={{ 
-                    scale: [0,1.5,1], 
-                    borderRadius: ["100%", "10%"],
-                    
-                    rotate: [0],
-                    x: [-300, 0,  0]
+                    scale: [0, 1, 2, 1, 1, 1], 
+                    borderRadius: ["20%", "20%", "50%", "80%", "20%", "50%"], 
+                    rotate: [0, 0, 270, 0,-270, -190, 0],
+                    y: [-300, 400, -100, 90, 0, 0]
                     
                     }}>   
-
+                    
                       <motion.h2 initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1, rotate: [1910000, 0] }}
-                          transition={{ duration: 5 }}>
-                          {item}</motion.h2>
+                          animate={{ opacity: 1, scale: 1, rotate: [600, -400, 870, 0,-870, 990, 0] }}
+                          transition={{ duration: 6 }}>
+                          {datos.boleta}</motion.h2>
 
+                      <motion.h3 initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: [0,0,0,0,0,0,1], scale: 1,}}
+                          transition={{ duration: 7 }}>
+                            {datos.cedula}</motion.h3>
                       
-                      <motion.h3 initial={{ opacity: 0, scale: 0.1 }}
-                          animate={{ opacity: [0,0,0,1], scale: 1,}}
-                          transition={{ duration: 8 }}>
-                            {index}</motion.h3>
+                      <motion.h3 initial={{ opacity: 0, scale: 0.5 }}
+                          animate={{ opacity: [0,0,0,0,0,0,1], scale: 1,}}
+                          transition={{ duration: 7 }}>
+                            {datos.nombre}</motion.h3>
 
                   </motion.div>
                   </Grid>

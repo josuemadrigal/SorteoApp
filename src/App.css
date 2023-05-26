@@ -8,10 +8,11 @@ body{
 }
 
 .box {
-    width: 110px;
-    height: 110px;
-    padding: 20%;
+    width: 80%;
+    height: 105px;
+    padding: 10%;
     font-size: 1.5rem;
+    border-radius: 10%;
     background-color: #2e7d32;
     color: aliceblue;
     display: grid;
@@ -20,8 +21,14 @@ body{
     align-items: center;
   }
 
+  h2{
+    font-size: 3rem;
+    margin: 2px;
+  }
+
   h3{
-    font-size: 0.5rem;
+    font-size: 1.2rem;
+    margin: 0px;
     color: aliceblue;
   }
 
