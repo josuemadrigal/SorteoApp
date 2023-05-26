@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import '../../App.css';
 
 import Lottie, {LottieRefCurrentProps} from 'lottie-react';
@@ -21,6 +21,8 @@ import { useForm } from "react-hook-form";
 
 import RegistrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
+import { Boleta } from "../../components/Boleta";
+import { RenderBoletas } from "../../components/RenderBoletas";
 
 const modelo = {defaultValues:{
   municipio:"",
@@ -38,6 +40,8 @@ export const Consulta = () => {
   
   const [checked, setChecked] = useState<any[]>([]);
   const [checkList, setCheckList] = useState<any[]>([]);
+  const [checkListShow, setCheckListShow] = useState<any[]>([]);
+
   const [unCheckList, setUnCheckList] = useState<any[]>([]);
   const [boletas, setBoletas] = useState<any[]>([]);
   const [premio, setPremio] = useState('');
@@ -81,7 +85,7 @@ const CustomGetRegistros = async()=>{
   await getRegistros(param);
 
   
-  const a = dataa?.data?.registros?.map(m=> { return m.boleta});
+    const a = dataa?.data?.registros?.map(m => { return m });
   const b = data?.data?.registros.map((datos) => { return datos.cedula});
   
 
@@ -147,12 +151,12 @@ const ActualizarRegistros = ()=>{
   setUnCheckList([]);
 }
 // Obteniendo los checks
-const checkedItems = checked.length
-  ? checked.reduce((total, item) => {
-      return total + ", " + item;
-    })
-  : "";
-
+  // const checkedItems = checked.length
+  //   ? checked.reduce((total, item) => {
+  //       return total + ", " + item.boleta;
+  //     })
+  //   : "";
+  console.log({ checked })
 // Return classes based on whether item is checked
   const isChecked:any = (item:any) =>
   checked.includes(item) ? "checked-item" : "not-checked-item";
@@ -170,6 +174,10 @@ const checkedItems = checked.length
 
 
 
+
+  const delay = (ms: number) => {
+    return new Promise<void>((resolve) => setTimeout(resolve, ms));
+  };
   return (
     <Grid container my={4} rowSpacing={2} columnSpacing={1}>
       <Grid item md={2} sm={10} >
@@ -222,14 +230,14 @@ const checkedItems = checked.length
                       <div key={index}>
                         
                         <input value={item} type="checkbox" onChange={handleCheck} />
-                        <span className={isChecked(item)}>{item}</span>
+                        <span className={isChecked(item.boleta)}>{item.boleta}</span>
                       </div>
                     ))}
                 </div>
               </div>
 
               <div>
-                <p>{`Boletas presentes:  ${checkedItems}`}</p>
+            {/* <p>{`Boletas presentes:  ${checkedItems}`}</p> */}
                 <p>{`Boletas ausentes:  ${JSON.stringify( unCheckList)}`}</p>
                 
                 <Button onClick={()=>ActualizarRegistros()} 
@@ -276,42 +284,11 @@ const checkedItems = checked.length
 
         <Grid container rowSpacing={1} columnSpacing={4} >
 
-            {isLoading ? (
-                <p>Cargando...</p>
-                ) : (
-                //  data?.data?.registros.map((datos) => (
-                checkList.map((item, index) => (
-                <Grid item md={4}>
-
-                <motion.div  
-                className='box'
-                initial={{ scale: 0}}
-                transition={{ duration: 3}}
-             
-                animate={{ 
-                    scale: [0,1.5,1], 
-                    borderRadius: ["100%", "10%"],
-                    
-                    rotate: [0],
-                    x: [-300, 0,  0]
-                    
-                    }}>   
-
-                      <motion.h2 initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1, rotate: [1910000, 0] }}
-                          transition={{ duration: 5 }}>
-                          {item}</motion.h2>
-
-                      
-                      <motion.h3 initial={{ opacity: 0, scale: 0.1 }}
-                          animate={{ opacity: [0,0,0,1], scale: 1,}}
-                          transition={{ duration: 8 }}>
-                            {index}</motion.h3>
-
-                  </motion.div>
-                  </Grid>
-                ))
-            )}    
+            {checkList.length <= 0 ? (
+              <p>Cargando...</p>
+            ) : (
+              <RenderBoletas items={checkList} />
+            )}
           
         </Grid>
       </Item>

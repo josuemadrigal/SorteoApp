@@ -1,50 +1,46 @@
 import { motion } from 'framer-motion'
 import '../App.css'
 import { Grid } from "@mui/material"
+import { useEffect, useState } from 'react'
 
 
-
-export const Boleta = (props) => {
-
-    const tiempo = props.boleta;
-
-    //console.log("Hola " + tiempo)
-    console.log(props.boleta)
-
-    const count = + 3;
-    
+interface Props {
+    item: any
+}
+export const Boleta = ({ item }: Props) => {
+    const [items, setItems] = useState<string[]>(['item1', 'item2', 'item3']);
 
     return (
         <Grid item md={4}>
-
-            
-
-                <motion.div  
+            <motion.div
                 className='box'
-                initial={{ scale: 0}}
-                transition={{ duration: 3}}
-                custom={5}
-                animate={{ 
-                    scale: [0, 1, 2, 1, 1, 1], 
-                    borderRadius: "10%", 
-                    rotate: [200000, 0],
-                    x: [-300, 90, 0, 0]
-                    
-                    }}>   
-                    
-                      <motion.h2 initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: 1, scale: 1, rotate: [1910000, 0] }}
-                          transition={{ type: "Inertia", duration: 5 }}>
-                          {props.boleta}
-                      </motion.h2>
+                initial={{ scale: 0 }}
+                transition={{ duration: 3 }}
 
-                      <motion.h3 initial={{ opacity: 0, scale: 0.5 }}
-                          animate={{ opacity: [0,0,0,0,0,0,1], scale: 1,}}
-                          transition={{ duration: 7 }}>
-                            {props.boleta}
-                      </motion.h3>
+                animate={{
+                    scale: [0, 1.5, 1],
+                    borderRadius: ["100%", "10%"],
 
-                  </motion.div>
-                  </Grid>
+                    rotate: [0],
+                    x: [-300, 0, 0]
+
+                }}>
+
+                <motion.h2 initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1, rotate: [1910000, 0] }}
+                    transition={{ duration: 5 }}>
+                    {item.boleta}</motion.h2>
+
+
+                <motion.h3 initial={{ opacity: 0, scale: 0.1 }}
+                    animate={{ opacity: [0, 0, 0, 1], scale: 1, }}
+                    transition={{ duration: 8 }}>
+                    {item.nombre}</motion.h3>
+
+            </motion.div>
+        </Grid>
     )
 }
+
+
+

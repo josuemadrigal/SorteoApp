@@ -2,7 +2,7 @@
 import { useForm } from "react-hook-form";
 //import Swal from 'sweetalert2'
 import Swal from 'sweetalert2/dist/sweetalert2.all.js'
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
 import { Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import RegistrosService from "../../services/RegistrosService";
 
