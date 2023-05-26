@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 
 import RegistrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
-import { Boleta } from "../../components/Boleta";
+// import { Boleta } from "../../components/Boleta";
 import { RenderBoletas } from "../../components/RenderBoletas";
 
 const modelo = {defaultValues:{
@@ -137,15 +137,15 @@ const EvaluarCheced = (checkeditemsss)=>{
 const ActualizarRegistros = ()=>{
   
   //Seleccionado
-  for (let index = 0; index < checked.length; index++) {
-    const element = checked[index];
-    RegistrosService.startUpdate(element,2, premio);
+  for (let index = 0; index < checkList.length; index++) {
+    const element = checkList[index];
+    RegistrosService.startUpdate(element.boleta,2, premio);
   }
   //No seleccionado
-  for (let index = 0; index < unCheckList.length; index++) {
-    const element = unCheckList[index];
-    RegistrosService.startUpdate(element,0,"No presente");
-  }
+  // for (let index = 0; index < unCheckList.length; index++) {
+  //   const element = unCheckList[index];
+  //   RegistrosService.startUpdate(element,0,"No presente");
+  // }
   setCheckList([]);
   setChecked([]);
   setUnCheckList([]);
@@ -221,9 +221,8 @@ const ActualizarRegistros = ()=>{
 
 
             </motion.div>
-            <hr />
-            <hr />
-              <div className="checkList">
+
+              {/* <div className="checkList">
                 <div className="title">Listado De Boletas:</div>
                   <div className="list-container">
                     {checkList && checkList.map((item, index) => (
@@ -234,11 +233,11 @@ const ActualizarRegistros = ()=>{
                       </div>
                     ))}
                 </div>
-              </div>
+              </div> */}
 
               <div>
             {/* <p>{`Boletas presentes:  ${checkedItems}`}</p> */}
-                <p>{`Boletas ausentes:  ${JSON.stringify( unCheckList)}`}</p>
+                {/* <p>{`Boletas ausentes:  ${JSON.stringify( unCheckList)}`}</p> */}
                 
                 <Button onClick={()=>ActualizarRegistros()} 
                         variant="contained" 
@@ -285,7 +284,7 @@ const ActualizarRegistros = ()=>{
         <Grid container rowSpacing={1} columnSpacing={4} >
 
             {checkList.length <= 0 ? (
-              <p>Cargando...</p>
+              <p>.</p>
             ) : (
               <RenderBoletas items={checkList} />
             )}
