@@ -14,10 +14,11 @@ export const Boleta = ({ item }: Props) => {
         <Grid item md={4}>
             <motion.div
                 className='box'
-                initial={{ scale: 0 }}
+                initial={{ scale: 0, backgroundColor: "#fff"}}
                 transition={{ duration: 3 }}
                 animate={{
-                    scale: [0, 1.5, 1],
+                    backgroundColor: "#2e7d32",
+                    scale: [0, 1],
                     borderRadius: ["100%", "10%"],
                     rotate: [100,0],
                     x: [-300, 0, 0]
@@ -32,7 +33,7 @@ export const Boleta = ({ item }: Props) => {
                 <motion.h3 initial={{ opacity: 0, scale: 0.1 }}
                     animate={{ opacity: [0, 0, 0, 1], scale: 1, }}
                     transition={{ duration: 5 }}>
-                    {item.nombre}</motion.h3>
+                    {item.nombre.toUpperCase()}</motion.h3>
 
             </motion.div>
         </Grid>
