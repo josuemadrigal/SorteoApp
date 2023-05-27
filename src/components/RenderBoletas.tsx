@@ -24,7 +24,8 @@ export const RenderBoletas = ({ items }: Props) => {
 
     return (
         <>
-            {renderedItems.map((item: object, index: number) => (
+            {/* {renderedItems.map((item: object, index: number) => ( */}
+            {renderedItems.map((item: object) => (
                 <Boleta item={item} />
             ))}
 

@@ -43,10 +43,10 @@ export const Consulta = () => {
   
   const [checked, setChecked] = useState<any[]>([]);
   const [checkList, setCheckList] = useState<any[]>([]);
-  const [checkListShow, setCheckListShow] = useState<any[]>([]);
+  // const [checkListShow, setCheckListShow] = useState<any[]>([]);
 
-  const [unCheckList, setUnCheckList] = useState<any[]>([]);
-  const [boletas, setBoletas] = useState<any[]>([]);
+  // const [unCheckList, setUnCheckList] = useState<any[]>([]);
+  // const [boletas, setBoletas] = useState<any[]>([]);
   const [premio, setPremio] = useState('');
 
 
@@ -67,7 +67,7 @@ const CustomGetRegistros = async()=>{
 
   setCheckList([]);
   setChecked([]);
-  setUnCheckList([]);
+  // setUnCheckList([]);
 
   
   const param:any = getValues();
@@ -135,7 +135,7 @@ const EvaluarCheced = (checkeditemsss)=>{
      unCheckedElemets = [...unCheckedElemets,element.trim()];
     }
   }
-  setUnCheckList(unCheckedElemets);
+  // setUnCheckList(unCheckedElemets);
 }
 const ActualizarRegistros = ()=>{
   
@@ -151,7 +151,7 @@ const ActualizarRegistros = ()=>{
   // }
   setCheckList([]);
   setChecked([]);
-  setUnCheckList([]);
+  // setUnCheckList([]);
 }
 // Obteniendo los checks
   // const checkedItems = checked.length
