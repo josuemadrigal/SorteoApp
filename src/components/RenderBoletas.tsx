@@ -15,7 +15,7 @@ export const RenderBoletas = ({ items }: Props) => {
                 setRenderedItems((prevItems) => [...prevItems, currentItem]);
                 setCurrentIndex((prevIndex) => prevIndex + 1);
             }
-        }, 6000); // Wait for 30 seconds between each item
+        }, 5000); // Wait for 30 seconds between each item
 
         return () => {
             clearInterval(interval);

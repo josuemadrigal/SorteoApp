@@ -1,8 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import {  useRef, useState } from "react";
 import '../../App.css';
 
-import Lottie, {LottieRefCurrentProps} from 'lottie-react';
-import animationData from '../../assets/65849-emos-spin.json'
+import GifTombola from "../../../public/tombolaEduard.gif";
+
+
+// import Lottie, {LottieRefCurrentProps} from 'lottie-react';
+// import animationData from '../../assets/65849-emos-spin.json'
 
 import {motion} from 'framer-motion';
 import { useMutation } from "react-query";
@@ -36,7 +39,7 @@ export const Consulta = () => {
 
   const { getValues, register} = useForm(modelo);
 
-  const spinRef = useRef<LottieRefCurrentProps>(null);
+  // const spinRef = useRef<LottieRefCurrentProps>(null);
   
   const [checked, setChecked] = useState<any[]>([]);
   const [checkList, setCheckList] = useState<any[]>([]);
@@ -258,14 +261,29 @@ const ActualizarRegistros = ()=>{
         <Grid container rowSpacing={5} columnSpacing={1} >
                       
           <Grid item md={12}>
-              <Lottie onComplete={() => {
+              {/* <Lottie onComplete={() => {
                 spinRef.current?.goToAndPlay(45, true)
-              }} lottieRef={spinRef} loop={false} style={style} animationData={animationData}/>
+              }} lottieRef={spinRef} loop={false} style={style} animationData={animationData}/> */}
+
+              {/* <ReactPlayer  
+
+                playing
+                url="/tombola.mp4"
+                
+                loop
+                
+                width="640"
+                height="360"
+              /> */}
+
+              <img src={GifTombola} alt="TOMBOLA" width="90%"  />
+
+
           </Grid>
 
-          <Grid item md={12}>
+          {/* <Grid item md={12}>
                 <Box component="img" src="/foto-eduard2.jpg" alt="hola" sx={{ height: "auto", width: "90%", borderRadius:"10px" }} />
-          </Grid>
+          </Grid> */}
 
         </Grid>
         </Item>
