@@ -110,16 +110,16 @@ const CustomGetRegistros = async()=>{
 }
 
 // Add/Remove checked item from list
-const handleCheck = (event):any => {
-  let updatedList:any = [...checked];
-  if (event.target.checked) {
-    updatedList = [...checked, event.target.value];
-  } else {
-    updatedList.splice(checked.indexOf(event.target.value), 1);
-  }
-  setChecked(updatedList);
-  EvaluarCheced(updatedList);
-};
+// const handleCheck = (event):any => {
+//   let updatedList:any = [...checked];
+//   if (event.target.checked) {
+//     updatedList = [...checked, event.target.value];
+//   } else {
+//     updatedList.splice(checked.indexOf(event.target.value), 1);
+//   }
+//   setChecked(updatedList);
+//   EvaluarCheced(updatedList);
+// };
 
 const EvaluarCheced = (checkeditemsss)=>{
   const elementsChecked = checkeditemsss;
@@ -161,8 +161,8 @@ const ActualizarRegistros = ()=>{
   //   : "";
   console.log({ checked })
 // Return classes based on whether item is checked
-  const isChecked:any = (item:any) =>
-  checked.includes(item) ? "checked-item" : "not-checked-item";
+  // const isChecked:any = (item:any) =>
+  // checked.includes(item) ? "checked-item" : "not-checked-item";
 
   const Item = styled(Paper)(({ theme }) => ({
   
@@ -171,9 +171,9 @@ const ActualizarRegistros = ()=>{
 
   }));
 
-  const style = {
-    height: 300,
-  };
+  // const style = {
+  //   height: 300,
+  // };
 
 
 
