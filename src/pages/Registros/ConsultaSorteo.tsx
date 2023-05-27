@@ -1,4 +1,4 @@
-import {  useRef, useState } from "react";
+import {   useState } from "react";
 import '../../App.css';
 
 import GifTombola from "../../../public/tombolaEduarde.gif";
@@ -14,7 +14,7 @@ import SaveIcon from '@mui/icons-material/Save';
 
 import 'animate.css';
 
-import { Box, Button, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, styled } from "@mui/material";
+import {  Button, Grid, InputLabel, MenuItem, Paper, Select, TextField, Typography, styled } from "@mui/material";
 import { SelectChangeEvent } from '@mui/material/Select';
 
 
@@ -59,7 +59,7 @@ export const Consulta = () => {
   
   const {
     mutate: getRegistros,
-    isLoading,
+    // isLoading,
     data,
   } = useMutation<any>( async (param:any)=> await registrosService.getRegistros(param.status,param.municipio, param.cantidad));
 
@@ -89,7 +89,7 @@ const CustomGetRegistros = async()=>{
 
   
     const a = dataa?.data?.registros?.map(m => { return m });
-  const b = data?.data?.registros.map((datos) => { return datos.cedula});
+  // const b = data?.data?.registros.map((datos) => { return datos.cedula});
   
 
 
@@ -121,22 +121,22 @@ const CustomGetRegistros = async()=>{
 //   EvaluarCheced(updatedList);
 // };
 
-const EvaluarCheced = (checkeditemsss)=>{
-  const elementsChecked = checkeditemsss;
+// const EvaluarCheced = (checkeditemsss)=>{
+//   const elementsChecked = checkeditemsss;
 
-  let unCheckedElemets:any = [];
+//   let unCheckedElemets:any = [];
 
-  for (let index = 0; index < checkList.length; index++) {
+//   for (let index = 0; index < checkList.length; index++) {
 
-    const element = checkList[index];
+//     const element = checkList[index];
 
-    const a = elementsChecked.map(m=>m.trim()).includes(element.trim());
-    if(!a){
-     unCheckedElemets = [...unCheckedElemets,element.trim()];
-    }
-  }
-  // setUnCheckList(unCheckedElemets);
-}
+//     const a = elementsChecked.map(m=>m.trim()).includes(element.trim());
+//     if(!a){
+//      unCheckedElemets = [...unCheckedElemets,element.trim()];
+//     }
+//   }
+//   // setUnCheckList(unCheckedElemets);
+// }
 const ActualizarRegistros = ()=>{
   
   //Seleccionado
@@ -178,9 +178,9 @@ const ActualizarRegistros = ()=>{
 
 
 
-  const delay = (ms: number) => {
-    return new Promise<void>((resolve) => setTimeout(resolve, ms));
-  };
+  // const delay = (ms: number) => {
+  //   return new Promise<void>((resolve) => setTimeout(resolve, ms));
+  // };
   return (
     <Grid container my={4} rowSpacing={2} columnSpacing={1}>
       <Grid item md={2} sm={10} >
