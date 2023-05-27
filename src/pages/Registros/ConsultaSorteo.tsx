@@ -1,7 +1,7 @@
 import {  useRef, useState } from "react";
 import '../../App.css';
 
-import GifTombola from "../../../public/tombolaEduard.gif";
+import GifTombola from "../../../public/tombolaEduarde.gif";
 
 
 // import Lottie, {LottieRefCurrentProps} from 'lottie-react';
