@@ -60,7 +60,7 @@ export const Consulta = () => {
   const {
     mutate: getRegistros,
     // isLoading,
-    data,
+    // data,
   } = useMutation<any>( async (param:any)=> await registrosService.getRegistros(param.status,param.municipio, param.cantidad));
 
 const CustomGetRegistros = async()=>{
