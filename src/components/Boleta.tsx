@@ -1,14 +1,14 @@
 import { motion } from 'framer-motion'
 import '../App.css'
 import { Grid } from "@mui/material"
-// import { useState } from 'react'
+ import { useState } from 'react'
 
 
 interface Props {
     item: any
 }
 export const Boleta = ({ item }: Props) => {
-    // const [items, setItems] = useState<string[]>(['item1', 'item2', 'item3']);
+     const [items, setItems] = useState<string[]>(['item1', 'item2', 'item3']);
 
     return (
         <Grid item md={4}>

@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form";
 
 import RegistrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
-// import { Boleta } from "../../components/Boleta";
+import { Boleta } from "../../components/Boleta";
 import { RenderBoletas } from "../../components/RenderBoletas";
 
 const modelo = {defaultValues:{
@@ -43,10 +43,10 @@ export const Consulta = () => {
   
   const [checked, setChecked] = useState<any[]>([]);
   const [checkList, setCheckList] = useState<any[]>([]);
-  // const [checkListShow, setCheckListShow] = useState<any[]>([]);
+  const [checkListShow, setCheckListShow] = useState<any[]>([]);
 
-  // const [unCheckList, setUnCheckList] = useState<any[]>([]);
-  // const [boletas, setBoletas] = useState<any[]>([]);
+  const [unCheckList, setUnCheckList] = useState<any[]>([]);
+  const [boletas, setBoletas] = useState<any[]>([]);
   const [premio, setPremio] = useState('');
 
 
@@ -59,15 +59,15 @@ export const Consulta = () => {
   
   const {
     mutate: getRegistros,
-    // isLoading,
-    // data,
+    isLoading,
+    data,
   } = useMutation<any>( async (param:any)=> await registrosService.getRegistros(param.status,param.municipio, param.cantidad));
 
 const CustomGetRegistros = async()=>{
 
   setCheckList([]);
   setChecked([]);
-  // setUnCheckList([]);
+  setUnCheckList([]);
 
   
   const param:any = getValues();
@@ -110,59 +110,59 @@ const CustomGetRegistros = async()=>{
 }
 
 // Add/Remove checked item from list
-// const handleCheck = (event):any => {
-//   let updatedList:any = [...checked];
-//   if (event.target.checked) {
-//     updatedList = [...checked, event.target.value];
-//   } else {
-//     updatedList.splice(checked.indexOf(event.target.value), 1);
-//   }
-//   setChecked(updatedList);
-//   EvaluarCheced(updatedList);
-// };
+const handleCheck = (event):any => {
+  let updatedList:any = [...checked];
+  if (event.target.checked) {
+    updatedList = [...checked, event.target.value];
+  } else {
+    updatedList.splice(checked.indexOf(event.target.value), 1);
+  }
+  setChecked(updatedList);
+  EvaluarCheced(updatedList);
+};
 
-// const EvaluarCheced = (checkeditemsss)=>{
-//   const elementsChecked = checkeditemsss;
+const EvaluarCheced = (checkeditemsss)=>{
+  const elementsChecked = checkeditemsss;
 
-//   let unCheckedElemets:any = [];
+  let unCheckedElemets:any = [];
 
-//   for (let index = 0; index < checkList.length; index++) {
+  for (let index = 0; index < checkList.length; index++) {
 
-//     const element = checkList[index];
+    const element = checkList[index];
 
-//     const a = elementsChecked.map(m=>m.trim()).includes(element.trim());
-//     if(!a){
-//      unCheckedElemets = [...unCheckedElemets,element.trim()];
-//     }
-//   }
-//   // setUnCheckList(unCheckedElemets);
-// }
+    const a = elementsChecked.map(m=>m.trim()).includes(element.trim());
+    if(!a){
+     unCheckedElemets = [...unCheckedElemets,element.trim()];
+    }
+  }
+   setUnCheckList(unCheckedElemets);
+}
 const ActualizarRegistros = ()=>{
   
   //Seleccionado
   for (let index = 0; index < checkList.length; index++) {
     const element = checkList[index];
-    RegistrosService.startUpdate(element.boleta,2, premio);
+    RegistrosService.startUpdate(String(element.boleta),2, premio);
   }
-  //No seleccionado
-  // for (let index = 0; index < unCheckList.length; index++) {
-  //   const element = unCheckList[index];
-  //   RegistrosService.startUpdate(element,0,"No presente");
-  // }
+  // No seleccionado
+  for (let index = 0; index < unCheckList.length; index++) {
+    const element = unCheckList[index];
+    RegistrosService.startUpdate(element,0,"No presente");
+  }
   setCheckList([]);
   setChecked([]);
-  // setUnCheckList([]);
+  setUnCheckList([]);
 }
 // Obteniendo los checks
-  // const checkedItems = checked.length
-  //   ? checked.reduce((total, item) => {
-  //       return total + ", " + item.boleta;
-  //     })
-  //   : "";
+  const checkedItems = checked.length
+    ? checked.reduce((total, item) => {
+        return total + ", " + item.boleta;
+      })
+    : "";
   console.log({ checked })
 // Return classes based on whether item is checked
-  // const isChecked:any = (item:any) =>
-  // checked.includes(item) ? "checked-item" : "not-checked-item";
+  const isChecked:any = (item:any) =>
+  checked.includes(item) ? "checked-item" : "not-checked-item";
 
   const Item = styled(Paper)(({ theme }) => ({
   
@@ -203,10 +203,25 @@ const ActualizarRegistros = ()=>{
                   
                   sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
 
-            <MenuItem value="plancha">PLANCHA</MenuItem>
-            <MenuItem value="licuadora">LICUADORA</MenuItem>
-            <MenuItem value="nevera">NEVERA</MenuItem>
-            <MenuItem value="estufa">ESTUFA</MenuItem>
+            <MenuItem value="setpPaire">Set de Paire</MenuItem>
+            <MenuItem value="setCalderos">Set de Carderos</MenuItem>
+            <MenuItem value="ollasPresion">Ollas de Presion</MenuItem>
+            <MenuItem value="freidora">Freidora</MenuItem>
+            <MenuItem value="vajilla">Vajilla</MenuItem>
+            <MenuItem value="corcha">Corcha</MenuItem>
+            <MenuItem value="cama">Cama</MenuItem>
+            <MenuItem value="televisor">Televisor</MenuItem>
+            <MenuItem value="microondas">Microondas</MenuItem>
+            <MenuItem value="licuadora">Licuadora</MenuItem>
+            <MenuItem value="hornoElectrico">Horno Electrico</MenuItem>
+            <MenuItem value="abanico">Abanico</MenuItem>
+            <MenuItem value="cilindroGas">Cilindro de Gas</MenuItem>
+            <MenuItem value="estufaMesa">Estufa de Mesa</MenuItem>
+            <MenuItem value="lavadora">Lavadora</MenuItem>
+            <MenuItem value="estufa">Estufa de horno</MenuItem>
+            <MenuItem value="nevera">Nevera</MenuItem>
+            
+
           </Select>
           
           <Button onClick={()=>CustomGetRegistros()} 
@@ -239,7 +254,7 @@ const ActualizarRegistros = ()=>{
               </div> */}
 
               <div>
-            {/* <p>{`Boletas presentes:  ${checkedItems}`}</p> */}
+            {/* <p>{`Boletas presentes:  ${checkedItems}`}</p>  */}
                 {/* <p>{`Boletas ausentes:  ${JSON.stringify( unCheckList)}`}</p> */}
                 
                 <Button onClick={()=>ActualizarRegistros()} 
