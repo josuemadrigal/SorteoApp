@@ -24,7 +24,7 @@ import { useForm } from "react-hook-form";
 
 import RegistrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
-//import { Boleta } from "../../components/Boleta";
+
 import { RenderBoletas } from "../../components/RenderBoletas";
 
 const modelo = {defaultValues:{
@@ -43,10 +43,10 @@ export const Consulta = () => {
   
   const [checked, setChecked] = useState<any[]>([]);
   const [checkList, setCheckList] = useState<any[]>([]);
-  //const [checkListShow, setCheckListShow] = useState<any[]>([]);
+  
 
   const [unCheckList, setUnCheckList] = useState<any[]>([]);
-  //const [boletas, setBoletas] = useState<any[]>([]);
+  
   const [premio, setPremio] = useState('');
 
 
@@ -59,8 +59,7 @@ export const Consulta = () => {
   
   const {
     mutate: getRegistros,
-    //isLoading,
-   // data,
+    
   } = useMutation<any>( async (param:any)=> await registrosService.getRegistros(param.status,param.municipio, param.cantidad));
 
 const CustomGetRegistros = async()=>{
@@ -109,34 +108,6 @@ const CustomGetRegistros = async()=>{
   }
 }
 
-// Add/Remove checked item from list
-// const handleCheck = (event):any => {
-//   let updatedList:any = [...checked];
-//   if (event.target.checked) {
-//     updatedList = [...checked, event.target.value];
-//   } else {
-//     updatedList.splice(checked.indexOf(event.target.value), 1);
-//   }
-//   setChecked(updatedList);
-//   EvaluarCheced(updatedList);
-// };
-
-// const EvaluarCheced = (checkeditemsss)=>{
-//   const elementsChecked = checkeditemsss;
-
-//   let unCheckedElemets:any = [];
-
-//   for (let index = 0; index < checkList.length; index++) {
-
-//     const element = checkList[index];
-
-//     const a = elementsChecked.map(m=>m.trim()).includes(element.trim());
-//     if(!a){
-//      unCheckedElemets = [...unCheckedElemets,element.trim()];
-//     }
-//   }
-//    setUnCheckList(unCheckedElemets);
-// }
 const ActualizarRegistros = ()=>{
   
   //Seleccionado
@@ -153,16 +124,6 @@ const ActualizarRegistros = ()=>{
   setChecked([]);
   setUnCheckList([]);
 }
-// Obteniendo los checks
-//   const checkedItems = checked.length
-//     ? checked.reduce((total, item) => {
-//         return total + ", " + item.boleta;
-//       })
-//     : "";
-//   console.log({ checked })
-// // Return classes based on whether item is checked
-//   const isChecked:any = (item:any) =>
-//   checked.includes(item) ? "checked-item" : "not-checked-item";
 
   const Item = styled(Paper)(({ theme }) => ({
   
@@ -171,16 +132,7 @@ const ActualizarRegistros = ()=>{
 
   }));
 
-  // const style = {
-  //   height: 300,
-  // };
-
-
-
-
-  // const delay = (ms: number) => {
-  //   return new Promise<void>((resolve) => setTimeout(resolve, ms));
-  // };
+  
   return (
     <Grid container my={4} rowSpacing={2} columnSpacing={1}>
       <Grid item md={2} sm={10} >
