@@ -41,7 +41,7 @@ export const Consulta = () => {
 
   // const spinRef = useRef<LottieRefCurrentProps>(null);
   
-  const [checked, setChecked] = useState<any[]>([]);
+  // const [checked, setChecked] = useState<any[]>([]);
   const [checkList, setCheckList] = useState<any[]>([]);
   
 
@@ -65,7 +65,7 @@ export const Consulta = () => {
 const CustomGetRegistros = async()=>{
 
   setCheckList([]);
-  setChecked([]);
+  
   setUnCheckList([]);
 
   
@@ -95,7 +95,7 @@ const CustomGetRegistros = async()=>{
   
   
   setCheckList(a);
-  setChecked(a);
+  // setChecked(a);
     
   } else {
     return  Swal.fire({
@@ -121,7 +121,7 @@ const ActualizarRegistros = ()=>{
     RegistrosService.startUpdate(element,0,"No presente");
   }
   setCheckList([]);
-  setChecked([]);
+  // setChecked([]);
   setUnCheckList([]);
 }
 
