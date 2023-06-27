@@ -114,7 +114,7 @@ export const Registro = (props: any) => {
     Swal.fire({
       position: 'center',
       icon: 'error',
-      title: 'Esta persona o boleta ya fue registrada',
+      title: 'EL PRODECESO DE REGISTRO AUN NO HA INICIADO',
       showConfirmButton: false,
       timer: 7000
     })
