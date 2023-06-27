@@ -31,7 +31,7 @@ const modelo = {defaultValues:{
   municipio:"",
   premio:"",
   status :1,
-  cantidad:0
+  cantidad:4
 }}
 
 
@@ -149,7 +149,7 @@ const ActualizarRegistros = ()=>{
             <MenuItem value="guaymate">Guaymate</MenuItem>
             <MenuItem value="Cumayasa">Cumayasa</MenuItem>
           </Select>
-          <TextField type="number" placeholder="Cantidad" label="cantidad" color='success'  {...register("cantidad", {required: true, maxLength: 10}) } sx={{minWidth:"20%", width:"100%", margin:"5px 5px 15px 0px" }}/>
+          <TextField type="text" placeholder="Cantidad" label="cantidad" color='success'  {...register("cantidad", {required: true, maxLength: 10}) } sx={{minWidth:"20%", width:"100%", margin:"5px 5px 15px 0px" }}/>
           
           <Select value={premio} color='success'   onChange={handlePremio}
                   

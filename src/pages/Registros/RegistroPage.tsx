@@ -128,12 +128,12 @@ export const Registro = (props: any) => {
 
   return (
     <>
-    <Grid container spacing={6} columns={10} justifyContent="center" alignItems="center" >
-      <Grid  item xs={8} md={8}>
+    <Grid container spacing={1} justifyContent="center" alignItems="center" >
+      <Grid  item xs={12} md={8}>
       
       <Card sx={{padding:"5%", margin:"5%", minWidth:"100px", maxWidth:"500px"}}>
       <Box component="img" src="/padre-portada.jpg" alt="hola" sx={{ height: "auto", width: "100%", borderRadius:"10px" }} />
-      <CardHeader title="FORMULARIO DE REGISTRO" sx={{alignContent:"center"}}/>
+      <CardHeader title="FORMULARIO DE REGISTRO" sx={{textAlign: 'center'}}/>
       <CardContent>
       
       {/* <TextField
