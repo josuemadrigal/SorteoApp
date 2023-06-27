@@ -147,7 +147,7 @@ export const Registro = (props: any) => {
         label="Ingresa"
       /> */}
 
-      <TextField variant="filled" type="text" color='success'  placeholder="Nombre" label="Nombre" 
+      <TextField variant="filled" type="text" color='success'  placeholder="Nombre" label="Nombre y apellido" 
       inputProps={{ maxLength: 60 }} required {...register("nombre", {required: true, maxLength: 80})} 
       sx={{minWidth:"100%", margin:"5px 5px 15px 0px" }}/>
 
@@ -209,7 +209,7 @@ export const Registro = (props: any) => {
       >
         {(inputProps: Props & TextFieldProps)=>
         <TextField {...inputProps}
-        variant="filled" color="success" type="text" label="Boleta"/>
+        variant="filled" color="success" type="text" label="Número de Boleta"/>
         }
       </InputMask>
       
