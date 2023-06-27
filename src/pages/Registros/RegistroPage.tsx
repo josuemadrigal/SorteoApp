@@ -17,7 +17,7 @@ const modelo = {defaultValues:{
   municipio:"la-romana",
   direccion:"",
   responsable:"",
-  codigo:"00",
+  codigo:"000",
   status:1
 }}
 
