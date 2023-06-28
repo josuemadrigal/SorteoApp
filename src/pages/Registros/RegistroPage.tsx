@@ -3,8 +3,12 @@ import InputMask, {Props} from 'react-input-mask';
 import { useForm } from "react-hook-form";
 //import Swal from 'sweetalert2'
 import Swal from 'sweetalert2/dist/sweetalert2.all.js'
-import { Box, styled } from '@mui/material';
-import { Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, Select, TextField, TextFieldProps } from "@mui/material";
+import { Theme, useTheme } from '@mui/material/styles';
+import { Box, Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, TextField, TextFieldProps } from "@mui/material";
+import FormControl from '@mui/material/FormControl';
+
+
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import RegistrosService from "../../services/RegistrosService";
 
 const modelo = {defaultValues:{
@@ -21,7 +25,39 @@ const modelo = {defaultValues:{
   status:1
 }}
 
-let listo = 0;
+const ITEM_HEIGHT = 75;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const names = [
+  'Oliver Hansen',
+  'Van Henry',
+  'April Tucker',
+  'Ralph Hubbard',
+  'Omar Alexander',
+  'Carlos Abbott',
+  'Miriam Wagner',
+  'Bradley Wilkerson',
+  'Virginia Andrews',
+  'Kelly Snyder',
+];
+
+function getStyles(name: string, personName: string[], theme: Theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
 
 export const Registro = (props: any) => {
   
@@ -152,6 +188,12 @@ export const Registro = (props: any) => {
   const [cedula, setCedula] = React.useState<string>("");
   const [ boleta, setBoleta] = React.useState<string>("");
 
+
+  const theme = useTheme();
+  const [personName, setPersonName] = React.useState<string[]>([]);
+
+
+
   return (
     <>
     <Grid container spacing={1} justifyContent="center" alignItems="center" >
@@ -172,7 +214,7 @@ export const Registro = (props: any) => {
         }}
         label="Ingresa"
       /> */}
-
+      
       <TextField variant="filled" type="text" color='success'  placeholder="Nombre" label="Nombre y apellido" 
       inputProps={{ maxLength: 60 }} required {...register("nombre", {required: true, maxLength: 80})} 
       sx={{minWidth:"100%", margin:"5px 5px 15px 0px" }}/>
@@ -235,18 +277,22 @@ export const Registro = (props: any) => {
       >
         {(inputProps: Props & TextFieldProps)=>
         <TextField {...inputProps}
-        variant="filled" color="success" type="text" label="Número de Boleta"/>
+        variant="filled" color="success" type="text" label="Número de boleta"/>
         }
       </InputMask>
       
       <InputLabel id="demo-multiple-name-label">Responsable</InputLabel>
-      <Select  variant="filled" {...register("responsable", { required: true })} color='success' sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>
-        <MenuItem value="nombre 1">Nombre 1</MenuItem>
-        <MenuItem value="nombre 2">Nombre 2</MenuItem>
-        <MenuItem value="nombre 3">Nombre 3</MenuItem>
-        <MenuItem value="nombre 5">Nombre 4</MenuItem>
-        <MenuItem value="nombre 6">Nombre 5</MenuItem>
-      </Select>
+      <Select  variant="filled"  {...register("responsable", { required: true })} color='success' sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}} MenuProps={MenuProps}>
+      {names.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getStyles(name, personName, theme)}
+            >
+              {name}
+            </MenuItem>
+          ))}
+      </Select> 
 
       <Button variant="contained" color='success' onClick={registerSubmit} 
       sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>Registrar</Button>
