@@ -21,6 +21,8 @@ const modelo = {defaultValues:{
   status:1
 }}
 
+let listo = 0;
+
 export const Registro = (props: any) => {
   
   //const { formState, setValue, getValues, register} = useForm(modelo);
@@ -43,7 +45,7 @@ export const Registro = (props: any) => {
       })
     }
 
-    if (objeto.cedula.length < 11) {
+    if (objeto.cedula.length < 13) {
       return  Swal.fire({
         position: 'center',
         icon: 'error',
@@ -53,7 +55,7 @@ export const Registro = (props: any) => {
       })
     }
 
-    if (objeto.telefono.length < 10) {
+    if (objeto.telefono.length < 14) {
       return  Swal.fire({
         position: 'center',
         icon: 'error',
@@ -63,7 +65,7 @@ export const Registro = (props: any) => {
       })
     }
 
-    if (objeto.boleta.length < 4) {
+    if (objeto.boleta.length == 0) {
       return  Swal.fire({
         position: 'center',
         icon: 'error',
@@ -85,29 +87,53 @@ export const Registro = (props: any) => {
   
     objeto.status = 1;
 
-    console.log(objeto);
-    const response = await RegistrosService.crearRegistros(objeto);
 
-    console.log(objeto);
-
-    if(response.status == 400){
-      alert("Cedula o boleta ya existen en nuestra base de datos");
-    }
     
-    if(response.status == 201){
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Registro completado',
-        showConfirmButton: false,
-        timer: 7000
-      })
 
-      setTimeout(() => {
-        window.location.replace('https://www.instagram.com/eduardespiritusanto/');
-      }, 2000);
+    Swal.fire({
+      title: '¿Están correctos sus datos?',
+      html: ` <p> Nombre: <b>${objeto.nombre}</b></p>
+              <p> Cédula: <b>${objeto.cedula}</b></p>
+              <p> Email: <b>${objeto.email}</b></p>
+              <p> Teléfono: <b>${objeto.telefono}</b></p>
+              <p> Municipio: <b>${objeto.municipio}</b></p>
+              <p> # Boleta: <b>${objeto.boleta}</b></p>
+              <p> Responsable: <b>${objeto.responsable}</b></p>`,
       
-    }
+      icon: 'question',
+      showCancelButton: true,
+      cancelButtonText: 'Editar datos',
+      confirmButtonColor: '#2e7d32',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Confirmar'
+
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+
+        const response = await RegistrosService.crearRegistros(objeto);
+        
+        if(response.status == 400){
+          alert("Cédula o boleta ya existen en nuestra base de datos");
+        }
+        
+        if(response.status == 201){
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Registro completado',
+            showConfirmButton: false,
+            timer: 7000
+          })
+    
+          setTimeout(() => {
+            window.location.replace('https://www.instagram.com/eduardespiritusanto/');
+          }, 2000);
+          
+        }
+      }
+      
+    })
+
 
   } catch (error) {
     console.log(error)
