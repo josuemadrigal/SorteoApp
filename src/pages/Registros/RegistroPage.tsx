@@ -189,7 +189,7 @@ export const Registro = (props: any) => {
       >
         {(inputProps: Props & TextFieldProps)=>
         <TextField {...inputProps}
-          color="success" type="text" label="Cedula" variant="filled"/>
+          color="success" type="text" label="Cédula" variant="filled"/>
         }
       </InputMask>
  
