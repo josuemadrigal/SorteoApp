@@ -198,7 +198,9 @@ export const Registro = (props: any) => {
 
         const response = await RegistrosService.crearRegistros(objeto);
         
-        if(response.status == 400){
+        console.log(response.status);
+
+        if(response.status == 500){
           alert("Cédula o boleta ya existen en nuestra base de datos");
         }
         
@@ -216,17 +218,20 @@ export const Registro = (props: any) => {
           }, 2000);
           
         }
+        
       }
       
     })
 
+    console.log(objeto);
+    
 
   } catch (error) {
     console.log(error)
     Swal.fire({
       position: 'center',
       icon: 'error',
-      title: 'EL PRODECESO DE REGISTRO AUN NO HA INICIADO',
+      title: 'Cédula o boleta registrada',
       showConfirmButton: false,
       timer: 7000
     })
