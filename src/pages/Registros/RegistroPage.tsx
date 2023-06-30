@@ -94,11 +94,21 @@ export const Registro = (props: any) => {
       })
     }
 
-    if (objeto.boleta == 0) {
+    if (objeto.boleta <= 0) {
       return  Swal.fire({
         position: 'center',
         icon: 'error',
         title: 'Verifique el numero de boleta',
+        showConfirmButton: false,
+        timer: 7000
+      })
+    }
+
+    if (objeto.boleta.toString().length < 5) {
+      return  Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'El numero de boleta debe tener 5 digitos, ejemplo: 00001, 00012, 00123, 01234',
         showConfirmButton: false,
         timer: 7000
       })
