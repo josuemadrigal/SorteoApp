@@ -227,7 +227,7 @@ export const Registro = (props: any) => {
             
       
             return setTimeout(() => {
-              //window.location.replace('https://www.instagram.com/eduardespiritusanto/');
+              window.location.replace('https://www.instagram.com/eduardespiritusanto/');
             }, 2000);
             
           }
