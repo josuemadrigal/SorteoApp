@@ -205,42 +205,60 @@ export const Registro = (props: any) => {
 
         const response = await RegistrosService.crearRegistros(objeto);
         
-        console.log(response.status);
-
-        if(response.status == 400){
-          alert("Cédula o boleta ya existen en nuestra base de datos");
-        }
-        
-        if(response.status == 201){
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Registro completado',
-            showConfirmButton: false,
-            timer: 7000
-          })
-    
-          setTimeout(() => {
-            window.location.replace('https://www.instagram.com/eduardespiritusanto/');
-          }, 2000);
+          if(response.status == 203 ){
+             Swal.fire({
+              position: 'center',
+              icon: 'error',
+              title: 'La cédula o boleta que ingresaste han sido registrada anteriormente',
+              showConfirmButton: false,
+              timer: 7000
+            })
+          }
           
-        }
+          if(response.status == 201){
+             Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Registro completado',
+              showConfirmButton: false,
+              timer: 7000
+            })
+
+            
+      
+            return setTimeout(() => {
+              //window.location.replace('https://www.instagram.com/eduardespiritusanto/');
+            }, 2000);
+            
+          }
+
+          if(response.status == 500){
+            Swal.fire({
+             position: 'center',
+             icon: 'error',
+             title: 'Intente más tarde',
+             showConfirmButton: false,
+             timer: 7000
+           })
+         }
+      
+       
         
       }
       
     })
 
-    console.log(objeto);
+
     
 
   } catch (error) {
     console.log(error)
-    Swal.fire({
+    return Swal.fire({
       position: 'center',
       icon: 'error',
       title: 'Cédula o boleta registrada',
       showConfirmButton: false,
-      timer: 7000
+      timer: 9000
     })
     
   }
