@@ -232,7 +232,7 @@ export const Registro = (props: any) => {
             
           }
 
-          if(response.status == 500){
+          if(response.status == 400){
             Swal.fire({
              position: 'center',
              icon: 'error',
