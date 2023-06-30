@@ -236,7 +236,7 @@ export const Registro = (props: any) => {
             Swal.fire({
              position: 'center',
              icon: 'error',
-             title: 'Intente más tarde',
+             title: 'La cédula o boleta que ingresaste han sido registrada anteriormente',
              showConfirmButton: false,
              timer: 7000
            })
