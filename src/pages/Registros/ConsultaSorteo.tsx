@@ -147,7 +147,7 @@ const ActualizarRegistros = ()=>{
             <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
             <MenuItem value="caleta">Caleta</MenuItem>
             <MenuItem value="guaymate">Guaymate</MenuItem>
-            <MenuItem value="Cumayasa">Cumayasa</MenuItem>
+            <MenuItem value="cumayasa">Cumayasa</MenuItem>
           </Select>
           <TextField type="text" placeholder="Cantidad" label="cantidad" color='success'  {...register("cantidad", {required: true, maxLength: 10}) } sx={{minWidth:"20%", width:"100%", margin:"5px 5px 15px 0px" }}/>
           

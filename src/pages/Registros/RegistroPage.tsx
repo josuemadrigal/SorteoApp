@@ -17,7 +17,7 @@ const modelo = {defaultValues:{
   cedula :"",
   email:"",
   telefono:"",
-  boleta:"",
+  boleta:1,
   municipio:"la-romana",
   direccion:"",
   responsable:"",
@@ -37,66 +37,9 @@ const MenuProps = {
 };
 
 const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
+  'Nombre 1',
+  'Nombre 2',
+  'Nombre 3'
 ];
 
 function getStyles(name: string, personName: string[], theme: Theme) {
@@ -151,7 +94,7 @@ export const Registro = (props: any) => {
       })
     }
 
-    if (objeto.boleta.length == 0) {
+    if (objeto.boleta == 0) {
       return  Swal.fire({
         position: 'center',
         icon: 'error',
@@ -170,11 +113,75 @@ export const Registro = (props: any) => {
         timer: 7000
       })
     }
+
+    // Romana 20 000        = 1 -> 20,000
+    // Villa hermosa 15000  = 20,001 -> 35,000
+    // Guaymate 3000        = 35,001 -> 38,000
+    // Caleta 2000          = 38,001 -> 40,000
+    // Cumayasa 2000        = 40,001 -> 42,000
+    
+
+    if (objeto.municipio == 'la-romana' ) {
+      if (objeto.boleta < 1 || objeto.boleta > 20000 ) {
+        return Swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `La boleta '${objeto.boleta}' no pertenece a La Romana`,
+          showConfirmButton: false,
+          timer: 7000
+        })
+      }
+    }
+    
+    if (objeto.municipio == 'villa-hermosa' ) {
+      if (objeto.boleta < 20001 || objeto.boleta > 35000 ) {
+        return Swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `La boleta '${objeto.boleta}' no pertenece a Villa Hermosa`,
+          showConfirmButton: false,
+          timer: 7000
+        })
+      }
+    }
+
+    if (objeto.municipio == 'guaymate' ) {
+      if (objeto.boleta < 35001 || objeto.boleta > 38000 ) {
+        return Swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `La boleta '${objeto.boleta}' no pertenece a Guaymate`,
+          showConfirmButton: false,
+          timer: 7000
+        })
+      }
+    }
+
+    if (objeto.municipio == 'caleta' ) {
+      if (objeto.boleta < 38001 || objeto.boleta > 40000 ) {
+        return Swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `La boleta '${objeto.boleta}' no pertenece a Caleta`,
+          showConfirmButton: false,
+          timer: 7000
+        })
+      }
+    }
+
+    if (objeto.municipio == 'cumayasa' ) {
+      if (objeto.boleta < 40001 || objeto.boleta > 42000 ) {
+        return Swal.fire({
+          position: 'center',
+          icon: 'warning',
+          title: `La boleta '${objeto.boleta}' no pertenece a Cumayasa`,
+          showConfirmButton: false,
+          timer: 7000
+        })
+      }
+    }
   
     objeto.status = 1;
-
-
-    
 
     Swal.fire({
       title: '¿Están correctos sus datos?',
@@ -200,7 +207,7 @@ export const Registro = (props: any) => {
         
         console.log(response.status);
 
-        if(response.status == 500){
+        if(response.status == 400){
           alert("Cédula o boleta ya existen en nuestra base de datos");
         }
         
