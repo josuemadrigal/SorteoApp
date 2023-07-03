@@ -263,7 +263,7 @@ const ActualizarRegistros = ()=>{
       <Grid item md={7} >
       <Item sx={{minHeight:'100%'}}>
       <Typography gutterBottom variant="h5" component="div">
-            GANADORAS 
+            GANADORES 
           </Typography>
 
         <Grid container rowSpacing={1} columnSpacing={4} >

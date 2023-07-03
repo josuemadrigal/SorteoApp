@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2/dist/sweetalert2.all.js'
 import { Theme, useTheme } from '@mui/material/styles';
 import { Box, Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, TextField, TextFieldProps } from "@mui/material";
-import FormControl from '@mui/material/FormControl';
+//import FormControl from '@mui/material/FormControl';
 
 
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -124,11 +124,12 @@ export const Registro = (props: any) => {
       })
     }
 
-    // Romana 20 000        = 1 -> 20,000
-    // Villa hermosa 15000  = 20,001 -> 35,000
-    // Guaymate 3000        = 35,001 -> 38,000
-    // Caleta 2000          = 38,001 -> 40,000
-    // Cumayasa 2000        = 40,001 -> 42,000
+    // Romana 20 000          = 1       -> 20,000 (final 35000)
+    // Villa hermosa 15 000   = 35,001  -> 50,000 (final 60 000)
+    // Cumayasa 2000          = 60,001  -> 62,000 (final 67 000)
+    // Guaymate 3000          = 67,001  -> 70,000 (final 75 000)
+    // Caleta 2000            = 75,001  -> 77,000 (final 80 000)
+   
     
 
     if (objeto.municipio == 'la-romana' ) {
@@ -142,9 +143,11 @@ export const Registro = (props: any) => {
         })
       }
     }
+
+    
     
     if (objeto.municipio == 'villa-hermosa' ) {
-      if (objeto.boleta < 20001 || objeto.boleta > 35000 ) {
+      if (objeto.boleta < 35001 || objeto.boleta > 50000 ) {
         return Swal.fire({
           position: 'center',
           icon: 'warning',
@@ -155,12 +158,12 @@ export const Registro = (props: any) => {
       }
     }
 
-    if (objeto.municipio == 'guaymate' ) {
-      if (objeto.boleta < 35001 || objeto.boleta > 38000 ) {
+    if (objeto.municipio == 'cumayasa' ) {
+      if (objeto.boleta < 60001 || objeto.boleta > 62000 ) {
         return Swal.fire({
           position: 'center',
           icon: 'warning',
-          title: `La boleta '${objeto.boleta}' no pertenece a Guaymate`,
+          title: `La boleta '${objeto.boleta}' no pertenece a Cumayasa`,
           showConfirmButton: false,
           timer: 7000
         })
@@ -168,7 +171,7 @@ export const Registro = (props: any) => {
     }
 
     if (objeto.municipio == 'caleta' ) {
-      if (objeto.boleta < 38001 || objeto.boleta > 40000 ) {
+      if (objeto.boleta < 67001 || objeto.boleta > 70000 ) {
         return Swal.fire({
           position: 'center',
           icon: 'warning',
@@ -179,17 +182,21 @@ export const Registro = (props: any) => {
       }
     }
 
-    if (objeto.municipio == 'cumayasa' ) {
-      if (objeto.boleta < 40001 || objeto.boleta > 42000 ) {
+    if (objeto.municipio == 'guaymate' ) {
+      if (objeto.boleta < 75001 || objeto.boleta > 77000 ) {
         return Swal.fire({
           position: 'center',
           icon: 'warning',
-          title: `La boleta '${objeto.boleta}' no pertenece a Cumayasa`,
+          title: `La boleta '${objeto.boleta}' no pertenece a Guaymate`,
           showConfirmButton: false,
           timer: 7000
         })
       }
     }
+
+    
+
+    
   
     objeto.status = 1;
 
