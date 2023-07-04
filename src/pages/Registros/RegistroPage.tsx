@@ -5,6 +5,9 @@ import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2/dist/sweetalert2.all.js'
 import { Theme, useTheme } from '@mui/material/styles';
 import { Box, Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, TextField, TextFieldProps } from "@mui/material";
+
+
+import  SelectWithSearch  from "../../components/Select";
 //import FormControl from '@mui/material/FormControl';
 
 
@@ -93,6 +96,7 @@ const names = [
   'RAMON ARIEL SEVERINO',
   'RAUL CEDEÑO',
   'REINALDO RAMIREZ (JEREMIAS)',
+  'RICARDO BERAS CASTILLO',
   'SANTA SABA ESPINAL',
   'SANTO DE LOS SANTOS',
   'SARITIN MARTINEZ (PASTORA SHARY)',
@@ -117,14 +121,7 @@ function getStyles(name: string, personName: string[], theme: Theme) {
 
 export const Registro = (props: any) => {
 
-  // const [responsableData, setResponsableData] = useState<any[]>([]);
-
-  // const respon =async () => {
-  //   const responsables = await RegistrosService.getResponsables();
-  //   console.log(responsables.data);
-  //   return setResponsableData(responsables.data);
-    
-  // }
+  
 
   //const { formState, setValue, getValues, register} = useForm(modelo);
   const { getValues, register} = useForm(modelo);
@@ -298,7 +295,7 @@ export const Registro = (props: any) => {
              Swal.fire({
               position: 'center',
               icon: 'error',
-              title: 'La cédula o boleta que ingresaste han sido registrada anteriormente',
+              title: 'Intente más tarde',
               showConfirmButton: false,
               timer: 7000
             })
@@ -325,7 +322,7 @@ export const Registro = (props: any) => {
             Swal.fire({
              position: 'center',
              icon: 'error',
-             title: 'La cédula o boleta que ingresaste han sido registrada anteriormente',
+             title: 'Intente más tarde',
              showConfirmButton: false,
              timer: 7000
            })
@@ -465,6 +462,8 @@ export const Registro = (props: any) => {
             </MenuItem>
           ))}
       </Select> 
+
+      {/* <SelectWithSearch/> */}
 
       <Button variant="contained" color='success' onClick={registerSubmit} 
       sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>Registrar</Button>
