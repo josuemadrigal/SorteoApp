@@ -41,12 +41,12 @@ const MenuProps = {
 
 
 const names = [
-
   'ADA JOSEFINA DIAZ',
   'AFRICANO CON MI BARRIO',
   'AMADO MERCEDES (NENO)',
   'ANA BRISA POOL',
   'ANEURY MOTA',
+  'ARACELIS SIMO',
   'CELESTE MEDINA',
   'CHAGO',
   'DANIEL ENCARNACION',
@@ -55,6 +55,7 @@ const names = [
   'DIANA MEJIA',
   'DOMINGO SANCHEZ',
   'DRA. SONIA GARCIA',
+  'ELISEO OLLER',
   'ENRIQUE ANTONIO PAYANO',
   'ESTEBAN MEJIA (BELY)',
   'FELIX DE GRACIA',
@@ -76,6 +77,7 @@ const names = [
   'LISETT GUZMAN',
   'MANUEL MODESTO ROSARIO POLLARD',
   'MARIA MERCEDES',
+  'MARIANO JAZMIN (EL CACIQUE)',
   'MARIANO MORALES',
   'MARINO CHEVALIER',
   'MAYOBANEX CEDEÑO',
@@ -95,11 +97,6 @@ const names = [
   'YISEL MARIA GALVEZ',
   'YOHAN VALENZUELA',
   'ZORAIMA BATISTA MORALES',
-  
-  
-  
-  
-  
 ];
 
 function getStyles(name: string, personName: string[], theme: Theme) {
