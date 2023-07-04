@@ -37,9 +37,17 @@ const MenuProps = {
 };
 
 const names = [
-  'Nombre 1',
-  'Nombre 2',
-  'Nombre 3'
+
+'AMADO MERCEDES (NENO)',
+'CELESTE MEDINA',
+'DAVID ROSARIO MUÑOZ',
+'DRA. SONIA GARCIA',
+'HECTOR JULIO MARTINEZ',
+'JOSE ARIARDY UBIERA',
+'JUAN RUFINO RODRIGUEZ',
+'MIGUEL ALEJANDRO PEGUERO RAMIREZ',
+'PEDRO HIDALGO',
+'YISEL MARIA GALVEZ',
 ];
 
 function getStyles(name: string, personName: string[], theme: Theme) {

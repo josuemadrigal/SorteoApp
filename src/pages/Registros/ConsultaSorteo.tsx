@@ -142,7 +142,8 @@ const ActualizarRegistros = ()=>{
           Buscar 
         </Typography>
         <InputLabel>Municipio / Distrito</InputLabel>
-        <Select {...register("municipio", {required: true, maxLength: 10}) } color='success'  sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
+        <Select {...register("municipio", {required: true, maxLength: 10}) } color='success'  
+        sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
             <MenuItem value="la-romana">La Romana</MenuItem>
             <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
             <MenuItem value="caleta">Caleta</MenuItem>
@@ -151,10 +152,9 @@ const ActualizarRegistros = ()=>{
           </Select>
           <TextField type="text" placeholder="Cantidad" label="cantidad" color='success'  {...register("cantidad", {required: true, maxLength: 10}) } sx={{minWidth:"20%", width:"100%", margin:"5px 5px 15px 0px" }}/>
           
-          <Select value={premio} color='success'   onChange={handlePremio}
-                  
-                  sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} >
-
+          <Select value={premio} color='success'   onChange={handlePremio} 
+                  sx={{minWidth:"40%", width:"100%", margin:"5px 5px 15px 0px" }} 
+          >
             <MenuItem value="setpPaire">Set de Paire</MenuItem>
             <MenuItem value="setCalderos">Set de Carderos</MenuItem>
             <MenuItem value="ollasPresion">Ollas de Presion</MenuItem>
@@ -162,18 +162,6 @@ const ActualizarRegistros = ()=>{
             <MenuItem value="vajilla">Vajilla</MenuItem>
             <MenuItem value="corcha">Corcha</MenuItem>
             <MenuItem value="cama">Cama</MenuItem>
-            <MenuItem value="televisor">Televisor</MenuItem>
-            <MenuItem value="microondas">Microondas</MenuItem>
-            <MenuItem value="licuadora">Licuadora</MenuItem>
-            <MenuItem value="hornoElectrico">Horno Electrico</MenuItem>
-            <MenuItem value="abanico">Abanico</MenuItem>
-            <MenuItem value="cilindroGas">Cilindro de Gas</MenuItem>
-            <MenuItem value="estufaMesa">Estufa de Mesa</MenuItem>
-            <MenuItem value="lavadora">Lavadora</MenuItem>
-            <MenuItem value="estufa">Estufa de horno</MenuItem>
-            <MenuItem value="nevera">Nevera</MenuItem>
-            
-
           </Select>
           
           <Button onClick={()=>CustomGetRegistros()} 
