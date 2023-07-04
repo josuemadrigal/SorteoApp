@@ -10,6 +10,7 @@ import { Box, Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem,
 
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import RegistrosService from "../../services/RegistrosService";
+import { useState } from "react";
 
 const modelo = {defaultValues:{
   
@@ -36,18 +37,34 @@ const MenuProps = {
   },
 };
 
+
+
+
 const names = [
 
-'AMADO MERCEDES (NENO)',
-'CELESTE MEDINA',
-'DAVID ROSARIO MUÑOZ',
-'DRA. SONIA GARCIA',
-'HECTOR JULIO MARTINEZ',
-'JOSE ARIARDY UBIERA',
-'JUAN RUFINO RODRIGUEZ',
-'MIGUEL ALEJANDRO PEGUERO RAMIREZ',
-'PEDRO HIDALGO',
-'YISEL MARIA GALVEZ',
+  'AMADO MERCEDES (NENO)',
+  'CELESTE MEDINA',
+  'DANIEL ENCARNACION',
+  'DANIEL FLORENTINO',
+  'DAVID ROSARIO MUÑOZ',
+  'DRA. SONIA GARCIA',
+  'ENRIQUE ANTONIO PAYANO',
+  'FRANCIS LAPPOST',
+  'HECTOR JULIO MARTINEZ',
+  'JESUS SANTANA',
+  'JOSE ARIARDY UBIERA',
+  'JUAN ANTONIO BAEZ',
+  'JUAN RUFINO RODRIGUEZ',
+  'JUNIOR ORTIZ',
+  'KARY DEL RIO',
+  'MANUEL MODESTO ROSARIO POLLARD',
+  'MARIA MERCEDES',
+  'MIGUEL ALEJANDRO PEGUERO RAMIREZ',
+  'PEDRO HIDALGO',
+  'SANTA SABA ESPINAL',
+  'SARITIN MARTINEZ (PASTORA SHARY)',
+  'YEISON CARRASCO MORALES',
+  'YISEL MARIA GALVEZ',
 ];
 
 function getStyles(name: string, personName: string[], theme: Theme) {
@@ -60,8 +77,18 @@ function getStyles(name: string, personName: string[], theme: Theme) {
 }
 
 
+
 export const Registro = (props: any) => {
-  
+
+  // const [responsableData, setResponsableData] = useState<any[]>([]);
+
+  // const respon =async () => {
+  //   const responsables = await RegistrosService.getResponsables();
+  //   console.log(responsables.data);
+  //   return setResponsableData(responsables.data);
+    
+  // }
+
   //const { formState, setValue, getValues, register} = useForm(modelo);
   const { getValues, register} = useForm(modelo);
  
@@ -387,7 +414,10 @@ export const Registro = (props: any) => {
       </InputMask>
       
       <InputLabel id="demo-multiple-name-label">Responsable</InputLabel>
-      <Select  variant="filled"  {...register("responsable", { required: true })} color='success' sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}} MenuProps={MenuProps}>
+      <Select variant="filled"  {...register("responsable", { required: true })} color='success' sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}} MenuProps={MenuProps}>
+      
+      
+      
       {names.map((name) => (
             <MenuItem
               key={name}

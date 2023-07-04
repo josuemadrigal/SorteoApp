@@ -10,6 +10,12 @@ class RegistrosService{
         return response;
     }
 
+    public async getResponsables(){
+        
+        const response = await http.get<any[]>('/registros/all');
+        return response;
+    }
+
     public async crearRegistros(param: any){
         const response = await http.post<any>("/registros",param);
 
