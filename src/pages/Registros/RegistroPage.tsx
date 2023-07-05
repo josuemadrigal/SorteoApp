@@ -6,10 +6,8 @@ import Swal from 'sweetalert2/dist/sweetalert2.all.js'
 // import { Theme, useTheme } from '@mui/material/styles';
 import { Box, Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, TextField, TextFieldProps } from "@mui/material";
 
-
 // import  SelectWithSearch  from "../../components/Select";
 //import FormControl from '@mui/material/FormControl';
-
 
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import RegistrosService from "../../services/RegistrosService";
@@ -198,8 +196,6 @@ export const Registro = (props: any) => {
     // Cumayasa 2000          = 60,001  -> 62,000 (final 67 000)
     // Guaymate 3000          = 67,001  -> 70,000 (final 75 000)
     // Caleta 2000            = 75,001  -> 77,000 (final 80 000)
-   
-    
 
     if (objeto.municipio == 'la-romana' ) {
       if (objeto.boleta < 1 || objeto.boleta > 20000 ) {
@@ -213,8 +209,6 @@ export const Registro = (props: any) => {
       }
     }
 
-    
-    
     if (objeto.municipio == 'villa-hermosa' ) {
       if (objeto.boleta < 35001 || objeto.boleta > 50000 ) {
         return Swal.fire({
@@ -263,10 +257,6 @@ export const Registro = (props: any) => {
       }
     }
 
-    
-
-    
-  
     objeto.status = 1;
 
     Swal.fire({
@@ -309,9 +299,6 @@ export const Registro = (props: any) => {
               showConfirmButton: false,
               timer: 7000
             })
-
-            
-      
             return setTimeout(() => {
               window.location.replace('https://www.instagram.com/eduardespiritusanto/');
             }, 2000);
@@ -327,16 +314,8 @@ export const Registro = (props: any) => {
              timer: 7000
            })
          }
-      
-       
-        
       }
-      
     })
-
-
-    
-
   } catch (error) {
     console.log(error)
     return Swal.fire({
@@ -346,7 +325,6 @@ export const Registro = (props: any) => {
       showConfirmButton: false,
       timer: 9000
     })
-    
   }
   };
 
@@ -354,11 +332,8 @@ export const Registro = (props: any) => {
   const [cedula, setCedula] = React.useState<string>("");
   const [ boleta, setBoleta] = React.useState<string>("");
 
-
   // const theme = useTheme();
   // const [personName, setPersonName] = React.useState<string[]>([]);
-
-
 
   return (
     <>

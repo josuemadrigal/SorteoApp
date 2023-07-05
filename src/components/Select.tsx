@@ -17,6 +17,11 @@ const options: Option[] = [
   { value: 'option3', label: 'Opción 3' },
 ];
 
+
+    
+
+console.log(options);
+
 const SelectWithSearch: React.FC = () => {
 
     const [responsableData, setResponsableData] = useState<any[]>([]);
@@ -28,7 +33,12 @@ const SelectWithSearch: React.FC = () => {
       
     }
 
-    respon();
+    
+    console.log(responsableData);
+
+
+    
+
     
 
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
@@ -41,7 +51,7 @@ const SelectWithSearch: React.FC = () => {
     <Autocomplete
       value={selectedOption}
       onChange={(event, newValue) => handleOptionChange(newValue)}
-      options={responsableData}
+      options={options}
       getOptionLabel={(option) => option.label}
       renderInput={(params) => (
         <TextField {...params} label="Responsable" color='success' variant="filled" />
