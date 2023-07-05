@@ -233,24 +233,24 @@ export const Registro = (props: any) => {
       }
     }
 
-    if (objeto.municipio == 'caleta' ) {
+    if (objeto.municipio == 'guaymate' ) {
       if (objeto.boleta < 67001 || objeto.boleta > 70000 ) {
         return Swal.fire({
           position: 'center',
           icon: 'warning',
-          title: `La boleta '${objeto.boleta}' no pertenece a Caleta`,
+          title: `La boleta '${objeto.boleta}' no pertenece a Guaymate`,
           showConfirmButton: false,
           timer: 7000
         })
       }
     }
 
-    if (objeto.municipio == 'guaymate' ) {
+    if (objeto.municipio == 'caleta' ) {
       if (objeto.boleta < 75001 || objeto.boleta > 77000 ) {
         return Swal.fire({
           position: 'center',
           icon: 'warning',
-          title: `La boleta '${objeto.boleta}' no pertenece a Guaymate`,
+          title: `La boleta '${objeto.boleta}' no pertenece a Caleta`,
           showConfirmButton: false,
           timer: 7000
         })
