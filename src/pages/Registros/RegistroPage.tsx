@@ -3,17 +3,17 @@ import InputMask, {Props} from 'react-input-mask';
 import { useForm } from "react-hook-form";
 //import Swal from 'sweetalert2'
 import Swal from 'sweetalert2/dist/sweetalert2.all.js'
-import { Theme, useTheme } from '@mui/material/styles';
+// import { Theme, useTheme } from '@mui/material/styles';
 import { Box, Button, Card, CardContent, CardHeader, Grid, InputLabel, MenuItem, TextField, TextFieldProps } from "@mui/material";
 
 
-import  SelectWithSearch  from "../../components/Select";
+// import  SelectWithSearch  from "../../components/Select";
 //import FormControl from '@mui/material/FormControl';
 
 
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import RegistrosService from "../../services/RegistrosService";
-import { useState } from "react";
+// import { useState } from "react";
 
 const modelo = {defaultValues:{
   
@@ -29,93 +29,93 @@ const modelo = {defaultValues:{
   status:1
 }}
 
-const ITEM_HEIGHT = 75;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+// const ITEM_HEIGHT = 75;
+// const ITEM_PADDING_TOP = 8;
+// const MenuProps = {
+//   PaperProps: {
+//     style: {
+//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+//       width: 250,
+//     },
+//   },
+// };
 
 
 
 
-const names = [
-  'ADA JOSEFINA DIAZ',
-  'AFRICANO CON MI BARRIO',
-  'AMADO MERCEDES (NENO)',
-  'ANA BRISA POOL',
-  'ANEURY MOTA',
-  'ARACELIS SIMO',
-  'CELESTE MEDINA',
-  'CHAGO',
-  'DANIEL ENCARNACION',
-  'DANIEL FLORENTINO',
-  'DAVID ROSARIO MUÑOZ',
-  'DIANA MEJIA',
-  'DOMINGO SANCHEZ',
-  'DRA. SONIA GARCIA',
-  'EDGAR RUIZ',
-  'ELISEO OLLER',
-  'ENRIQUE ANTONIO PAYANO',
-  'ESTEBAN MEJIA (BELY)',
-  'FELIX DE GRACIA',
-  'FELIX MANUEL SOLANO',
-  'FLOR MARIA RODRIGUEZ',
-  'FRANCIS LAPPOST',
-  'FRANKLIN AUGUSTO',
-  'FREDDY FELIX ISAAC',
-  'HECTOR JULIO MARTINEZ',
-  'HENRY RIJO',
-  'ISAIAS CARVAJAL',
-  'JAIME KING',
-  'JESUS SANTANA',
-  'JOHN JAVIER PEGUERO',
-  'JOSE ARIARDY UBIERA',
-  'JUAN ANTONIO BAEZ',
-  'JUAN RIVERA',
-  'JUAN RUFINO RODRIGUEZ',
-  'JULIO ALBERTO RIJO MARTE',
-  'JUNIOR ORTIZ',
-  'JUSTO REYES',
-  'KARY DEL RIO',
-  'LISETT GUZMAN',
-  'MANUEL MODESTO ROSARIO POLLARD',
-  'MARIA MERCEDES',
-  'MARIANO JAZMIN (EL CACIQUE)',
-  'MARIANO MORALES',
-  'MARINO CHEVALIER',
-  'MAYOBANEX CEDEÑO',
-  'MIGUEL ALEJANDRO PEGUERO RAMIREZ',
-  'PEDRO HIDALGO',
-  'PRANDY PINALES',
-  'RAFAEL CANDELARIO',
-  'RAMON ARIEL SEVERINO',
-  'RAUL CEDEÑO',
-  'REINALDO RAMIREZ (JEREMIAS)',
-  'RICARDO BERAS CASTILLO',
-  'SANTA SABA ESPINAL',
-  'SANTO DE LOS SANTOS',
-  'SARITIN MARTINEZ (PASTORA SHARY)',
-  'SONIA CASTILLO',
-  'WILQUIN JOSELIN MOTA',
-  'YEISON CARRASCO MORALES',
-  'YISEL MARIA GALVEZ',
-  'YOHAN VALENZUELA',
-  'ZORAIMA BATISTA MORALES',
-];
+// const names = [
+//   'ADA JOSEFINA DIAZ',
+//   'AFRICANO CON MI BARRIO',
+//   'AMADO MERCEDES (NENO)',
+//   'ANA BRISA POOL',
+//   'ANEURY MOTA',
+//   'ARACELIS SIMO',
+//   'CELESTE MEDINA',
+//   'CHAGO',
+//   'DANIEL ENCARNACION',
+//   'DANIEL FLORENTINO',
+//   'DAVID ROSARIO MUÑOZ',
+//   'DIANA MEJIA',
+//   'DOMINGO SANCHEZ',
+//   'DRA. SONIA GARCIA',
+//   'EDGAR RUIZ',
+//   'ELISEO OLLER',
+//   'ENRIQUE ANTONIO PAYANO',
+//   'ESTEBAN MEJIA (BELY)',
+//   'FELIX DE GRACIA',
+//   'FELIX MANUEL SOLANO',
+//   'FLOR MARIA RODRIGUEZ',
+//   'FRANCIS LAPPOST',
+//   'FRANKLIN AUGUSTO',
+//   'FREDDY FELIX ISAAC',
+//   'HECTOR JULIO MARTINEZ',
+//   'HENRY RIJO',
+//   'ISAIAS CARVAJAL',
+//   'JAIME KING',
+//   'JESUS SANTANA',
+//   'JOHN JAVIER PEGUERO',
+//   'JOSE ARIARDY UBIERA',
+//   'JUAN ANTONIO BAEZ',
+//   'JUAN RIVERA',
+//   'JUAN RUFINO RODRIGUEZ',
+//   'JULIO ALBERTO RIJO MARTE',
+//   'JUNIOR ORTIZ',
+//   'JUSTO REYES',
+//   'KARY DEL RIO',
+//   'LISETT GUZMAN',
+//   'MANUEL MODESTO ROSARIO POLLARD',
+//   'MARIA MERCEDES',
+//   'MARIANO JAZMIN (EL CACIQUE)',
+//   'MARIANO MORALES',
+//   'MARINO CHEVALIER',
+//   'MAYOBANEX CEDEÑO',
+//   'MIGUEL ALEJANDRO PEGUERO RAMIREZ',
+//   'PEDRO HIDALGO',
+//   'PRANDY PINALES',
+//   'RAFAEL CANDELARIO',
+//   'RAMON ARIEL SEVERINO',
+//   'RAUL CEDEÑO',
+//   'REINALDO RAMIREZ (JEREMIAS)',
+//   'RICARDO BERAS CASTILLO',
+//   'SANTA SABA ESPINAL',
+//   'SANTO DE LOS SANTOS',
+//   'SARITIN MARTINEZ (PASTORA SHARY)',
+//   'SONIA CASTILLO',
+//   'WILQUIN JOSELIN MOTA',
+//   'YEISON CARRASCO MORALES',
+//   'YISEL MARIA GALVEZ',
+//   'YOHAN VALENZUELA',
+//   'ZORAIMA BATISTA MORALES',
+// ];
 
-function getStyles(name: string, personName: string[], theme: Theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium,
-  };
-}
+// function getStyles(name: string, personName: string[], theme: Theme) {
+//   return {
+//     fontWeight:
+//       personName.indexOf(name) === -1
+//         ? theme.typography.fontWeightRegular
+//         : theme.typography.fontWeightMedium,
+//   };
+// }
 
 
 
@@ -355,8 +355,8 @@ export const Registro = (props: any) => {
   const [ boleta, setBoleta] = React.useState<string>("");
 
 
-  const theme = useTheme();
-  const [personName, setPersonName] = React.useState<string[]>([]);
+  // const theme = useTheme();
+  // const [personName, setPersonName] = React.useState<string[]>([]);
 
 
 
@@ -447,7 +447,9 @@ export const Registro = (props: any) => {
         }
       </InputMask>
       
-      <InputLabel id="demo-multiple-name-label">Responsable</InputLabel>
+      <TextField type="text" variant="filled" placeholder="Nombre del responsable" color='success' label="Responsable"
+      {...register("responsable", {required: true, maxLength: 80})} sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}/>
+      {/* <InputLabel id="demo-multiple-name-label">Responsable</InputLabel>
       <Select variant="filled"  {...register("responsable", { required: true })} color='success' sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}} MenuProps={MenuProps}>
       
       
@@ -461,7 +463,7 @@ export const Registro = (props: any) => {
               {name}
             </MenuItem>
           ))}
-      </Select> 
+      </Select>  */}
 
       {/* <SelectWithSearch/> */}
 
