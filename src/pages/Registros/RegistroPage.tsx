@@ -20,7 +20,7 @@ const modelo = {defaultValues:{
   email:"",
   telefono:"",
   boleta:1,
-  municipio:"la-romana",
+  municipio:"",
   direccion:"",
   responsable:"",
   codigo:"000",
@@ -156,6 +156,16 @@ export const Registro = (props: any) => {
         position: 'center',
         icon: 'error',
         title: 'Verifique el numero de teléfono',
+        showConfirmButton: false,
+        timer: 7000
+      })
+    }
+
+    if (!objeto.municipio) {
+      return  Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Seleccione el municipio o distrito',
         showConfirmButton: false,
         timer: 7000
       })
@@ -309,7 +319,7 @@ export const Registro = (props: any) => {
             Swal.fire({
              position: 'center',
              icon: 'error',
-             title: 'Intente más tarde',
+             title: 'Cédula o boleta registrada',
              showConfirmButton: false,
              timer: 7000
            })
@@ -321,7 +331,7 @@ export const Registro = (props: any) => {
     return Swal.fire({
       position: 'center',
       icon: 'error',
-      title: 'Cédula o boleta registrada',
+      title: 'Intente más tarde',
       showConfirmButton: false,
       timer: 9000
     })
@@ -396,7 +406,7 @@ export const Registro = (props: any) => {
       </InputMask>
       
       <InputLabel id="demo-multiple-name-label">Municipio / Distrito</InputLabel>
-      <Select variant="filled"  {...register("municipio", { required: true })} color='success' sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>
+      <Select variant="filled" {...register("municipio", { required: true })} color='success' sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}}>
         <MenuItem value="caleta">Caleta</MenuItem>
         <MenuItem value="cumayasa">Cumayasa</MenuItem>
         <MenuItem value="guaymate">Guaymate</MenuItem>
