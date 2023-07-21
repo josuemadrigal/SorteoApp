@@ -212,7 +212,7 @@ export const Registro = (props: any) => {
       // Caleta 2000            = 75,001  -> 77,000 (final 80 000)
 
       if (objeto.municipio == "la-romana") {
-        if (objeto.boleta < 1 || objeto.boleta > 25000) {
+        if (objeto.boleta < 1 || objeto.boleta > 35000) {
           return Swal.fire({
             position: "center",
             icon: "warning",
@@ -224,7 +224,7 @@ export const Registro = (props: any) => {
       }
 
       if (objeto.municipio == "villa-hermosa") {
-        if (objeto.boleta < 35001 || objeto.boleta > 50000) {
+        if (objeto.boleta < 35001 || objeto.boleta > 60000) {
           return Swal.fire({
             position: "center",
             icon: "warning",
@@ -236,7 +236,7 @@ export const Registro = (props: any) => {
       }
 
       if (objeto.municipio == "cumayasa") {
-        if (objeto.boleta < 60001 || objeto.boleta > 62000) {
+        if (objeto.boleta < 60001 || objeto.boleta > 67000) {
           return Swal.fire({
             position: "center",
             icon: "warning",
@@ -248,7 +248,7 @@ export const Registro = (props: any) => {
       }
 
       if (objeto.municipio == "guaymate") {
-        if (objeto.boleta < 67001 || objeto.boleta > 70000) {
+        if (objeto.boleta < 67001 || objeto.boleta > 75000) {
           return Swal.fire({
             position: "center",
             icon: "warning",
@@ -260,7 +260,7 @@ export const Registro = (props: any) => {
       }
 
       if (objeto.municipio == "caleta") {
-        if (objeto.boleta < 75001 || objeto.boleta > 77000) {
+        if (objeto.boleta < 75001 || objeto.boleta > 80000) {
           return Swal.fire({
             position: "center",
             icon: "warning",
