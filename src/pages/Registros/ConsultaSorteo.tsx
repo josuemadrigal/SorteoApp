@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../../App.css";
 
-import GifTombola from "../../../public/gif-padress.gif";
+import GifTombola from "../../../public/gif-padresLow.gif";
 
 // import Lottie, {LottieRefCurrentProps} from 'lottie-react';
 // import animationData from '../../assets/65849-emos-spin.json'
@@ -54,7 +54,12 @@ export const Consulta = () => {
   const [unCheckList, setUnCheckList] = useState<any[]>([]);
 
   const [premio, setPremio] = useState("");
+  const [municipioT, setMunicipioT] = useState("");
 
+  const handleMunicipio = (event: SelectChangeEvent) => {
+    setMunicipioT(event.target.value);
+    console.log(municipioT);
+  };
   const handlePremio = (event: SelectChangeEvent) => {
     setPremio(event.target.value);
     console.log(premio);
@@ -144,6 +149,7 @@ export const Consulta = () => {
           <Select
             {...register("municipio", { required: true, maxLength: 10 })}
             color="success"
+            onChange={handleMunicipio}
             sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
           >
             <MenuItem value="caleta">Caleta</MenuItem>
