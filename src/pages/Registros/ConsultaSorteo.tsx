@@ -174,12 +174,12 @@ export const Consulta = () => {
             onChange={handlePremio}
             sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
           >
-            <MenuItem value="abanico">Abanico</MenuItem>
-            <MenuItem value="bono">Bono</MenuItem>
-            <MenuItem value="celular">Celular</MenuItem>
-            <MenuItem value="inversor">Inversor</MenuItem>
-            <MenuItem value="motor">Motor</MenuItem>
-            <MenuItem value="televisor">Televisor</MenuItem>
+            <MenuItem value="Abanico">Abanico</MenuItem>
+            <MenuItem value="Bono">Bono</MenuItem>
+            <MenuItem value="Celular">Celular</MenuItem>
+            <MenuItem value="Inversor">Inversor</MenuItem>
+            <MenuItem value="Motor">Motor</MenuItem>
+            <MenuItem value="Televisor">Televisor</MenuItem>
           </Select>
 
           <Button
@@ -215,10 +215,15 @@ export const Consulta = () => {
             backgroundColor: "#06502a",
           }}
         >
-          {/* <Typography gutterBottom variant="h5" component="div">
-            GANADORES
-          </Typography> */}
-
+          <Typography
+            gutterBottom
+            variant="h3"
+            component="div"
+            sx={{ color: "#fff" }}
+          >
+            Ganadores de un {premio}
+          </Typography>{" "}
+          *
           <Grid container rowSpacing={1} columnSpacing={4}>
             {checkList.length <= 0 ? (
               <p>.</p>

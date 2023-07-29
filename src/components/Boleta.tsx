@@ -7,7 +7,7 @@ interface Props {
 }
 export const Boleta = ({ item }: Props) => {
   return (
-    <Grid item sm={12} md={4} lg={3}>
+    <Grid item sm={12} md={4} lg={4}>
       <motion.div
         className="box"
         initial={{ scale: 0, backgroundColor: "#fff" }}
