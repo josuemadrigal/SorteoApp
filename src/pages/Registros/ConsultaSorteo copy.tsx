@@ -6,6 +6,7 @@ import GifTombola from "../../../public/gif-padresLow.gif";
 // import Lottie, {LottieRefCurrentProps} from 'lottie-react';
 // import animationData from '../../assets/65849-emos-spin.json'
 
+import { motion } from "framer-motion";
 import { useMutation } from "react-query";
 //import SearchIcon from '@mui/icons-material/Search';
 //import SaveIcon from '@mui/icons-material/Save';
@@ -140,9 +141,7 @@ export const Consulta = () => {
   return (
     <Grid container my={1} rowSpacing={2} columnSpacing={1}>
       <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
-        <Item sx={{ height: "850px", width: "220px" }}>
-          <img src={GifTombola} alt="TOMBOLA" width="90%" />
-
+        <Item sx={{ height: "600px", width: "220px" }}>
           <Typography gutterBottom variant="h5" component="div">
             Buscar
           </Typography>
@@ -192,7 +191,31 @@ export const Consulta = () => {
             Buscar
           </Button>
 
+          {/* <motion.div>
+            <img
+              src={`/premios/${premio}.png`}
+              alt="Imagen del premio"
+              width={"80%"}
+            ></img>
+          </motion.div> */}
+
+          {/* <div className="checkList">
+                <div className="title">Listado De Boletas:</div>
+                  <div className="list-container">
+                    {checkList && checkList.map((item, index) => (
+                      <div key={index}>
+                        
+                        <input value={item} type="checkbox" onChange={handleCheck} />
+                        <span className={isChecked(item.boleta)}>{item.boleta}</span>
+                      </div>
+                    ))}
+                </div>
+              </div> */}
+
           <div>
+            {/* <p>{`Boletas presentes:  ${checkedItems}`}</p>  */}
+            {/* <p>{`Boletas ausentes:  ${JSON.stringify( unCheckList)}`}</p> */}
+
             <Button
               onClick={() => ActualizarRegistros()}
               variant="contained"
@@ -207,17 +230,51 @@ export const Consulta = () => {
       </Grid>
       {/* END CONTROLES */}
 
-      <Grid item md={12}>
+      {/* START  Column 2 */}
+      <Grid item md={3}>
         <Item
           sx={{
-            minHeight: "1000px",
-            marginLeft: "250px",
-            backgroundColor: "#06502a",
+            height: "550px",
+
+            alignItems: "center",
+            width: "260px",
+            marginLeft: "30px",
           }}
         >
-          {/* <Typography gutterBottom variant="h5" component="div">
+          <Grid container rowSpacing={5} columnSpacing={1}>
+            <Grid item md={12}>
+              {/* <Lottie onComplete={() => {
+                spinRef.current?.goToAndPlay(45, true)
+              }} lottieRef={spinRef} loop={false} style={style} animationData={animationData}/> */}
+
+              {/* <ReactPlayer  
+
+                playing
+                url="/tombola.mp4"
+                
+                loop
+                
+                width="640"
+                height="360"
+              /> */}
+
+              <img src={GifTombola} alt="TOMBOLA" width="90%" />
+            </Grid>
+
+            {/* <Grid item md={12}>
+                <Box component="img" src="/foto-eduard2.jpg" alt="hola" sx={{ height: "auto", width: "90%", borderRadius:"10px" }} />
+          </Grid> */}
+          </Grid>
+        </Item>
+      </Grid>
+
+      {/* END  Column 2 */}
+
+      <Grid item md={7}>
+        <Item sx={{ minHeight: "500px" }}>
+          <Typography gutterBottom variant="h5" component="div">
             GANADORES
-          </Typography> */}
+          </Typography>
 
           <Grid container rowSpacing={1} columnSpacing={4}>
             {checkList.length <= 0 ? (
