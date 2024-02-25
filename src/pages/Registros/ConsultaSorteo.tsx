@@ -2,18 +2,19 @@ import { useState } from "react";
 import "../../App.css";
 
 import GifTombola from "../../../public/gif-padresLow.gif";
+import SearchIcon from "@mui/icons-material/Search";
+import SaveIcon from "@mui/icons-material/Save";
 
 // import Lottie, {LottieRefCurrentProps} from 'lottie-react';
 // import animationData from '../../assets/65849-emos-spin.json'
 
 import { useMutation } from "react-query";
-//import SearchIcon from '@mui/icons-material/Search';
-//import SaveIcon from '@mui/icons-material/Save';
 
 import "animate.css";
 
 import {
   Button,
+  FormControl,
   Grid,
   InputLabel,
   MenuItem,
@@ -33,21 +34,24 @@ import Swal from "sweetalert2";
 
 import { RenderBoletas } from "../../components/RenderBoletas";
 
-const modelo = {
-  defaultValues: {
-    municipio: "-",
-    premio: "",
-    status: 1,
-    cantidad: 4,
-  },
-};
-
+interface FormValues {
+  municipio: string;
+  premio: string;
+  status: number;
+  cantidad: number;
+}
 export const Consulta = () => {
-  const { getValues, register } = useForm(modelo);
-
   // const spinRef = useRef<LottieRefCurrentProps>(null);
 
   // const [checked, setChecked] = useState<any[]>([]);
+  const { getValues, register } = useForm<FormValues>({
+    defaultValues: {
+      municipio: "",
+      premio: "",
+      status: 1,
+      cantidad: 4,
+    },
+  });
   const [checkList, setCheckList] = useState<any[]>([]);
 
   const [unCheckList, setUnCheckList] = useState<any[]>([]);
@@ -57,6 +61,7 @@ export const Consulta = () => {
 
   const handleMunicipio = (event: SelectChangeEvent) => {
     setMunicipioT(event.target.value);
+    //register("municipio")(municipioT);
     console.log(municipioT);
   };
   const handlePremio = (event: SelectChangeEvent) => {
@@ -79,6 +84,7 @@ export const Consulta = () => {
     setUnCheckList([]);
 
     const param: any = getValues();
+    param.municipio = municipioT;
 
     if (param.cantidad <= 0) {
       return Swal.fire({
@@ -109,7 +115,7 @@ export const Consulta = () => {
       return Swal.fire({
         position: "center",
         icon: "error",
-        title: "Seleccione el municipio",
+        title: "Verifique los parametros",
         showConfirmButton: false,
         timer: 7000,
       });
@@ -143,11 +149,11 @@ export const Consulta = () => {
         <Item sx={{ height: "850px", width: "220px" }}>
           <img src={GifTombola} alt="TOMBOLA" width="90%" />
 
-          <Typography gutterBottom variant="h5" component="div">
-            Buscar
-          </Typography>
-          <InputLabel>Municipio / Distrito</InputLabel>
+          <InputLabel sx={{ marginTop: "20px" }}>
+            Municipio / Distrito
+          </InputLabel>
           <Select
+            value={municipioT}
             {...register("municipio", { required: true, maxLength: 10 })}
             color="success"
             onChange={handleMunicipio}
@@ -159,13 +165,19 @@ export const Consulta = () => {
             <MenuItem value="la-romana">La Romana</MenuItem>
             <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
           </Select>
+
           <TextField
             type="text"
             placeholder="Cantidad"
-            label="cantidad"
+            label="Cantidad"
             color="success"
             {...register("cantidad", { required: true, maxLength: 10 })}
-            sx={{ minWidth: "20%", width: "100%", margin: "5px 5px 15px 0px" }}
+            sx={{
+              minWidth: "20%",
+              width: "100%",
+              margin: "5px 5px 15px 0px",
+              textAlign: "center",
+            }}
           />
 
           <Select
@@ -187,22 +199,22 @@ export const Consulta = () => {
             variant="contained"
             color="success"
             size="large"
-            sx={{ width: "100%", marginBottom: "20px" }}
+            sx={{ width: "100%", marginBottom: "90px", marginTop: "20px" }}
+            endIcon={<SearchIcon />}
           >
             Buscar
           </Button>
 
-          <div>
-            <Button
-              onClick={() => ActualizarRegistros()}
-              variant="contained"
-              color="error"
-              size="large"
-              sx={{ width: "100%" }}
-            >
-              Guardar
-            </Button>
-          </div>
+          <Button
+            onClick={() => ActualizarRegistros()}
+            variant="contained"
+            color="info"
+            size="large"
+            sx={{ width: "100%" }}
+            endIcon={<SaveIcon />}
+          >
+            Guardar
+          </Button>
         </Item>
       </Grid>
       {/* END CONTROLES */}
@@ -210,23 +222,40 @@ export const Consulta = () => {
       <Grid item md={12}>
         <Item
           sx={{
-            minHeight: "1000px",
+            height: "calc(100vh)",
             marginLeft: "250px",
             backgroundColor: "#06502a",
+            justifyContent: "center",
           }}
         >
           <Typography
             gutterBottom
             variant="h3"
             component="div"
-            sx={{ color: "#fff" }}
+            sx={{ color: "#fff", backgroundColor: "#ef5061" }}
           >
-            Ganadores de un {premio}
+            Ganadoras de un {premio}
           </Typography>{" "}
-          *
-          <Grid container rowSpacing={1} columnSpacing={4}>
+          <Grid
+            container
+            // rowSpacing={1}
+            columnSpacing={1}
+            sx={{
+              justifyContent: "center",
+              transition: "ease-in",
+
+              flex: 1,
+              width: "100%",
+              minHeight: "200px",
+              // height: "calc(90vh)",
+              //backgroundColor: "red",
+              overflowY: "auto",
+              overflowX: "hidden",
+              maxHeight: "calc(95vh - 64px)",
+            }}
+          >
             {checkList.length <= 0 ? (
-              <p>.</p>
+              <p>------</p>
             ) : (
               <RenderBoletas items={checkList} />
             )}

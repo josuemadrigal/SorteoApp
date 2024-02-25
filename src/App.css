@@ -1,10 +1,18 @@
 body {
   margin: 0;
+  padding: 0;
   background: #06502a;
-  /* display: grid; */
-  /* place-content: center; */
+  /* display: grid; 
+  place-content: center;
   /* margin-top: 100px; */
   font-family: Helvetica, sans-serif;
+  min-height: 100vh;
+  min-width: 100vh;
+  background-image: url("/fondoE.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
 
 .box {
@@ -32,8 +40,38 @@ h3 {
   color: aliceblue;
 }
 
+h4 {
+  font-size: 1.5rem;
+  margin: 0px;
+  color: darkgreen;
+}
+b {
+  color: navy;
+}
 .title {
   font-size: 1.2rem;
   font-style: oblique;
   font-weight: 800;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 100px;
+  cursor: default;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #157c07;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #045322;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #04290c;
 }

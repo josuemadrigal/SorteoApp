@@ -6,7 +6,7 @@ import GifTombola from "../../../public/gif-padresLow.gif";
 // import Lottie, {LottieRefCurrentProps} from 'lottie-react';
 // import animationData from '../../assets/65849-emos-spin.json'
 
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion";
 import { useMutation } from "react-query";
 //import SearchIcon from '@mui/icons-material/Search';
 //import SaveIcon from '@mui/icons-material/Save';

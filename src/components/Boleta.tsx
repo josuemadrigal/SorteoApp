@@ -11,13 +11,16 @@ export const Boleta = ({ item }: Props) => {
       <motion.div
         className="box"
         initial={{ scale: 0, backgroundColor: "#fff" }}
-        transition={{ duration: 3 }}
+        transition={{ duration: 5 }}
         animate={{
           backgroundColor: "#469957",
-          scale: [0, 1],
-          borderRadius: ["100%", "5%"],
+          scale: [0, 1, 0.9, 1],
+          borderRadius: ["100%", "1%"],
+          border: "20px",
+          borderColor: "blue",
           rotate: [100, 0],
           x: [-300, 0, 0],
+          overflow: "hidden",
         }}
       >
         <motion.h2
@@ -32,14 +35,6 @@ export const Boleta = ({ item }: Props) => {
         >
           {item.boleta}
         </motion.h2>
-
-        <motion.h3
-          initial={{ opacity: 0, scale: 0.1 }}
-          animate={{ opacity: [0, 0, 0, 1], scale: 1 }}
-          transition={{ duration: 5 }}
-        >
-          {item.nombre.toUpperCase()}
-        </motion.h3>
       </motion.div>
     </Grid>
   );

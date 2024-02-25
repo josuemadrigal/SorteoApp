@@ -1,15 +1,12 @@
 import * as React from "react";
 import InputMask, { Props } from "react-input-mask";
 import { useForm } from "react-hook-form";
-//import Swal from 'sweetalert2'
 import Swal from "sweetalert2/dist/sweetalert2.all.js";
-// import { Theme, useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
   Card,
   CardContent,
-  CardHeader,
   Grid,
   InputLabel,
   MenuItem,
@@ -17,152 +14,44 @@ import {
   TextFieldProps,
 } from "@mui/material";
 
-// import  SelectWithSearch  from "../../components/Select";
-//import FormControl from '@mui/material/FormControl';
-
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import RegistrosService from "../../services/RegistrosService";
-// import { useState } from "react";
+import { useRef } from "react";
+
+// import BarcodeScanner from "../../components/BarcodeScanner";
 
 const modelo = {
   defaultValues: {
-    nombre: "",
-    cedula: "",
-    email: "",
-    telefono: "",
-    boleta: 1,
+    boleta: "",
     municipio: "",
-    direccion: "",
-    responsable: "",
-    codigo: "000",
     status: 1,
+    premio: "",
   },
 };
 
-// const ITEM_HEIGHT = 75;
-// const ITEM_PADDING_TOP = 8;
-// const MenuProps = {
-//   PaperProps: {
-//     style: {
-//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-//       width: 250,
-//     },
-//   },
-// };
-
-// const names = [
-//   'ADA JOSEFINA DIAZ',
-//   'AFRICANO CON MI BARRIO',
-//   'AMADO MERCEDES (NENO)',
-//   'ANA BRISA POOL',
-//   'ANEURY MOTA',
-//   'ARACELIS SIMO',
-//   'CELESTE MEDINA',
-//   'CHAGO',
-//   'DANIEL ENCARNACION',
-//   'DANIEL FLORENTINO',
-//   'DAVID ROSARIO MUÑOZ',
-//   'DIANA MEJIA',
-//   'DOMINGO SANCHEZ',
-//   'DRA. SONIA GARCIA',
-//   'EDGAR RUIZ',
-//   'ELISEO OLLER',
-//   'ENRIQUE ANTONIO PAYANO',
-//   'ESTEBAN MEJIA (BELY)',
-//   'FELIX DE GRACIA',
-//   'FELIX MANUEL SOLANO',
-//   'FLOR MARIA RODRIGUEZ',
-//   'FRANCIS LAPPOST',
-//   'FRANKLIN AUGUSTO',
-//   'FREDDY FELIX ISAAC',
-//   'HECTOR JULIO MARTINEZ',
-//   'HENRY RIJO',
-//   'ISAIAS CARVAJAL',
-//   'JAIME KING',
-//   'JESUS SANTANA',
-//   'JOHN JAVIER PEGUERO',
-//   'JOSE ARIARDY UBIERA',
-//   'JUAN ANTONIO BAEZ',
-//   'JUAN RIVERA',
-//   'JUAN RUFINO RODRIGUEZ',
-//   'JULIO ALBERTO RIJO MARTE',
-//   'JUNIOR ORTIZ',
-//   'JUSTO REYES',
-//   'KARY DEL RIO',
-//   'LISETT GUZMAN',
-//   'MANUEL MODESTO ROSARIO POLLARD',
-//   'MARIA MERCEDES',
-//   'MARIANO JAZMIN (EL CACIQUE)',
-//   'MARIANO MORALES',
-//   'MARINO CHEVALIER',
-//   'MAYOBANEX CEDEÑO',
-//   'MIGUEL ALEJANDRO PEGUERO RAMIREZ',
-//   'PEDRO HIDALGO',
-//   'PRANDY PINALES',
-//   'RAFAEL CANDELARIO',
-//   'RAMON ARIEL SEVERINO',
-//   'RAUL CEDEÑO',
-//   'REINALDO RAMIREZ (JEREMIAS)',
-//   'RICARDO BERAS CASTILLO',
-//   'SANTA SABA ESPINAL',
-//   'SANTO DE LOS SANTOS',
-//   'SARITIN MARTINEZ (PASTORA SHARY)',
-//   'SONIA CASTILLO',
-//   'WILQUIN JOSELIN MOTA',
-//   'YEISON CARRASCO MORALES',
-//   'YISEL MARIA GALVEZ',
-//   'YOHAN VALENZUELA',
-//   'ZORAIMA BATISTA MORALES',
-// ];
-
-// function getStyles(name: string, personName: string[], theme: Theme) {
-//   return {
-//     fontWeight:
-//       personName.indexOf(name) === -1
-//         ? theme.typography.fontWeightRegular
-//         : theme.typography.fontWeightMedium,
-//   };
-// }
-
 export const Registro = (props: any) => {
   //const { formState, setValue, getValues, register} = useForm(modelo);
-  const { getValues, register } = useForm(modelo);
+  const { getValues, register, setValue } = useForm(modelo);
+  const [boleta, setBoleta] = React.useState<string>("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const registerSubmit = async (event) => {
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      // Lógica que deseas ejecutar al presionar Enter
+      registerSubmit(event);
+    }
+  };
+
+  const handleClic = (event) => {
+    event.key = "Enter";
+    registerSubmit(event);
+  };
+
+  const registerSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
       const objeto = getValues();
-
-      if (objeto.nombre.length < 3) {
-        return Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Verifique el nombre",
-          showConfirmButton: false,
-          timer: 7000,
-        });
-      }
-
-      if (objeto.cedula.length < 13) {
-        return Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Verifique el numero de cédula",
-          showConfirmButton: false,
-          timer: 7000,
-        });
-      }
-
-      if (objeto.telefono.length < 14) {
-        return Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Verifique el numero de teléfono",
-          showConfirmButton: false,
-          timer: 7000,
-        });
-      }
 
       if (!objeto.municipio) {
         return Swal.fire({
@@ -174,114 +63,22 @@ export const Registro = (props: any) => {
         });
       }
 
-      if (objeto.boleta <= 0) {
+      if (objeto.boleta.length < 8 || objeto.boleta.length > 8) {
         return Swal.fire({
           position: "center",
           icon: "error",
-          title: "Verifique el numero de boleta",
+          title: "El numero de boleta debe tener 8 digitos: XX000000",
           showConfirmButton: false,
           timer: 7000,
         });
       }
-
-      if (objeto.boleta.toString().length < 5) {
-        return Swal.fire({
-          position: "center",
-          icon: "error",
-          title:
-            "El numero de boleta debe tener 5 digitos, ejemplo: 00001, 00012, 00123, 01234",
-          showConfirmButton: false,
-          timer: 7000,
-        });
-      }
-
-      if (objeto.responsable.length < 1) {
-        return Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Ingrese el responsable",
-          showConfirmButton: false,
-          timer: 7000,
-        });
-      }
-
-      // Romana 20 000          = 1       -> 20,000 (final 35000)
-      // Villa hermosa 15 000   = 35,001  -> 50,000 (final 60 000)
-      // Cumayasa 2000          = 60,001  -> 62,000 (final 67 000)
-      // Guaymate 3000          = 67,001  -> 70,000 (final 75 000)
-      // Caleta 2000            = 75,001  -> 77,000 (final 80 000)
-
-      if (objeto.municipio == "la-romana") {
-        if (objeto.boleta < 1 || objeto.boleta > 35000) {
-          return Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: `La boleta '${objeto.boleta}' no pertenece a La Romana`,
-            showConfirmButton: false,
-            timer: 7000,
-          });
-        }
-      }
-
-      if (objeto.municipio == "villa-hermosa") {
-        if (objeto.boleta < 35001 || objeto.boleta > 60000) {
-          return Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: `La boleta '${objeto.boleta}' no pertenece a Villa Hermosa`,
-            showConfirmButton: false,
-            timer: 7000,
-          });
-        }
-      }
-
-      if (objeto.municipio == "cumayasa") {
-        if (objeto.boleta < 60001 || objeto.boleta > 67000) {
-          return Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: `La boleta '${objeto.boleta}' no pertenece a Cumayasa`,
-            showConfirmButton: false,
-            timer: 7000,
-          });
-        }
-      }
-
-      if (objeto.municipio == "guaymate") {
-        if (objeto.boleta < 67001 || objeto.boleta > 75000) {
-          return Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: `La boleta '${objeto.boleta}' no pertenece a Guaymate`,
-            showConfirmButton: false,
-            timer: 7000,
-          });
-        }
-      }
-
-      if (objeto.municipio == "caleta") {
-        if (objeto.boleta < 75001 || objeto.boleta > 80000) {
-          return Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: `La boleta '${objeto.boleta}' no pertenece a Caleta`,
-            showConfirmButton: false,
-            timer: 7000,
-          });
-        }
-      }
-
       objeto.status = 1;
+      objeto.premio = "";
 
       Swal.fire({
         title: "¿Están correctos sus datos?",
-        html: ` <p> Nombre: <b>${objeto.nombre}</b></p>
-              <p> Cédula: <b>${objeto.cedula}</b></p>
-              <p> Email: <b>${objeto.email}</b></p>
-              <p> Teléfono: <b>${objeto.telefono}</b></p>
-              <p> Municipio: <b>${objeto.municipio}</b></p>
-              <p> # Boleta: <b>${objeto.boleta}</b></p>
-              <p> Responsable: <b>${objeto.responsable}</b></p>`,
+        html: `<h4> Municipio: <b>${objeto.municipio}</b></h4>
+              <h4> # Boleta: <b>${objeto.boleta}</b></h4>`,
 
         icon: "question",
         showCancelButton: true,
@@ -307,22 +104,27 @@ export const Registro = (props: any) => {
             Swal.fire({
               position: "center",
               icon: "success",
-              title: "Registro completado",
+              title: `Registro de la boleta ${objeto.boleta} COMPLETADO`,
               showConfirmButton: false,
-              timer: 7000,
+              timer: 3000,
             });
-            return setTimeout(() => {
-              window.location.replace(
-                "https://www.instagram.com/eduardespiritusanto/"
-              );
-            }, 2000);
+
+            if (inputRef.current) {
+              inputRef.current.focus();
+              setValue("boleta", "");
+            }
+            // return setTimeout(() => {
+            //   window.location.replace(
+            //     "https://www.instagram.com/eduardespiritusanto/"
+            //   );
+            // }, 2000);
           }
 
           if (response.status == 203) {
             Swal.fire({
               position: "center",
               icon: "error",
-              title: "Cédula o boleta registrada",
+              title: "Esta boleta ya ha sido registrada",
               showConfirmButton: false,
               timer: 7000,
             });
@@ -341,118 +143,44 @@ export const Registro = (props: any) => {
     }
   };
 
-  const [phone, setPhone] = React.useState<string>("");
-  const [cedula, setCedula] = React.useState<string>("");
-  const [boleta, setBoleta] = React.useState<string>("");
-
-  // const theme = useTheme();
-  // const [personName, setPersonName] = React.useState<string[]>([]);
-
   return (
     <>
-      <Grid container spacing={1} justifyContent="center" alignItems="center">
-        <Grid item xs={12} md={8}>
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        style={{
+          minHeight: "100vh",
+          minWidth: "100vh",
+          // backgroundImage: `url(/fondoE.jpg)`,
+          // backgroundSize: "cover",
+          // backgroundPosition: "center",
+
+          margin: 0,
+        }}
+      >
+        <Grid item>
           <Card
             sx={{
               padding: "5%",
-              margin: "5%",
               minWidth: "100px",
-              maxWidth: "500px",
+              maxWidth: "700px",
+              boxShadow: 20,
             }}
           >
             <Box
               component="img"
-              src="/padre-portada.jpg"
+              src="/mujer-portada.jpg"
               alt="hola"
-              sx={{ height: "auto", width: "100%", borderRadius: "10px" }}
+              sx={{
+                height: "auto",
+                width: "100%",
+                borderRadius: "10px",
+                backgroundColor: "ro",
+              }}
             />
-            <CardHeader
-              title="FORMULARIO DE REGISTRO"
-              sx={{ textAlign: "center" }}
-            />
+
             <CardContent>
-              {/* <TextField
-        sx={{
-          "& .MuiOutlinedInput-root": {
-            "& > fieldset": {
-              border: "none"
-            }
-          }
-        }}
-        label="Ingresa"
-      /> */}
-
-              <TextField
-                variant="filled"
-                type="text"
-                color="success"
-                placeholder="Nombre"
-                label="Nombre y apellido"
-                inputProps={{ maxLength: 60 }}
-                required
-                {...register("nombre", { required: true, maxLength: 80 })}
-                sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-              />
-
-              <InputMask
-                // alwaysShowMask
-                {...props}
-                mask="999-9999999-9"
-                maskChar=""
-                placeholder="000-0000000-0"
-                value={cedula}
-                required
-                {...register("cedula", { required: true, maxLength: 11 })}
-                sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                onChange={(e) => setCedula(e.target.value)}
-              >
-                {(inputProps: Props & TextFieldProps) => (
-                  <TextField
-                    {...inputProps}
-                    color="success"
-                    type="text"
-                    label="Cédula"
-                    variant="filled"
-                  />
-                )}
-              </InputMask>
-
-              <TextField
-                type="email"
-                variant="filled"
-                color="success"
-                placeholder="Correo Eléctronico"
-                label="Correo eléctronico"
-                {...register("email", {
-                  required: false,
-                  pattern: /^\S+@\S+$/i,
-                })}
-                sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-              />
-
-              <InputMask
-                // alwaysShowMask
-                {...props}
-                mask="(999) 999-9999"
-                maskChar=""
-                placeholder="Ej.: (809)000-0000"
-                value={phone}
-                required
-                {...register("telefono", { required: true, maxLength: 11 })}
-                sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                onChange={(e) => setPhone(e.target.value)}
-              >
-                {(inputProps: Props & TextFieldProps) => (
-                  <TextField
-                    {...inputProps}
-                    variant="filled"
-                    color="success"
-                    type="text"
-                    label="Teléfono"
-                  />
-                )}
-              </InputMask>
-
               <InputLabel id="demo-multiple-name-label">
                 Municipio / Distrito
               </InputLabel>
@@ -468,22 +196,13 @@ export const Registro = (props: any) => {
                 <MenuItem value="la-romana">La Romana</MenuItem>
                 <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
               </Select>
-              <TextField
-                type="text"
-                variant="filled"
-                placeholder="Dirección"
-                color="success"
-                label="Dirección"
-                {...register("direccion", { required: true, maxLength: 80 })}
-                sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-              />
 
               <InputMask
                 // alwaysShowMask
                 {...props}
-                mask="99999"
+                mask="aa999999"
                 maskChar=""
-                placeholder="00000"
+                maskPlaceholder={null}
                 value={boleta}
                 required
                 {...register("boleta", { required: true, maxLength: 11 })}
@@ -497,41 +216,18 @@ export const Registro = (props: any) => {
                     color="success"
                     type="text"
                     label="Número de boleta"
+                    inputRef={register("boleta")}
+                    ref={inputRef}
+                    onKeyDown={handleKeyPress}
                   />
                 )}
               </InputMask>
-
-              <TextField
-                type="text"
-                variant="filled"
-                placeholder="Nombre del responsable"
-                color="success"
-                label="Responsable"
-                {...register("responsable", { required: true, maxLength: 80 })}
-                sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-              />
-              {/* <InputLabel id="demo-multiple-name-label">Responsable</InputLabel>
-      <Select variant="filled"  {...register("responsable", { required: true })} color='success' sx={{minWidth:"100%" , margin:"5px 5px 15px 0px"}} MenuProps={MenuProps}>
-      
-      
-      
-      {names.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-      </Select>  */}
-
-              {/* <SelectWithSearch/> */}
-
+              {/* <BarcodeScanner /> */}
               <Button
                 variant="contained"
                 color="success"
-                onClick={registerSubmit}
+                type="submit"
+                onClick={handleClic}
                 sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
               >
                 Registrar
