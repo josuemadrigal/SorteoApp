@@ -27,7 +27,7 @@ const SelectMunicio = () => {
     >
       <Grid item>
         <Typography variant="h3" gutterBottom>
-          Seleccione el municipio
+          Seleccione el municipio que va registrar
         </Typography>
       </Grid>
       <Grid item container spacing={2} justifyContent="center">
