@@ -62,13 +62,75 @@ export const Registro = (props: any) => {
 
       objeto.municipio = municipioNombre;
 
+      const esLaRomana = objeto.municipio === "la-romana";
+      const esCaleta = objeto.municipio === "caleta";
+      const esVillaHermosa = objeto.municipio === "villa-hermosa";
+      const esCumayasa = objeto.municipio === "cumayasa";
+      const esGuaymate = objeto.municipio === "guaymate";
+
+      const LR = objeto.boleta.slice(0, 2).toUpperCase() === "LR";
+      const CA = objeto.boleta.slice(0, 2).toUpperCase() === "CA";
+      const VH = objeto.boleta.slice(0, 2).toUpperCase() === "VH";
+      const CU = objeto.boleta.slice(0, 2).toUpperCase() === "CU";
+      const GU = objeto.boleta.slice(0, 2).toUpperCase() === "GU";
+
+      if (esLaRomana && !LR) {
+        return Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Boleta no pertenece a La Romana",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+
+      if (esCaleta && !CA) {
+        return Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Boleta no pertenece a Caleta",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+
+      if (esVillaHermosa && !VH) {
+        return Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Boleta no pertenece a Villa Hermosa",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+
+      if (esCumayasa && !CU) {
+        return Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Boleta no pertenece a Cumayasa",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+
+      if (esGuaymate && !GU) {
+        return Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Boleta no pertenece a Guaymate",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      }
+
       if (!objeto.municipio) {
         return Swal.fire({
           position: "center",
           icon: "error",
           title: "Seleccione el municipio o distrito",
           showConfirmButton: false,
-          timer: 7000,
+          timer: 3000,
         });
       }
 
@@ -78,7 +140,7 @@ export const Registro = (props: any) => {
           icon: "error",
           title: "Seleccione el municipio o distrito",
           showConfirmButton: false,
-          timer: 7000,
+          timer: 3000,
         });
       }
 
@@ -88,7 +150,7 @@ export const Registro = (props: any) => {
           icon: "error",
           title: "Ingrese una boleta valida",
           showConfirmButton: false,
-          timer: 7000,
+          timer: 3000,
         });
       }
       objeto.status = 1;
