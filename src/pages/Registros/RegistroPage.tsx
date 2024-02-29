@@ -86,7 +86,7 @@ export const Registro = (props: any) => {
         return Swal.fire({
           position: "center",
           icon: "error",
-          title: "El numero de boleta debe tener 8 digitos: XX000000",
+          title: "Ingrese una boleta valida",
           showConfirmButton: false,
           timer: 7000,
         });
@@ -170,7 +170,7 @@ export const Registro = (props: any) => {
         alignItems="center"
         style={{
           minHeight: "100vh",
-          minWidth: "100vh",
+          // minWidth: "",
           // backgroundImage: `url(/fondoE.jpg)`,
           // backgroundSize: "cover",
           // backgroundPosition: "center",

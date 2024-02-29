@@ -26,7 +26,7 @@ const SelectMunicio = () => {
       spacing={2}
     >
       <Grid item>
-        <Typography variant="h3" gutterBottom>
+        <Typography variant="h3" gutterBottom textAlign="center">
           Seleccione el municipio que va registrar
         </Typography>
       </Grid>
@@ -41,6 +41,7 @@ const SelectMunicio = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
+                  backgroundColor: "yellowgreen",
                 }}
                 elevation={3}
               >
