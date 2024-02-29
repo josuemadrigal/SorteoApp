@@ -17,6 +17,7 @@ import {
 import Select from "@mui/material/Select";
 import RegistrosService from "../../services/RegistrosService";
 import { useRef } from "react";
+import { useLocation, useParams } from "react-router-dom";
 
 // import BarcodeScanner from "../../components/BarcodeScanner";
 
@@ -34,6 +35,12 @@ export const Registro = (props: any) => {
   const { getValues, register, setValue } = useForm(modelo);
   const [boleta, setBoleta] = React.useState<string>("");
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const { id } = useParams<{ id: string }>();
+  const municipioNombre = id || "";
+  const location = useLocation();
+  const objeto = location.state?.parametros;
+
+  const municipio = objeto.municipio || "";
 
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
@@ -53,7 +60,19 @@ export const Registro = (props: any) => {
     try {
       const objeto = getValues();
 
+      objeto.municipio = municipioNombre;
+
       if (!objeto.municipio) {
+        return Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Seleccione el municipio o distrito",
+          showConfirmButton: false,
+          timer: 7000,
+        });
+      }
+
+      if (objeto.municipio.length < 1) {
         return Swal.fire({
           position: "center",
           icon: "error",
@@ -77,7 +96,7 @@ export const Registro = (props: any) => {
 
       Swal.fire({
         title: "¿Están correctos sus datos?",
-        html: `<h4> Municipio: <b>${objeto.municipio}</b></h4>
+        html: `<h4> Municipio: <b>${municipio}</b></h4>
               <h4> # Boleta: <b>${objeto.boleta}</b></h4>`,
 
         icon: "question",
@@ -176,12 +195,12 @@ export const Registro = (props: any) => {
                 height: "auto",
                 width: "100%",
                 borderRadius: "10px",
-                backgroundColor: "ro",
               }}
             />
 
             <CardContent>
-              <InputLabel id="demo-multiple-name-label">
+              <h1>{municipio}</h1>
+              {/* <InputLabel id="demo-multiple-name-label">
                 Municipio / Distrito
               </InputLabel>
               <Select
@@ -195,7 +214,7 @@ export const Registro = (props: any) => {
                 <MenuItem value="guaymate">Guaymate</MenuItem>
                 <MenuItem value="la-romana">La Romana</MenuItem>
                 <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
-              </Select>
+              </Select> */}
 
               <InputMask
                 // alwaysShowMask
