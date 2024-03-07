@@ -44,6 +44,22 @@ export const Consulta = () => {
   // const spinRef = useRef<LottieRefCurrentProps>(null);
 
   // const [checked, setChecked] = useState<any[]>([]);
+
+  const premiosData = [
+    { premioText: "Nevera", premioValue: "Nevera" },
+    { premioText: "Televisor", premioValue: "Televisor" },
+    { premioText: "Estufa de horno", premioValue: "Estufa-Horno" },
+    { premioText: "Estufa de mesa", premioValue: "Estufa-Mesa" },
+    { premioText: "Licuadora", premioValue: "Licuadora" },
+    { premioText: "Horno", premioValue: "Horno" },
+    { premioText: "Abanico", premioValue: "Abanico" },
+    { premioText: "Tanque de Gas", premioValue: "Tanque-Gas" },
+    { premioText: "Olla de Presion", premioValue: "Olla-Presion" },
+    { premioText: "Juego de Colcha", premioValue: "Juego-Colcha" },
+    { premioText: "Lavadora", premioValue: "Lavadora" },
+    { premioText: "Microonda", premioValue: "Microonda" },
+    { premioText: "Freidora", premioValue: "Freidora" },
+  ];
   const { getValues, register } = useForm<FormValues>({
     defaultValues: {
       municipio: "",
@@ -57,6 +73,7 @@ export const Consulta = () => {
   const [unCheckList, setUnCheckList] = useState<any[]>([]);
 
   const [premio, setPremio] = useState("");
+  const [premioTitle, setPremioTitle] = useState("");
   const [municipioT, setMunicipioT] = useState("");
 
   const handleMunicipio = (event: SelectChangeEvent) => {
@@ -65,7 +82,15 @@ export const Consulta = () => {
     console.log(municipioT);
   };
   const handlePremio = (event: SelectChangeEvent) => {
-    setPremio(event.target.value);
+    const selectedPremioValue = event.target.value;
+    const selectedPremio = premiosData.find(
+      (item) => item.premioValue === selectedPremioValue
+    );
+
+    if (selectedPremio) {
+      setPremioTitle(selectedPremio.premioText);
+      setPremio(selectedPremioValue);
+    }
     console.log(premio);
   };
 
@@ -186,12 +211,9 @@ export const Consulta = () => {
             onChange={handlePremio}
             sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
           >
-            <MenuItem value="Abanico">Abanico</MenuItem>
-            <MenuItem value="Bono">Bono</MenuItem>
-            <MenuItem value="Celular">Celular</MenuItem>
-            <MenuItem value="Inversor">Inversor</MenuItem>
-            <MenuItem value="Motor">Motor</MenuItem>
-            <MenuItem value="Televisor">Televisor</MenuItem>
+            {premiosData.map((e) => (
+              <MenuItem value={e.premioValue}>{e.premioText}</MenuItem>
+            ))}
           </Select>
 
           <Button
@@ -234,7 +256,7 @@ export const Consulta = () => {
             component="div"
             sx={{ color: "#fff", backgroundColor: "#ef5061" }}
           >
-            Ganadoras de un {premio}
+            Ganadoras de un {premioTitle}
           </Typography>{" "}
           <Grid
             container
