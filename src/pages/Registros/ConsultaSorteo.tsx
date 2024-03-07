@@ -256,7 +256,7 @@ export const Consulta = () => {
             component="div"
             sx={{ color: "#fff", backgroundColor: "#ef5061" }}
           >
-            Ganadoras de un {premioTitle}
+            Ganadoras de: {premioTitle}
           </Typography>{" "}
           <Grid
             container
