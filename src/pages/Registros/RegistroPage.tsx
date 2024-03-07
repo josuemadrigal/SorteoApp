@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import RegistrosService from "../../services/RegistrosService";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
 const modelo = {
@@ -63,7 +63,7 @@ export const Registro = (props: any) => {
         icon: "error",
         title,
         showConfirmButton: false,
-        timer: 3000,
+        timer: 2000,
       });
       reset({ boleta: "" });
     };
@@ -126,7 +126,7 @@ export const Registro = (props: any) => {
           icon: "success",
           title: `Registro de la boleta ${objeto.boleta} COMPLETADO`,
           showConfirmButton: false,
-          timer: 4000,
+          timer: 2000,
         });
 
         if (inputRef.current) {
@@ -140,6 +140,12 @@ export const Registro = (props: any) => {
       showError("Intente más tarde");
     }
   };
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   return (
     <>
