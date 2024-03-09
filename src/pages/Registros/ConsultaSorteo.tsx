@@ -59,7 +59,7 @@ export const Consulta = () => {
     { premioText: "Lavadora", premioValue: "Lavadora" },
     { premioText: "Microonda", premioValue: "Microonda" },
     { premioText: "Freidora", premioValue: "Freidora" },
-    { premioText: "Bono", premioValue: "Bono" },
+    //{ premioText: "Bono", premioValue: "Bono" },
   ];
   const { getValues, register } = useForm<FormValues>({
     defaultValues: {
