@@ -51,7 +51,7 @@ export const Registro = (props: any) => {
 
     // Mensajes de error centralizados
     const errorMessages = {
-      invalidMunicipio: "Seleccione un municipio o distrito válido!",
+      invalidMunicipio: "Seleccione un municipio o distrito válido",
       invalidBoleta: "Ingrese una boleta válida ",
       duplicateBoleta: "Esta boleta ya ha sido registrada",
     };
