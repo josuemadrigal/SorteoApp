@@ -201,7 +201,7 @@ export const Registro = (props: any) => {
                       variant="filled"
                       color="success"
                       type="text"
-                      label="Número de boleta"
+                      label="Cédula"
                     />
                   )}
                 </InputMask>

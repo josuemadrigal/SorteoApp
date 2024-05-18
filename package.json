@@ -23,6 +23,7 @@
     "framer-motion": "10.12.12",
     "git": "^0.1.5",
     "lottie-react": "^2.4.0",
+    "mui-styles": "^2.0.5",
     "notistack": "^3.0.1",
     "prettier": "^2.8.8",
     "react": "^18.2.0",
