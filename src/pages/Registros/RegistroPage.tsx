@@ -41,7 +41,7 @@ export const Registro = (props: any) => {
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
-      event.preventDefault(); // Evitar envío automático del formulario
+      event.preventDefault();
       handleSubmit(registerSubmit)();
     }
   };
@@ -52,11 +52,10 @@ export const Registro = (props: any) => {
     // Mensajes de error centralizados
     const errorMessages = {
       invalidMunicipio: "Seleccione un municipio o distrito válido",
-      invalidBoleta: "Ingrese una boleta válida",
+      invalidBoleta: "Ingrese una boleta válida ",
       duplicateBoleta: "Esta boleta ya ha sido registrada",
     };
 
-    // Función auxiliar para mostrar errores con Swal
     const showError = (title: string) => {
       Swal.fire({
         position: "center",
