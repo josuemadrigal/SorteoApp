@@ -170,7 +170,10 @@ export const RegistroPremios = () => {
                   color="success"
                   placeholder="Premio"
                   label="Premio"
-                  inputProps={{ maxLength: 60 }}
+                  inputProps={{
+                    maxLength: 60,
+                    style: { textTransform: "uppercase" },
+                  }}
                   required
                   {...register("premio", { required: true, maxLength: 80 })}
                   sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
