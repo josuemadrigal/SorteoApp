@@ -12,13 +12,14 @@ import {
 
 import RegistrosService from "../../services/RegistrosService";
 import { useEffect, useRef } from "react";
+import { generateSlug } from "../../utils";
 
 const modelo = {
   defaultValues: {
     premio: "",
-    slug: "",
-    laRomana: 0,
-    villaHermosa: 0,
+    slug_premio: "",
+    la_romana: 0,
+    villa_hermosa: 0,
     caleta: 0,
     cumayasa: 0,
     guaymate: 0,
@@ -37,6 +38,7 @@ export const RegistroPremios = () => {
   };
 
   const registerSubmit = async (objeto: any) => {
+    console.log("qlq");
     // Mensajes de error centralizados
     const errorMessages = {
       invalidMunicipio: "Seleccione un municipio o distrito válido",
@@ -56,12 +58,12 @@ export const RegistroPremios = () => {
     };
 
     try {
-      const codigoBoleta = objeto.boleta.slice(0, 2).toUpperCase();
+      //const codigoBoleta = objeto.boleta.slice(0, 2).toUpperCase();
 
       objeto.status = 1;
-      objeto.premio = "";
+      objeto.slug_premio = generateSlug(objeto.premio);
 
-      const response = await RegistrosService.crearRegistros(objeto);
+      const response = await RegistrosService.regPremio(objeto);
 
       if (response.status === 203) {
         showError(errorMessages.duplicateBoleta);
@@ -72,7 +74,7 @@ export const RegistroPremios = () => {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: `Registro de la boleta ${objeto.boleta} COMPLETADO`,
+          title: `Registro de la boleta ${objeto.premio} COMPLETADO`,
           showConfirmButton: false,
           timer: 2000,
         });
@@ -160,7 +162,7 @@ export const RegistroPremios = () => {
                   defaultValue={0}
                   inputProps={{ maxLength: 60 }}
                   required
-                  {...register("laRomana", { required: true, maxLength: 80 })}
+                  {...register("la_romana", { required: true, maxLength: 80 })}
                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
                 />
                 <TextField
@@ -206,7 +208,7 @@ export const RegistroPremios = () => {
                   label="Villa Hermosa"
                   inputProps={{ maxLength: 60 }}
                   required
-                  {...register("villaHermosa", {
+                  {...register("villa_hermosa", {
                     required: true,
                     maxLength: 80,
                   })}

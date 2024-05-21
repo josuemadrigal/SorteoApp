@@ -18,8 +18,16 @@ class RegistrosService {
   }
 
   public async crearRegistros(param: any) {
+    console.log("servicio: ", param);
     const response = await http.post<any>("/registros", param);
+    console.log("servicio2");
+    console.log(response);
+    return response;
+  }
 
+  public async regPremio(param: any) {
+    const response = await http.post<any>("/registros/regPremio", param);
+    console.log("param: ", param);
     console.log(response);
     return response;
   }

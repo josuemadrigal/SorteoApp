@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 //import  Registros  from '../pages/Registros/Formulario'
-import { Registro } from "../pages/Registros/RegistroPage";
+import Registro from "../pages/Registros/RegistroPage";
 import { Consulta } from "../pages/Registros/ConsultaSorteo";
 import { View } from "../pages/Registros/View";
 import SelectMunicio from "../pages/Registros/SelectMunicio";
