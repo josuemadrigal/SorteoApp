@@ -27,7 +27,13 @@ const modelo = {
 };
 
 export const RegistroPremios = () => {
-  const { getValues, register, handleSubmit, reset } = useForm(modelo);
+  const {
+    getValues,
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm(modelo);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -38,12 +44,13 @@ export const RegistroPremios = () => {
   };
 
   const registerSubmit = async (objeto: any) => {
-    console.log("qlq");
     // Mensajes de error centralizados
     const errorMessages = {
       invalidMunicipio: "Seleccione un municipio o distrito válido",
-      invalidBoleta: "Ingrese una boleta válida ",
-      duplicateBoleta: "Esta boleta ya ha sido registrada",
+      invalidBoleta: "Ingrese un premio válido ",
+      duplicateBoleta: "Este premio ya ha sido registrado",
+      emptyFields: "Todos los campos son obligatorios",
+      zeroQuantity: "La cantidad de ningun premio puede ser 0",
     };
 
     const showError = (title: string) => {
@@ -57,9 +64,32 @@ export const RegistroPremios = () => {
       reset({ premio: "" });
     };
 
-    try {
-      //const codigoBoleta = objeto.boleta.slice(0, 2).toUpperCase();
+    // Verificar campos vacíos
+    if (
+      !objeto.premio ||
+      !objeto.la_romana ||
+      !objeto.villa_hermosa ||
+      !objeto.caleta ||
+      !objeto.cumayasa ||
+      !objeto.guaymate
+    ) {
+      showError(errorMessages.emptyFields);
+      return;
+    }
 
+    // Verificar cantidades no sean 0
+    if (
+      objeto.la_romana <= 0 ||
+      objeto.villa_hermosa <= 0 ||
+      objeto.caleta <= 0 ||
+      objeto.cumayasa <= 0 ||
+      objeto.guaymate <= 0
+    ) {
+      showError(errorMessages.zeroQuantity);
+      return;
+    }
+
+    try {
       objeto.status = 1;
       objeto.slug_premio = generateSlug(objeto.premio);
 
@@ -74,7 +104,7 @@ export const RegistroPremios = () => {
         Swal.fire({
           position: "center",
           icon: "success",
-          title: `Registro de la boleta ${objeto.premio} COMPLETADO`,
+          title: `Registro del premio ${objeto.premio} COMPLETADO`,
           showConfirmButton: false,
           timer: 2000,
         });
@@ -82,8 +112,15 @@ export const RegistroPremios = () => {
         if (inputRef.current) {
           inputRef.current.focus();
         }
-        // Limpiar el campo de la boleta
-        reset({ premio: "" });
+        // Limpiar el campo del premio
+        reset({
+          premio: "",
+          la_romana: 0,
+          caleta: 0,
+          cumayasa: 0,
+          guaymate: 0,
+          villa_hermosa: 0,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -137,6 +174,8 @@ export const RegistroPremios = () => {
                   required
                   {...register("premio", { required: true, maxLength: 80 })}
                   sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
+                  error={!!errors.premio}
+                  helperText={errors.premio ? "Campo obligatorio" : ""}
                 />
 
                 <Typography
@@ -160,10 +199,16 @@ export const RegistroPremios = () => {
                   placeholder="La Romana"
                   label="La Romana"
                   defaultValue={0}
-                  inputProps={{ maxLength: 60 }}
+                  inputProps={{ maxLength: 60, min: 1 }}
                   required
-                  {...register("la_romana", { required: true, maxLength: 80 })}
+                  {...register("la_romana", {
+                    required: true,
+                    maxLength: 80,
+                    min: 1,
+                  })}
                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
+                  error={!!errors.la_romana}
+                  helperText={errors.la_romana ? "Cantidad no puede ser 0" : ""}
                 />
                 <TextField
                   variant="filled"
@@ -171,10 +216,16 @@ export const RegistroPremios = () => {
                   color="success"
                   placeholder="Caleta"
                   label="Caleta"
-                  inputProps={{ maxLength: 60 }}
+                  inputProps={{ maxLength: 60, min: 1 }}
                   required
-                  {...register("caleta", { required: true, maxLength: 80 })}
+                  {...register("caleta", {
+                    required: true,
+                    maxLength: 80,
+                    min: 1,
+                  })}
                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
+                  error={!!errors.caleta}
+                  helperText={errors.caleta ? "Cantidad no puede ser 0" : ""}
                 />
 
                 <TextField
@@ -183,10 +234,16 @@ export const RegistroPremios = () => {
                   color="success"
                   placeholder="Cumayasa"
                   label="Cumayasa"
-                  inputProps={{ maxLength: 60 }}
+                  inputProps={{ maxLength: 60, min: 1 }}
                   required
-                  {...register("cumayasa", { required: true, maxLength: 80 })}
+                  {...register("cumayasa", {
+                    required: true,
+                    maxLength: 80,
+                    min: 1,
+                  })}
                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
+                  error={!!errors.cumayasa}
+                  helperText={errors.cumayasa ? "Cantidad no puede ser 0" : ""}
                 />
                 <TextField
                   variant="filled"
@@ -194,10 +251,16 @@ export const RegistroPremios = () => {
                   color="success"
                   placeholder="Guaymate"
                   label="Guaymate"
-                  inputProps={{ maxLength: 60 }}
+                  inputProps={{ maxLength: 60, min: 1 }}
                   required
-                  {...register("guaymate", { required: true, maxLength: 80 })}
+                  {...register("guaymate", {
+                    required: true,
+                    maxLength: 80,
+                    min: 1,
+                  })}
                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
+                  error={!!errors.guaymate}
+                  helperText={errors.guaymate ? "Cantidad no puede ser 0" : ""}
                 />
 
                 <TextField
@@ -206,14 +269,19 @@ export const RegistroPremios = () => {
                   color="success"
                   placeholder="Villa Hermosa"
                   label="Villa Hermosa"
-                  inputProps={{ maxLength: 60 }}
+                  inputProps={{ maxLength: 60, min: 1 }}
                   required
                   {...register("villa_hermosa", {
                     required: true,
                     maxLength: 80,
+                    min: 1,
                   })}
                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
                   onKeyDown={handleKeyPress}
+                  error={!!errors.villa_hermosa}
+                  helperText={
+                    errors.villa_hermosa ? "Cantidad no puede ser 0" : ""
+                  }
                 />
 
                 <Button
