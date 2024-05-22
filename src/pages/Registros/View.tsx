@@ -2,7 +2,7 @@
 
 import "../../App.css";
 import { Grid } from "@mui/material";
-import Consulta from "./ConsultaSorteo";
+import Consulta from "../../screens/Consultas/index";
 
 export const View = () => {
   return (

@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../App.css";
-import GifTombola from "../../../public/gif-padresLow.gif";
+import GifTombola from "/gif-padresLow.gif";
 import SearchIcon from "@mui/icons-material/Search";
 import SaveIcon from "@mui/icons-material/Save";
 import { useMutation } from "react-query";
 import "animate.css";
-import { Button, Grid, Paper, Typography, styled } from "@mui/material";
+import { Grid, Paper, Typography, styled } from "@mui/material";
 import { useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
@@ -31,22 +31,6 @@ interface GetRegistrosResponse {
   registros: Registro[];
 }
 
-const premiosData = [
-  { premioText: "Nevera", premioValue: "Nevera" },
-  { premioText: "Televisor", premioValue: "Televisor" },
-  { premioText: "Estufa de horno", premioValue: "Estufa-Horno" },
-  { premioText: "Estufa de mesa", premioValue: "Estufa-Mesa" },
-  { premioText: "Licuadora", premioValue: "Licuadora" },
-  { premioText: "Horno", premioValue: "Horno" },
-  { premioText: "Abanico", premioValue: "Abanico" },
-  { premioText: "Tanque de Gas", premioValue: "Tanque-Gas" },
-  { premioText: "Olla de Presion", premioValue: "Olla-Presion" },
-  { premioText: "Juego de Colcha", premioValue: "Juego-Colcha" },
-  { premioText: "Lavadora", premioValue: "Lavadora" },
-  { premioText: "Microonda", premioValue: "Microonda" },
-  { premioText: "Freidora", premioValue: "Freidora" },
-];
-
 const Consulta = () => {
   const { getValues, register } = useForm<FormValues>({
     defaultValues: {
@@ -65,6 +49,24 @@ const Consulta = () => {
   const [municipioT, setMunicipioT] = useState("");
   const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
+  const [premios, setPremios] = useState<
+    { slug_premio: string; premio: string }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchPremios = async () => {
+      try {
+        const response = await registrosService.getPremios();
+        if (response.data.ok) {
+          setPremios(response.data.premios);
+        }
+      } catch (error) {
+        console.error("Error fetching premios", error);
+      }
+    };
+
+    fetchPremios();
+  }, []);
 
   const handleMunicipio = (event: React.ChangeEvent<{ value: unknown }>) => {
     setMunicipioT(event.target.value as string);
@@ -72,11 +74,11 @@ const Consulta = () => {
 
   const handlePremio = (event: React.ChangeEvent<{ value: unknown }>) => {
     const selectedPremioValue = event.target.value as string;
-    const selectedPremio = premiosData.find(
-      (item) => item.premioValue === selectedPremioValue
+    const selectedPremio = premios.find(
+      (item) => item.slug_premio === selectedPremioValue
     );
     if (selectedPremio) {
-      setPremioTitle(selectedPremio.premioText);
+      setPremioTitle(selectedPremio.premio);
       setPremio(selectedPremioValue);
     }
   };
@@ -206,8 +208,13 @@ const Consulta = () => {
             onChange={handleMunicipio}
             register={register}
           />
+
           <CantidadInput register={register} />
-          <PremioSelect value={premio} onChange={handlePremio} />
+          <PremioSelect
+            value={premio}
+            onChange={handlePremio}
+            premios={premios}
+          />
           <CustomButton
             onClick={CustomGetRegistros}
             icon={<SearchIcon />}

@@ -20,6 +20,21 @@ interface GetCedulaResponse {
   registro: Cedula;
 }
 
+interface CheckParticipandoResponse {
+  ok: boolean;
+  participando: boolean;
+}
+
+// interface Premio {
+//   cedula: string;
+//   nombre: string;
+// }
+
+// interface GetPremioResponse {
+//   ok: boolean;
+//   premio: Premio;
+// }
+
 class RegistrosService {
   public async getRegistros(
     status: number,
@@ -45,11 +60,30 @@ class RegistrosService {
     return response;
   }
 
+  public async checkParticipando(
+    cedula: string
+  ): Promise<AxiosResponse<CheckParticipandoResponse>> {
+    const jsonPar: any = { cedula };
+    const params = new URLSearchParams(jsonPar);
+    const response = await http.get<CheckParticipandoResponse>(
+      `/registros/getParticipando?${params}`
+    );
+    return response;
+  }
+
   public async getResponsables(): Promise<AxiosResponse<any[]>> {
     const response = await http.get<any[]>("/registros/all");
     return response;
   }
 
+  public async getPremios(): Promise<
+    AxiosResponse<{ ok: boolean; premios: any[] }>
+  > {
+    const response = await http.get<{ ok: boolean; premios: any[] }>(
+      "/registros/getPremios"
+    );
+    return response;
+  }
   public async crearRegistros(param: any): Promise<AxiosResponse<any>> {
     console.log("servicio: ", param);
     const response = await http.post<any>("/registros", param);
