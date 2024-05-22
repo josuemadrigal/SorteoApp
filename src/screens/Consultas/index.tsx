@@ -1,26 +1,20 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../../App.css";
 import GifTombola from "../../../public/gif-padresLow.gif";
 import SearchIcon from "@mui/icons-material/Search";
 import SaveIcon from "@mui/icons-material/Save";
 import { useMutation } from "react-query";
 import "animate.css";
-import {
-  Button,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  TextField,
-  Typography,
-  styled,
-} from "@mui/material";
-import { SelectChangeEvent } from "@mui/material/Select";
+import { Button, Grid, Paper, Typography, styled } from "@mui/material";
 import { useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
 import { RenderBoletas } from "../../components/RenderBoletas";
+import PremioSelect from "./components/PremioSelect";
+import MunicipioSelect from "./components/MunicipioSelect";
+import CantidadInput from "./components/CantidadInput";
+import CheckList from "./components/CheckList";
+import CustomButton from "./components/CustomButton";
 
 interface FormValues {
   municipio: string;
@@ -69,13 +63,15 @@ const Consulta = () => {
   const [premio, setPremio] = useState("");
   const [premioTitle, setPremioTitle] = useState("");
   const [municipioT, setMunicipioT] = useState("");
+  const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
+  const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
 
-  const handleMunicipio = (event: SelectChangeEvent) => {
-    setMunicipioT(event.target.value);
+  const handleMunicipio = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setMunicipioT(event.target.value as string);
   };
 
-  const handlePremio = (event: SelectChangeEvent) => {
-    const selectedPremioValue = event.target.value;
+  const handlePremio = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const selectedPremioValue = event.target.value as string;
     const selectedPremio = premiosData.find(
       (item) => item.premioValue === selectedPremioValue
     );
@@ -107,6 +103,8 @@ const Consulta = () => {
         );
         setCheckedItems(checkedNames);
         setUnCheckList([]);
+        setIsSearchButtonDisabled(true);
+        setIsSaveButtonDisabled(false);
       },
       onError: () => {
         Swal.fire({
@@ -116,6 +114,7 @@ const Consulta = () => {
           showConfirmButton: false,
           timer: 7000,
         });
+        setIsSearchButtonDisabled(false);
       },
     }
   );
@@ -135,6 +134,8 @@ const Consulta = () => {
     }
 
     if (param.cantidad > 0 && param.municipio !== "") {
+      setIsSearchButtonDisabled(true);
+      setIsSaveButtonDisabled(true);
       getRegistros(param);
     } else {
       return Swal.fire({
@@ -165,6 +166,9 @@ const Consulta = () => {
   };
 
   const ActualizarRegistros = async () => {
+    setIsSaveButtonDisabled(true);
+    setIsSearchButtonDisabled(true);
+
     for (const element of checkList) {
       const status = checkedItems.has(element.nombre) ? 2 : 0;
       const premioText = checkedItems.has(element.nombre)
@@ -176,9 +180,11 @@ const Consulta = () => {
         premioText
       );
     }
+
     setCheckList([]);
     setCheckedItems(new Set());
     setUnCheckList([]);
+    setIsSearchButtonDisabled(false);
   };
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -186,100 +192,48 @@ const Consulta = () => {
     textAlign: "center",
   }));
 
+  const filteredCheckList = checkList.filter((item) =>
+    checkedItems.has(item.nombre)
+  );
+
   return (
     <Grid container my={1} rowSpacing={2} columnSpacing={1}>
       <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
         <Item sx={{ height: "850px", width: "220px" }}>
           <img src={GifTombola} alt="TOMBOLA" width="90%" />
-          <InputLabel sx={{ marginTop: "20px" }}>
-            Municipio / Distrito
-          </InputLabel>
-          <Select
+          <MunicipioSelect
             value={municipioT}
-            {...register("municipio", { required: true, maxLength: 10 })}
-            color="success"
             onChange={handleMunicipio}
-            sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
-          >
-            <MenuItem value="caleta">Caleta</MenuItem>
-            <MenuItem value="cumayasa">Cumayasa</MenuItem>
-            <MenuItem value="guaymate">Guaymate</MenuItem>
-            <MenuItem value="la-romana">La Romana</MenuItem>
-            <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
-          </Select>
-
-          <TextField
-            type="number"
-            placeholder="Cantidad"
-            label="Cantidad"
-            color="success"
-            {...register("cantidad", { required: true, min: 1 })}
-            sx={{
-              minWidth: "20%",
-              width: "100%",
-              margin: "5px 5px 15px 0px",
-              textAlign: "center",
-            }}
+            register={register}
           />
-
-          <Select
-            value={premio}
-            color="success"
-            onChange={handlePremio}
-            sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
-          >
-            {premiosData.map((e) => (
-              <MenuItem key={e.premioValue} value={e.premioValue}>
-                {e.premioText}
-              </MenuItem>
-            ))}
-          </Select>
-
-          <Button
+          <CantidadInput register={register} />
+          <PremioSelect value={premio} onChange={handlePremio} />
+          <CustomButton
             onClick={CustomGetRegistros}
-            variant="contained"
+            icon={<SearchIcon />}
+            text="Buscar"
             color="success"
-            size="large"
-            sx={{ width: "100%", marginBottom: "90px", marginTop: "20px" }}
-            endIcon={<SearchIcon />}
-          >
-            Buscar
-          </Button>
-
-          <div className="checkList">
-            <div className="title">Listado De Boletas:</div>
-            <div className="list-container">
-              {checkList.map((item) => (
-                <div key={item.nombre}>
-                  <input
-                    value={item.nombre}
-                    type="checkbox"
-                    onChange={handleCheck}
-                    checked={isChecked(item.nombre)}
-                  />
-                  <span className={isChecked(item.nombre) ? "checked" : ""}>
-                    {item.nombre}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+            disabled={isSearchButtonDisabled}
+          />
+          <CheckList
+            checkList={checkList}
+            checkedItems={checkedItems}
+            handleCheck={handleCheck}
+            isChecked={isChecked}
+          />
           <p>{`Boletas presentes:  ${Array.from(checkedItems).join(", ")}`}</p>
           <p>{`Boletas ausentes:  ${JSON.stringify(
             checkList
               .filter((item) => !checkedItems.has(item.nombre))
               .map((item) => item.nombre)
           )}`}</p>
-          <Button
+          <CustomButton
             onClick={ActualizarRegistros}
-            variant="contained"
+            icon={<SaveIcon />}
+            text="Guardar"
             color="info"
-            size="large"
-            sx={{ width: "100%" }}
-            endIcon={<SaveIcon />}
-          >
-            Guardar
-          </Button>
+            disabled={isSaveButtonDisabled}
+          />
         </Item>
       </Grid>
 
@@ -314,10 +268,10 @@ const Consulta = () => {
               maxHeight: "calc(95vh - 64px)",
             }}
           >
-            {checkList.length <= 0 ? (
+            {filteredCheckList.length <= 0 ? (
               <p>------</p>
             ) : (
-              <RenderBoletas items={checkList} />
+              <RenderBoletas items={filteredCheckList} />
             )}
           </Grid>
         </Item>
