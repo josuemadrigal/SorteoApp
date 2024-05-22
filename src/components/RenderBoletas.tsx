@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { Boleta } from "./Boleta";
 
 interface Props {
-  items: any | any[];
+  items: any[];
 }
-export const RenderBoletas = ({ items }: Props) => {
+
+const RenderBoletasComponent = ({ items }: Props) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [renderedItems, setRenderedItems] = useState<object[]>([]);
+  const [renderedItems, setRenderedItems] = useState<any[]>([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,12 +23,18 @@ export const RenderBoletas = ({ items }: Props) => {
     };
   }, [currentIndex, items]);
 
+  useEffect(() => {
+    setCurrentIndex(0);
+    setRenderedItems([]);
+  }, [items]);
+
   return (
     <>
-      {/* {renderedItems.map((item: object, index: number) => ( */}
-      {renderedItems.map((item: object) => (
-        <Boleta item={item} />
+      {renderedItems.map((item, index) => (
+        <Boleta key={index} item={item} />
       ))}
     </>
   );
 };
+
+export const RenderBoletas = memo(RenderBoletasComponent);

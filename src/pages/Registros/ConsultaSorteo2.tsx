@@ -2,19 +2,19 @@ import { useState } from "react";
 import "../../App.css";
 
 import GifTombola from "../../../public/gif-padresLow.gif";
+import SearchIcon from "@mui/icons-material/Search";
+import SaveIcon from "@mui/icons-material/Save";
 
 // import Lottie, {LottieRefCurrentProps} from 'lottie-react';
 // import animationData from '../../assets/65849-emos-spin.json'
 
-// import { motion } from "framer-motion";
 import { useMutation } from "react-query";
-//import SearchIcon from '@mui/icons-material/Search';
-//import SaveIcon from '@mui/icons-material/Save';
 
 import "animate.css";
 
 import {
   Button,
+  FormControl,
   Grid,
   InputLabel,
   MenuItem,
@@ -34,34 +34,64 @@ import Swal from "sweetalert2";
 
 import { RenderBoletas } from "../../components/RenderBoletas";
 
-const modelo = {
-  defaultValues: {
-    municipio: "-",
-    premio: "",
-    status: 1,
-    cantidad: 4,
-  },
-};
-
+interface FormValues {
+  municipio: string;
+  premio: string;
+  status: number;
+  cantidad: number;
+}
 export const Consulta = () => {
-  const { getValues, register } = useForm(modelo);
-
   // const spinRef = useRef<LottieRefCurrentProps>(null);
 
   // const [checked, setChecked] = useState<any[]>([]);
+
+  const premiosData = [
+    { premioText: "Nevera", premioValue: "Nevera" },
+    { premioText: "Televisor", premioValue: "Televisor" },
+    { premioText: "Estufa de horno", premioValue: "Estufa-Horno" },
+    { premioText: "Estufa de mesa", premioValue: "Estufa-Mesa" },
+    { premioText: "Licuadora", premioValue: "Licuadora" },
+    { premioText: "Horno", premioValue: "Horno" },
+    { premioText: "Abanico", premioValue: "Abanico" },
+    { premioText: "Tanque de Gas", premioValue: "Tanque-Gas" },
+    { premioText: "Olla de Presion", premioValue: "Olla-Presion" },
+    { premioText: "Juego de Colcha", premioValue: "Juego-Colcha" },
+    { premioText: "Lavadora", premioValue: "Lavadora" },
+    { premioText: "Microonda", premioValue: "Microonda" },
+    { premioText: "Freidora", premioValue: "Freidora" },
+    //{ premioText: "Bono", premioValue: "Bono" },
+  ];
+  const { getValues, register } = useForm<FormValues>({
+    defaultValues: {
+      municipio: "",
+      premio: "",
+      status: 1,
+      cantidad: 4,
+    },
+  });
   const [checkList, setCheckList] = useState<any[]>([]);
 
   const [unCheckList, setUnCheckList] = useState<any[]>([]);
 
   const [premio, setPremio] = useState("");
+  const [premioTitle, setPremioTitle] = useState("");
   const [municipioT, setMunicipioT] = useState("");
 
   const handleMunicipio = (event: SelectChangeEvent) => {
     setMunicipioT(event.target.value);
+    //register("municipio")(municipioT);
     console.log(municipioT);
   };
   const handlePremio = (event: SelectChangeEvent) => {
-    setPremio(event.target.value);
+    const selectedPremioValue = event.target.value;
+    const selectedPremio = premiosData.find(
+      (item) => item.premioValue === selectedPremioValue
+    );
+
+    if (selectedPremio) {
+      setPremioTitle(selectedPremio.premioText);
+      setPremio(selectedPremioValue);
+    }
     console.log(premio);
   };
 
@@ -80,6 +110,7 @@ export const Consulta = () => {
     setUnCheckList([]);
 
     const param: any = getValues();
+    param.municipio = municipioT;
 
     if (param.cantidad <= 0) {
       return Swal.fire({
@@ -110,7 +141,7 @@ export const Consulta = () => {
       return Swal.fire({
         position: "center",
         icon: "error",
-        title: "Seleccione el municipio",
+        title: "Verifique los parametros",
         showConfirmButton: false,
         timer: 7000,
       });
@@ -141,12 +172,14 @@ export const Consulta = () => {
   return (
     <Grid container my={1} rowSpacing={2} columnSpacing={1}>
       <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
-        <Item sx={{ height: "600px", width: "220px" }}>
-          <Typography gutterBottom variant="h5" component="div">
-            Buscar
-          </Typography>
-          <InputLabel>Municipio / Distrito</InputLabel>
+        <Item sx={{ height: "850px", width: "220px" }}>
+          <img src={GifTombola} alt="TOMBOLA" width="90%" />
+
+          <InputLabel sx={{ marginTop: "20px" }}>
+            Municipio / Distrito
+          </InputLabel>
           <Select
+            value={municipioT}
             {...register("municipio", { required: true, maxLength: 10 })}
             color="success"
             onChange={handleMunicipio}
@@ -158,13 +191,19 @@ export const Consulta = () => {
             <MenuItem value="la-romana">La Romana</MenuItem>
             <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
           </Select>
+
           <TextField
             type="text"
             placeholder="Cantidad"
-            label="cantidad"
+            label="Cantidad"
             color="success"
             {...register("cantidad", { required: true, maxLength: 10 })}
-            sx={{ minWidth: "20%", width: "100%", margin: "5px 5px 15px 0px" }}
+            sx={{
+              minWidth: "20%",
+              width: "100%",
+              margin: "5px 5px 15px 0px",
+              textAlign: "center",
+            }}
           />
 
           <Select
@@ -173,12 +212,9 @@ export const Consulta = () => {
             onChange={handlePremio}
             sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
           >
-            <MenuItem value="abanico">Abanico</MenuItem>
-            <MenuItem value="bono">Bono</MenuItem>
-            <MenuItem value="celular">Celular</MenuItem>
-            <MenuItem value="inversor">Inversor</MenuItem>
-            <MenuItem value="motor">Motor</MenuItem>
-            <MenuItem value="televisor">Televisor</MenuItem>
+            {premiosData.map((e) => (
+              <MenuItem value={e.premioValue}>{e.premioText}</MenuItem>
+            ))}
           </Select>
 
           <Button
@@ -186,99 +222,63 @@ export const Consulta = () => {
             variant="contained"
             color="success"
             size="large"
-            sx={{ width: "100%", marginBottom: "20px" }}
+            sx={{ width: "100%", marginBottom: "90px", marginTop: "20px" }}
+            endIcon={<SearchIcon />}
           >
             Buscar
           </Button>
 
-          {/* <motion.div>
-            <img
-              src={`/premios/${premio}.png`}
-              alt="Imagen del premio"
-              width={"80%"}
-            ></img>
-          </motion.div> */}
-
-          {/* <div className="checkList">
-                <div className="title">Listado De Boletas:</div>
-                  <div className="list-container">
-                    {checkList && checkList.map((item, index) => (
-                      <div key={index}>
-                        
-                        <input value={item} type="checkbox" onChange={handleCheck} />
-                        <span className={isChecked(item.boleta)}>{item.boleta}</span>
-                      </div>
-                    ))}
-                </div>
-              </div> */}
-
-          <div>
-            {/* <p>{`Boletas presentes:  ${checkedItems}`}</p>  */}
-            {/* <p>{`Boletas ausentes:  ${JSON.stringify( unCheckList)}`}</p> */}
-
-            <Button
-              onClick={() => ActualizarRegistros()}
-              variant="contained"
-              color="error"
-              size="large"
-              sx={{ width: "100%" }}
-            >
-              Guardar
-            </Button>
-          </div>
+          <Button
+            onClick={() => ActualizarRegistros()}
+            variant="contained"
+            color="info"
+            size="large"
+            sx={{ width: "100%" }}
+            endIcon={<SaveIcon />}
+          >
+            Guardar
+          </Button>
         </Item>
       </Grid>
       {/* END CONTROLES */}
 
-      {/* START  Column 2 */}
-      <Grid item md={3}>
+      <Grid item md={12}>
         <Item
           sx={{
-            height: "550px",
-
-            alignItems: "center",
-            width: "260px",
-            marginLeft: "30px",
+            height: "calc(100vh)",
+            marginLeft: "250px",
+            backgroundColor: "#06502a",
+            justifyContent: "center",
           }}
         >
-          <Grid container rowSpacing={5} columnSpacing={1}>
-            <Grid item md={12}>
-              {/* <Lottie onComplete={() => {
-                spinRef.current?.goToAndPlay(45, true)
-              }} lottieRef={spinRef} loop={false} style={style} animationData={animationData}/> */}
+          <Typography
+            gutterBottom
+            variant="h3"
+            component="div"
+            sx={{ color: "#fff", backgroundColor: "#ef5061" }}
+          >
+            Ganadoras de: {premioTitle}
+          </Typography>{" "}
+          <Grid
+            container
+            // rowSpacing={1}
+            columnSpacing={1}
+            sx={{
+              justifyContent: "center",
+              transition: "ease-in",
 
-              {/* <ReactPlayer  
-
-                playing
-                url="/tombola.mp4"
-                
-                loop
-                
-                width="640"
-                height="360"
-              /> */}
-
-              <img src={GifTombola} alt="TOMBOLA" width="90%" />
-            </Grid>
-
-            {/* <Grid item md={12}>
-                <Box component="img" src="/foto-eduard2.jpg" alt="hola" sx={{ height: "auto", width: "90%", borderRadius:"10px" }} />
-          </Grid> */}
-          </Grid>
-        </Item>
-      </Grid>
-
-      {/* END  Column 2 */}
-
-      <Grid item md={7}>
-        <Item sx={{ minHeight: "500px" }}>
-          <Typography gutterBottom variant="h5" component="div">
-            GANADORES
-          </Typography>
-
-          <Grid container rowSpacing={1} columnSpacing={4}>
+              flex: 1,
+              width: "100%",
+              minHeight: "200px",
+              // height: "calc(90vh)",
+              //backgroundColor: "red",
+              overflowY: "auto",
+              overflowX: "hidden",
+              maxHeight: "calc(95vh - 64px)",
+            }}
+          >
             {checkList.length <= 0 ? (
-              <p>.</p>
+              <p>------</p>
             ) : (
               <RenderBoletas items={checkList} />
             )}

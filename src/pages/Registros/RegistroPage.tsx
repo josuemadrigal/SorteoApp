@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputMask from "react-input-mask";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
@@ -9,7 +9,7 @@ import {
   CardContent,
   Grid,
   TextField,
-  TextFieldProps,
+  Typography,
 } from "@mui/material";
 import RegistrosService from "../../services/RegistrosService";
 import { useLocation, useParams } from "react-router-dom";
@@ -27,13 +27,15 @@ const defaultValues: FormValues = {
   cedula: "",
   municipio: "",
   status: 1,
-  premio: "",
+  premio: "-",
 };
 
 const errorMessages = {
   invalidMunicipio: "Seleccione un municipio o distrito válido",
-  invalidBoleta: "Ingrese una boleta válida",
-  duplicateBoleta: "Esta boleta ya ha sido registrada",
+  invalidBoleta: "Ingrese una cédula válida",
+  duplicateBoleta: "Esta cédula ya ha sido registrada",
+  cedulaNotFound: "No se encontró un registro con esa cédula",
+  cedulaParticipando: "Esta cédula ya está participando",
 };
 
 const showError = (title: string) => {
@@ -46,11 +48,30 @@ const showError = (title: string) => {
   });
 };
 
+const showSuccess = (title: string) => {
+  Swal.fire({
+    position: "center",
+    icon: "success",
+    title,
+    showConfirmButton: false,
+    timer: 2000,
+  });
+};
+
 const Registro: React.FC = () => {
-  const { register, handleSubmit, reset, setValue } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
     defaultValues,
   });
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [nombre, setNombre] = useState("");
+  const [cedula, setCedula] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
@@ -64,43 +85,74 @@ const Registro: React.FC = () => {
     }
   }, []);
 
-  const registerSubmit: SubmitHandler<FormValues> = async (data) => {
-    data.municipio = municipioNombre;
+  const checkCedula = async (cedula: string) => {
+    try {
+      const response = await RegistrosService.getCedula(cedula);
+      if (response.data.registro && response.data.registro.nombre) {
+        const nombre = response.data.registro.nombre.toUpperCase();
+        setNombre(nombre);
+        setCedula(cedula);
+        setIsSubmitting(false);
+      } else {
+        setNombre("");
+        setCedula("");
+        setIsSubmitting(false);
+        showError(errorMessages.cedulaNotFound);
+      }
+    } catch (error) {
+      console.log(error);
+      setNombre("");
+      setCedula("");
+      setIsSubmitting(false);
+      showError(errorMessages.cedulaNotFound);
+    }
+  };
+
+  const handleRegister = async () => {
+    const data = {
+      cedula,
+      nombre,
+      municipio: municipioNombre,
+      status: 1,
+      premio: "-",
+    };
 
     try {
-      if (!data.municipio) {
-        showError(errorMessages.invalidMunicipio);
-        return;
-      }
-
-      data.status = 1;
-      data.premio = "";
-      data.nombre = "test";
-
+      setIsSubmitting(true);
       const response = await RegistrosService.crearRegistros(data);
-
       if (response.status === 203) {
-        showError(errorMessages.duplicateBoleta);
+        showError(errorMessages.cedulaParticipando);
+      } else if (response.status === 201) {
+        showSuccess(`Registro de la cédula ${cedula} COMPLETADO (${nombre})`);
         reset({ cedula: "" });
-      }
-
-      if (response.status === 201) {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: `Registro de la boleta ${data.cedula} COMPLETADO`,
-          showConfirmButton: false,
-          timer: 2000,
-        });
-
-        reset({ cedula: "" });
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
+        setNombre("");
       }
     } catch (error) {
       console.error(error);
-      showError(`Intente más tarde ${data.municipio}`);
+      showError(`Intente más tarde ${municipioNombre}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleBlur = async (event: React.FocusEvent<HTMLInputElement>) => {
+    const cedulaValue = event.target.value;
+    if (cedulaValue.length === 13) {
+      setIsSubmitting(true);
+      await checkCedula(cedulaValue);
+    }
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && event.currentTarget.value.length === 13) {
+      event.preventDefault();
+      handleBlur(event as any);
+    }
+  };
+
+  const registerSubmit: SubmitHandler<FormValues> = async () => {
+    if (cedula.length === 13 && nombre) {
+      await handleRegister();
     }
   };
 
@@ -125,7 +177,7 @@ const Registro: React.FC = () => {
         >
           <Box
             component="img"
-            src="/mujer-portada.jpg"
+            //src="/mujer-portada.jpg"
             alt="Mujer Portada"
             sx={{
               height: "auto",
@@ -141,20 +193,14 @@ const Registro: React.FC = () => {
               <InputMask
                 mask="999-9999999-9"
                 maskChar=""
-                required
-                {...register("cedula", { required: true, maxLength: 13 })}
-                inputRef={(node) => {
-                  register(node);
-                  inputRef.current = node;
-                }}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    event.preventDefault();
-                    handleSubmit(registerSubmit)();
-                  }
-                }}
+                {...register("cedula", {
+                  required: true,
+                  maxLength: 13,
+                  onBlur: handleBlur,
+                })}
+                disabled={isSubmitting}
               >
-                {(inputProps: TextFieldProps) => (
+                {(inputProps) => (
                   <TextField
                     {...inputProps}
                     variant="filled"
@@ -162,9 +208,17 @@ const Registro: React.FC = () => {
                     type="text"
                     label="Cédula"
                     sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
+                    inputRef={inputRef}
+                    onKeyDown={handleKeyPress}
                   />
                 )}
               </InputMask>
+
+              {nombre && (
+                <Typography variant="h6" sx={{ margin: "5px 5px 15px 0px" }}>
+                  Nombre: {nombre}
+                </Typography>
+              )}
 
               <Button
                 variant="contained"

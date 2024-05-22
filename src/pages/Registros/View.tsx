@@ -1,31 +1,13 @@
 //import React from "react";
 
-import '../../App.css'
+import "../../App.css";
 import { Grid } from "@mui/material";
-import {Consulta} from './ConsultaSorteo';
-
-
+import Consulta from "./ConsultaSorteo";
 
 export const View = () => {
-
-
-
-
-    
-
-    return ( 
-
-        <Grid container>
-
-          
-          <Consulta  />
-        </Grid>
-
-        
-
-       
-       
-    )
-
-
+  return (
+    <Grid container>
+      <Consulta />
+    </Grid>
+  );
 };
