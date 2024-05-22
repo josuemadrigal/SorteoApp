@@ -36,6 +36,7 @@ const errorMessages = {
   duplicateBoleta: "Esta cédula ya ha sido registrada",
   cedulaNotFound: "No se encontró un registro con esa cédula",
   cedulaParticipando: "Esta cédula ya está participando",
+  nombreRequerido: "El nombre es necesario",
 };
 
 const showError = (title: string) => {
@@ -72,6 +73,8 @@ const Registro: React.FC = () => {
   const [nombre, setNombre] = useState("");
   const [cedula, setCedula] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cedulaNotFound, setCedulaNotFound] = useState(false);
+  const [cedulaParticipando, setCedulaParticipando] = useState(false);
 
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
@@ -92,40 +95,51 @@ const Registro: React.FC = () => {
         const nombre = response.data.registro.nombre.toUpperCase();
         setNombre(nombre);
         setCedula(cedula);
+        setCedulaNotFound(false);
         setIsSubmitting(false);
+
+        // Verificar si está participando
+        const participandoResponse = await RegistrosService.checkParticipando(
+          cedula
+        );
+        if (participandoResponse.data.participando) {
+          showError(errorMessages.cedulaParticipando);
+          setCedula("cedula");
+          setCedulaParticipando(true);
+        } else {
+          setCedulaParticipando(false);
+        }
       } else {
         setNombre("");
-        setCedula("");
+        setCedula(cedula);
+        setCedulaNotFound(true);
         setIsSubmitting(false);
-        showError(errorMessages.cedulaNotFound);
       }
     } catch (error) {
       console.log(error);
       setNombre("");
-      setCedula("");
+      setCedula(cedula);
+      setCedulaNotFound(true);
       setIsSubmitting(false);
-      showError(errorMessages.cedulaNotFound);
     }
   };
 
-  const handleRegister = async () => {
-    const data = {
-      cedula,
-      nombre,
-      municipio: municipioNombre,
-      status: 1,
-      premio: "-",
-    };
-
+  const handleRegister = async (data: FormValues) => {
     try {
       setIsSubmitting(true);
       const response = await RegistrosService.crearRegistros(data);
       if (response.status === 203) {
         showError(errorMessages.cedulaParticipando);
+        setCedula("");
       } else if (response.status === 201) {
-        showSuccess(`Registro de la cédula ${cedula} COMPLETADO (${nombre})`);
-        reset({ cedula: "" });
+        showSuccess(
+          `Registro de la cédula ${data.cedula} COMPLETADO (${data.nombre})`
+        );
+        reset({ ...defaultValues, municipio: municipioNombre });
         setNombre("");
+        setCedula("");
+        setCedulaNotFound(false);
+        setCedulaParticipando(false);
       }
     } catch (error) {
       console.error(error);
@@ -150,9 +164,13 @@ const Registro: React.FC = () => {
     }
   };
 
-  const registerSubmit: SubmitHandler<FormValues> = async () => {
-    if (cedula.length === 13 && nombre) {
-      await handleRegister();
+  const registerSubmit: SubmitHandler<FormValues> = async (data) => {
+    if (data.cedula.length === 13 && (nombre || cedulaNotFound)) {
+      await handleRegister({
+        ...data,
+        nombre: nombre || data.nombre,
+        municipio: municipioNombre,
+      });
     }
   };
 
@@ -214,10 +232,26 @@ const Registro: React.FC = () => {
                 )}
               </InputMask>
 
-              {nombre && (
+              {nombre && !cedulaNotFound && !cedulaParticipando && (
                 <Typography variant="h6" sx={{ margin: "5px 5px 15px 0px" }}>
                   Nombre: {nombre}
                 </Typography>
+              )}
+
+              {cedulaNotFound && (
+                <TextField
+                  {...register("nombre", {
+                    required: errorMessages.nombreRequerido,
+                  })}
+                  variant="filled"
+                  color="success"
+                  type="text"
+                  label="Nombre"
+                  sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
+                  disabled={isSubmitting}
+                  error={!!errors.nombre}
+                  helperText={errors.nombre ? errors.nombre.message : ""}
+                />
               )}
 
               <Button
@@ -225,6 +259,7 @@ const Registro: React.FC = () => {
                 color="success"
                 type="submit"
                 sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
+                disabled={isSubmitting || cedulaParticipando}
               >
                 Registrar
               </Button>
