@@ -97,7 +97,7 @@ const Registro: React.FC = () => {
       if (participandoResponse.data.participando) {
         showError(errorMessages.cedulaParticipando);
         reset({ ...defaultValues, municipio: municipioNombre });
-        reset({ cedula });
+        reset({ cedula: "" });
         setCedula("");
         setCedulaParticipando(false);
         setIsSubmitting(false);
@@ -141,7 +141,7 @@ const Registro: React.FC = () => {
       if (response.status === 203) {
         showError(errorMessages.cedulaParticipando);
         reset({ ...defaultValues, municipio: municipioNombre });
-        reset({ cedula });
+        reset({ cedula: "" });
         setNombre("");
         setCedula("");
         setCedulaNotFound(false);
@@ -185,6 +185,8 @@ const Registro: React.FC = () => {
         ...data,
         nombre: nombre || data.nombre,
         municipio: municipioNombre,
+        premio: "-",
+        status: 1,
       });
     }
   };
