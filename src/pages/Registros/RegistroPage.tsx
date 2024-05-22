@@ -90,7 +90,24 @@ const Registro: React.FC = () => {
 
   const checkCedula = async (cedula: string) => {
     try {
+      const participandoResponse = await RegistrosService.checkParticipando(
+        cedula
+      );
+      console.log("hola");
+      if (participandoResponse.data.participando) {
+        showError(errorMessages.cedulaParticipando);
+        reset({ ...defaultValues, municipio: municipioNombre });
+        reset({ cedula });
+        setCedula("");
+        setCedulaParticipando(false);
+        setIsSubmitting(false);
+        return;
+      } else {
+        setCedulaParticipando(false);
+      }
+
       const response = await RegistrosService.getCedula(cedula);
+
       if (response.data.registro && response.data.registro.nombre) {
         const nombre = response.data.registro.nombre.toUpperCase();
         setNombre(nombre);
@@ -99,16 +116,6 @@ const Registro: React.FC = () => {
         setIsSubmitting(false);
 
         // Verificar si está participando
-        const participandoResponse = await RegistrosService.checkParticipando(
-          cedula
-        );
-        if (participandoResponse.data.participando) {
-          showError(errorMessages.cedulaParticipando);
-          setCedula("cedula");
-          setCedulaParticipando(true);
-        } else {
-          setCedulaParticipando(false);
-        }
       } else {
         setNombre("");
         setCedula(cedula);
@@ -127,10 +134,18 @@ const Registro: React.FC = () => {
   const handleRegister = async (data: FormValues) => {
     try {
       setIsSubmitting(true);
+
+      defaultValues.premio = "-";
+      defaultValues.status = 1;
       const response = await RegistrosService.crearRegistros(data);
       if (response.status === 203) {
         showError(errorMessages.cedulaParticipando);
+        reset({ ...defaultValues, municipio: municipioNombre });
+        reset({ cedula });
+        setNombre("");
         setCedula("");
+        setCedulaNotFound(false);
+        setCedulaParticipando(false);
       } else if (response.status === 201) {
         showSuccess(
           `Registro de la cédula ${data.cedula} COMPLETADO (${data.nombre})`
