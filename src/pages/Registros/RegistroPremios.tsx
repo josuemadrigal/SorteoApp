@@ -69,8 +69,6 @@ export const RegistroPremios = () => {
       !objeto.premio ||
       !objeto.la_romana ||
       !objeto.villa_hermosa ||
-      !objeto.caleta ||
-      !objeto.cumayasa ||
       !objeto.guaymate
     ) {
       showError(errorMessages.emptyFields);
@@ -81,8 +79,8 @@ export const RegistroPremios = () => {
     if (
       objeto.la_romana <= 0 ||
       objeto.villa_hermosa <= 0 ||
-      objeto.caleta <= 0 ||
-      objeto.cumayasa <= 0 ||
+      // objeto.caleta <= 0 ||
+      // objeto.cumayasa <= 0 ||
       objeto.guaymate <= 0
     ) {
       showError(errorMessages.zeroQuantity);
@@ -91,6 +89,8 @@ export const RegistroPremios = () => {
 
     try {
       objeto.status = 1;
+      objeto.caleta = 0;
+      objeto.cumayasa = 0;
       objeto.slug_premio = generateSlug(objeto.premio);
 
       const response = await RegistrosService.regPremio(objeto);
@@ -209,45 +209,11 @@ export const RegistroPremios = () => {
                     maxLength: 80,
                     min: 1,
                   })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
+                  sx={{ width: "100%/3", margin: "5px 5px 15px 0px" }}
                   error={!!errors.la_romana}
                   helperText={errors.la_romana ? "Cantidad no puede ser 0" : ""}
                 />
-                <TextField
-                  variant="filled"
-                  type="number"
-                  color="success"
-                  placeholder="Caleta"
-                  label="Caleta"
-                  inputProps={{ maxLength: 60, min: 1 }}
-                  required
-                  {...register("caleta", {
-                    required: true,
-                    maxLength: 80,
-                    min: 1,
-                  })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-                  error={!!errors.caleta}
-                  helperText={errors.caleta ? "Cantidad no puede ser 0" : ""}
-                />
 
-                <TextField
-                  variant="filled"
-                  type="number"
-                  color="success"
-                  placeholder="Cumayasa"
-                  label="Cumayasa"
-                  inputProps={{ maxLength: 60, min: 1 }}
-                  required
-                  {...register("cumayasa", {
-                    required: true,
-                    maxLength: 80,
-                    min: 1,
-                  })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-                  error={!!errors.cumayasa}
-                  helperText={errors.cumayasa ? "Cantidad no puede ser 0" : ""}
-                />
                 <TextField
                   variant="filled"
                   type="number"
@@ -261,17 +227,16 @@ export const RegistroPremios = () => {
                     maxLength: 80,
                     min: 1,
                   })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
+                  sx={{ width: "100%/3", margin: "5px 5px 15px 0px" }}
                   error={!!errors.guaymate}
                   helperText={errors.guaymate ? "Cantidad no puede ser 0" : ""}
                 />
-
                 <TextField
                   variant="filled"
                   type="number"
                   color="success"
-                  placeholder="Villa Hermosa"
-                  label="Villa Hermosa"
+                  placeholder="Guaymate"
+                  label="Guaymate"
                   inputProps={{ maxLength: 60, min: 1 }}
                   required
                   {...register("villa_hermosa", {
@@ -279,8 +244,7 @@ export const RegistroPremios = () => {
                     maxLength: 80,
                     min: 1,
                   })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-                  onKeyDown={handleKeyPress}
+                  sx={{ width: "100%/3", margin: "5px 5px 15px 0px" }}
                   error={!!errors.villa_hermosa}
                   helperText={
                     errors.villa_hermosa ? "Cantidad no puede ser 0" : ""

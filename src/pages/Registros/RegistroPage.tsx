@@ -88,33 +88,36 @@ const Registro: React.FC = () => {
     }
   }, []);
 
+  const checkParticipando = async (cedula: string) => {
+    const participandoResponse = await RegistrosService.checkParticipando(
+      cedula
+    );
+    console.log("hola");
+    if (participandoResponse.data.participando) {
+      showError(errorMessages.cedulaParticipando);
+      reset({ ...defaultValues, municipio: municipioNombre });
+      reset({ ...defaultValues, municipio: municipioNombre });
+      setNombre("");
+      setCedula("");
+      setCedulaNotFound(false);
+      setCedulaParticipando(false);
+    } else {
+      setCedulaParticipando(false);
+    }
+  };
   const checkCedula = async (cedula: string) => {
     try {
-      const participandoResponse = await RegistrosService.checkParticipando(
-        cedula
-      );
-      console.log("hola");
-      if (participandoResponse.data.participando) {
-        showError(errorMessages.cedulaParticipando);
-        reset({ ...defaultValues, municipio: municipioNombre });
-        reset({ cedula: "" });
-        setCedula("");
-        setCedulaParticipando(false);
-        setIsSubmitting(false);
-        return;
-      } else {
-        setCedulaParticipando(false);
-      }
-
       const response = await RegistrosService.getCedula(cedula);
 
       if (response.data.registro && response.data.registro.nombre) {
         const nombre = response.data.registro.nombre.toUpperCase();
+
+        console.log(nombre);
         setNombre(nombre);
         setCedula(cedula);
         setCedulaNotFound(false);
         setIsSubmitting(false);
-
+        checkParticipando(cedula);
         // Verificar si está participando
       } else {
         setNombre("");

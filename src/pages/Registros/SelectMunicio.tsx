@@ -5,9 +5,9 @@ const SelectMunicio = () => {
   const municipios = [
     { municipio: "La Romana", value: "la-romana" },
     { municipio: "Villa Hermosa", value: "villa-hermosa" },
-    { municipio: "Caleta", value: "caleta" },
     { municipio: "Guaymate", value: "guaymate" },
-    { municipio: "Cumayasa", value: "cumayasa" },
+    // { municipio: "Cumayasa", value: "cumayasa" },
+    // { municipio: "Caleta", value: "caleta" },
   ];
 
   const navigate = useNavigate();
@@ -26,7 +26,12 @@ const SelectMunicio = () => {
       spacing={2}
     >
       <Grid item>
-        <Typography variant="h3" gutterBottom textAlign="center">
+        <Typography
+          style={{ fontWeight: "bold", textTransform: "uppercase" }}
+          variant="h3"
+          gutterBottom
+          textAlign="center"
+        >
           Seleccione el municipio que va registrar
         </Typography>
       </Grid>
@@ -45,7 +50,9 @@ const SelectMunicio = () => {
                 }}
                 elevation={3}
               >
-                <Typography variant="h5">{item.municipio}</Typography>
+                <Typography style={{ fontWeight: "bold" }} variant="h5">
+                  {item.municipio}
+                </Typography>
               </Paper>
             </Button>
           </Grid>
