@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import "../App.css";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 interface Props {
   item: any;
 }
 export const Boleta = ({ item }: Props) => {
+  const numCedula = item.cedula;
+  const boletaCedula = numCedula.slice(-5);
+
   return (
     <Grid item sm={12} md={4} lg={4}>
       <motion.div
@@ -24,7 +27,7 @@ export const Boleta = ({ item }: Props) => {
         }}
       >
         <motion.h2
-          style={{ fontSize: 55 }}
+          style={{ fontSize: 55, textTransform: "uppercase" }}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{
             opacity: 1,
@@ -35,6 +38,9 @@ export const Boleta = ({ item }: Props) => {
           transition={{ duration: 2 }}
         >
           {item.nombre}
+          <Typography style={{ fontSize: 40, fontWeight: "bold" }}>
+            {boletaCedula}
+          </Typography>
         </motion.h2>
       </motion.div>
     </Grid>

@@ -21,9 +21,12 @@ interface FormValues {
   premio: string;
   status: number;
   cantidad: number;
+  ronda: string;
+  cedula: string;
 }
 
 interface Registro {
+  cedula: any;
   nombre: string;
 }
 
@@ -38,6 +41,7 @@ const Consulta = () => {
       premio: "",
       status: 1,
       cantidad: 4,
+      ronda: "1",
     },
   });
 
@@ -101,7 +105,7 @@ const Consulta = () => {
         const registros = data.registros || [];
         setCheckList(registros);
         const checkedNames = new Set(
-          registros.map((registro) => registro.nombre)
+          registros.map((registro) => registro.cedula)
         );
         setCheckedItems(checkedNames);
         setUnCheckList([]);
@@ -163,8 +167,8 @@ const Consulta = () => {
     });
   };
 
-  const isChecked = (nombre: string) => {
-    return checkedItems.has(nombre);
+  const isChecked = (cedula: string) => {
+    return checkedItems.has(cedula);
   };
 
   const ActualizarRegistros = async () => {
@@ -172,14 +176,15 @@ const Consulta = () => {
     setIsSearchButtonDisabled(true);
 
     for (const element of checkList) {
-      const status = checkedItems.has(element.nombre) ? 2 : 0;
-      const premioText = checkedItems.has(element.nombre)
+      const status = checkedItems.has(element.cedula) ? 3 : 0;
+      const premioText = checkedItems.has(element.cedula)
         ? premio
         : "No presente";
       await registrosService.startUpdate(
-        String(element.nombre),
+        String(element.cedula),
         status,
-        premioText
+        premioText,
+        "1"
       );
     }
 
@@ -195,7 +200,7 @@ const Consulta = () => {
   }));
 
   const filteredCheckList = checkList.filter((item) =>
-    checkedItems.has(item.nombre)
+    checkedItems.has(item.cedula)
   );
 
   return (
@@ -222,7 +227,15 @@ const Consulta = () => {
             color="success"
             disabled={isSearchButtonDisabled}
           />
-          <CheckList
+
+          <CustomButton
+            onClick={ActualizarRegistros}
+            icon={<SaveIcon />}
+            text="Guardar"
+            color="info"
+            disabled={isSaveButtonDisabled}
+          />
+          {/* <CheckList
             checkList={checkList}
             checkedItems={checkedItems}
             handleCheck={handleCheck}
@@ -233,14 +246,7 @@ const Consulta = () => {
             checkList
               .filter((item) => !checkedItems.has(item.nombre))
               .map((item) => item.nombre)
-          )}`}</p>
-          <CustomButton
-            onClick={ActualizarRegistros}
-            icon={<SaveIcon />}
-            text="Guardar"
-            color="info"
-            disabled={isSaveButtonDisabled}
-          />
+          )}`}</p> */}
         </Item>
       </Grid>
 

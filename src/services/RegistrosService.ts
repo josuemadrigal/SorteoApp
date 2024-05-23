@@ -4,6 +4,7 @@ import { AxiosResponse } from "axios";
 interface Registro {
   nombre: string;
   boleta: string;
+  cedula: string;
 }
 
 interface Cedula {
@@ -85,10 +86,12 @@ class RegistrosService {
     return response;
   }
   public async crearRegistros(param: any): Promise<AxiosResponse<any>> {
-    console.log("servicio: ", param);
     const response = await http.post<any>("/registros", param);
-    console.log("servicio2");
-    console.log(response);
+    return response;
+  }
+
+  public async crearTemporal(param: any): Promise<AxiosResponse<any>> {
+    const response = await http.post<any>("/registros/temporal", param);
     return response;
   }
 
@@ -107,11 +110,12 @@ class RegistrosService {
   }
 
   async startUpdate(
-    boleta: any,
+    cedula: any,
     status: number,
-    premio: string
+    premio: string,
+    ronda: string
   ): Promise<AxiosResponse<any>> {
-    return await http.put(`registros/` + boleta, { status, premio });
+    return await http.put(`registros/` + cedula, { status, premio, ronda });
   }
 }
 
