@@ -9,11 +9,13 @@ import { ViewPremios } from "../pages/Registros/ViewPremios";
 import { RegistroCedula } from "../pages/Registros/RegistroCedula";
 import Consulta from "../screens/Consulta";
 import Verificar from "../screens/Verificar";
+import Home from "../pages/Registros/home";
 
 export const AppRouter = (): any => {
   return (
     <Routes>
-      <Route path="/" element={<SelectMunicio />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/select" element={<SelectMunicio />} />
       <Route path="/registro" element={<SelectMunicio />} />
       <Route path="/reg-premios" element={<RegistroPremios />} />
       <Route path="/reg-cedula" element={<RegistroCedula />} />
