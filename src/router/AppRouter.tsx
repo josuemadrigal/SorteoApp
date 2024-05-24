@@ -7,7 +7,8 @@ import SelectMunicio from "../pages/Registros/SelectMunicio";
 import { RegistroPremios } from "../pages/Registros/RegistroPremios";
 import { ViewPremios } from "../pages/Registros/ViewPremios";
 import { RegistroCedula } from "../pages/Registros/RegistroCedula";
-import Consulta from "../screens/Consultas";
+import Consulta from "../screens/Consulta";
+import Verificar from "../screens/Verificar";
 
 export const AppRouter = (): any => {
   return (
@@ -19,6 +20,7 @@ export const AppRouter = (): any => {
       <Route path="/view-premios" element={<ViewPremios />} />
       <Route path="/registro/:id" element={<Registro />} />
       <Route path="/consulta" element={<Consulta />} />
+      <Route path="/verificar" element={<Verificar />} />
       {/* <Route path="/view" element={<View />} /> */}
     </Routes>
   );

@@ -6,8 +6,8 @@ const SelectMunicio = () => {
     { municipio: "La Romana", value: "la-romana" },
     { municipio: "Villa Hermosa", value: "villa-hermosa" },
     { municipio: "Guaymate", value: "guaymate" },
-    // { municipio: "Cumayasa", value: "cumayasa" },
-    // { municipio: "Caleta", value: "caleta" },
+    { municipio: "Cumayasa", value: "cumayasa" },
+    { municipio: "Caleta", value: "caleta" },
   ];
 
   const navigate = useNavigate();
