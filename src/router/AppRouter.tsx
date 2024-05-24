@@ -9,7 +9,7 @@ import { ViewPremios } from "../pages/Registros/ViewPremios";
 import { RegistroCedula } from "../pages/Registros/RegistroCedula";
 import Consulta from "../screens/Consulta";
 import Verificar from "../screens/Verificar";
-import Home from "../pages/Registros/home";
+import Home from "../pages/Registros/casa";
 
 export const AppRouter = (): any => {
   return (
