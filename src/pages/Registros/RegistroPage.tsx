@@ -70,6 +70,7 @@ const Registro: React.FC = () => {
     defaultValues,
   });
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const nombreRef = useRef<HTMLInputElement | null>(null);
   const [nombre, setNombre] = useState("");
   const [cedula, setCedula] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -88,6 +89,12 @@ const Registro: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (cedulaNotFound && nombreRef.current) {
+      nombreRef.current.focus();
+    }
+  }, [cedulaNotFound]);
+
   const checkParticipando = async (cedula: string) => {
     const participandoResponse = await RegistrosService.checkParticipando(
       cedula
@@ -101,8 +108,14 @@ const Registro: React.FC = () => {
       setCedula("");
       setCedulaNotFound(false);
       setCedulaParticipando(false);
+      console.log("PASO 3");
     } else {
       setCedulaParticipando(false);
+      setNombre("");
+      setCedula(cedula);
+      setCedulaNotFound(true);
+      setIsSubmitting(false);
+      console.log("PASO 4");
     }
   };
   const checkCedula = async (cedula: string) => {
@@ -112,20 +125,25 @@ const Registro: React.FC = () => {
       if (response.data.registro && response.data.registro.nombre) {
         const nombre = response.data.registro.nombre.toUpperCase();
 
-        console.log(nombre);
         setNombre(nombre);
         setCedula(cedula);
         setCedulaNotFound(false);
         setIsSubmitting(false);
         checkParticipando(cedula);
+        setCedulaNotFound(false);
+        setIsSubmitting(false);
+        console.log("PASO 1");
         // Verificar si está participando
       } else {
-        setNombre("");
-        setCedula(cedula);
-        setCedulaNotFound(true);
-        setIsSubmitting(false);
+        checkParticipando(cedula);
+        console.log("PASO 2");
+        // setNombre("");
+        // setCedula(cedula);
+        // setCedulaNotFound(true);
+        // setIsSubmitting(false);
       }
     } catch (error) {
+      checkParticipando(cedula);
       console.log(error);
       setNombre("");
       setCedula(cedula);
@@ -175,10 +193,15 @@ const Registro: React.FC = () => {
     }
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && event.currentTarget.value.length === 13) {
+  const handleKeyPress = async (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
       event.preventDefault();
-      handleBlur(event as any);
+      const cedulaValue = (event.target as HTMLInputElement).value;
+      if (cedulaValue.length === 13) {
+        await checkCedula(cedulaValue);
+      }
     }
   };
 
@@ -216,10 +239,11 @@ const Registro: React.FC = () => {
           <Box
             component="img"
             //src="/mujer-portada.jpg"
-            alt="Mujer Portada"
+            // alt="Mujer Portada"
             sx={{
               height: "auto",
               width: "100%",
+              minWidth: "600px",
               borderRadius: "10px",
             }}
           />
@@ -268,6 +292,7 @@ const Registro: React.FC = () => {
                   type="text"
                   label="Nombre"
                   sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
+                  inputRef={nombreRef}
                   disabled={isSubmitting}
                   error={!!errors.nombre}
                   helperText={errors.nombre ? errors.nombre.message : ""}

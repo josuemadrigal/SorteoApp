@@ -69,7 +69,9 @@ export const RegistroPremios = () => {
       !objeto.premio ||
       !objeto.la_romana ||
       !objeto.villa_hermosa ||
-      !objeto.guaymate
+      !objeto.guaymate ||
+      !objeto.caleta ||
+      !objeto.cumayasa
     ) {
       showError(errorMessages.emptyFields);
       return;
@@ -79,8 +81,8 @@ export const RegistroPremios = () => {
     if (
       objeto.la_romana <= 0 ||
       objeto.villa_hermosa <= 0 ||
-      // objeto.caleta <= 0 ||
-      // objeto.cumayasa <= 0 ||
+      objeto.caleta <= 0 ||
+      objeto.cumayasa <= 0 ||
       objeto.guaymate <= 0
     ) {
       showError(errorMessages.zeroQuantity);
@@ -89,8 +91,6 @@ export const RegistroPremios = () => {
 
     try {
       objeto.status = 1;
-      objeto.caleta = 0;
-      objeto.cumayasa = 0;
       objeto.slug_premio = generateSlug(objeto.premio);
 
       const response = await RegistrosService.regPremio(objeto);
