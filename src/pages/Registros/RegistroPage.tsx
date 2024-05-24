@@ -30,15 +30,6 @@ const defaultValues: FormValues = {
   premio: "-",
 };
 
-const errorMessages = {
-  invalidMunicipio: "Seleccione un municipio o distrito válido",
-  invalidBoleta: "Ingrese una cédula válida",
-  duplicateBoleta: "Esta cédula ya ha sido registrada",
-  cedulaNotFound: "No se encontró un registro con esa cédula",
-  cedulaParticipando: "Esta cédula ya está participando",
-  nombreRequerido: "El nombre es necesario",
-};
-
 const showError = (title: string) => {
   Swal.fire({
     position: "center",
@@ -72,10 +63,20 @@ const Registro: React.FC = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const nombreRef = useRef<HTMLInputElement | null>(null);
   const [nombre, setNombre] = useState("");
+  const [nombreDB, setNombreDB] = useState("");
   const [cedula, setCedula] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cedulaNotFound, setCedulaNotFound] = useState(false);
   const [cedulaParticipando, setCedulaParticipando] = useState(false);
+
+  const errorMessages = {
+    invalidMunicipio: "Seleccione un municipio o distrito válido",
+    invalidBoleta: "Ingrese una cédula válida",
+    duplicateBoleta: "Esta cédula ya ha sido registrada",
+    cedulaNotFound: "No se encontró un registro con esa cédula",
+    cedulaParticipando: `${nombreDB} Esta cédula ya está participando`,
+    nombreRequerido: "El nombre es necesario",
+  };
 
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
@@ -99,7 +100,7 @@ const Registro: React.FC = () => {
     const participandoResponse = await RegistrosService.checkParticipando(
       cedula
     );
-    console.log("hola");
+
     if (participandoResponse.data.participando) {
       showError(errorMessages.cedulaParticipando);
       reset({ ...defaultValues, municipio: municipioNombre });
@@ -108,35 +109,35 @@ const Registro: React.FC = () => {
       setCedula("");
       setCedulaNotFound(false);
       setCedulaParticipando(false);
-      console.log("PASO 3");
     } else {
       setCedulaParticipando(false);
       setNombre("");
+      setNombreDB("");
       setCedula(cedula);
       setCedulaNotFound(true);
       setIsSubmitting(false);
-      console.log("PASO 4");
     }
   };
   const checkCedula = async (cedula: string) => {
     try {
       const response = await RegistrosService.getCedula(cedula);
-
+      const nombre = response.data.registro.nombre.toUpperCase();
+      setNombreDB(nombre);
       if (response.data.registro && response.data.registro.nombre) {
-        const nombre = response.data.registro.nombre.toUpperCase();
-
         setNombre(nombre);
+        setNombreDB(nombre);
         setCedula(cedula);
         setCedulaNotFound(false);
         setIsSubmitting(false);
         checkParticipando(cedula);
         setCedulaNotFound(false);
         setIsSubmitting(false);
-        console.log("PASO 1");
+
         // Verificar si está participando
       } else {
+        setNombreDB(nombre);
         checkParticipando(cedula);
-        console.log("PASO 2");
+
         // setNombre("");
         // setCedula(cedula);
         // setCedulaNotFound(true);
@@ -145,7 +146,8 @@ const Registro: React.FC = () => {
     } catch (error) {
       checkParticipando(cedula);
       console.log(error);
-      setNombre("");
+
+      setNombre(nombre);
       setCedula(cedula);
       setCedulaNotFound(true);
       setIsSubmitting(false);
