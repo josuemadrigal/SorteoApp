@@ -40,10 +40,11 @@ const TablePremios: React.FC<PremioSelectProps> = ({ premios }) => {
           >
             <TableCell>Premios</TableCell>
             <TableCell>La Romana</TableCell>
-            <TableCell>Caleta</TableCell>
-            <TableCell>Cumayasa</TableCell>
             <TableCell>Villa Hermosa</TableCell>
+            <TableCell>Caleta</TableCell>
             <TableCell>Guaymate</TableCell>
+            <TableCell>Cumayasa</TableCell>
+
             <TableCell>Total</TableCell>
           </TableRow>
         </TableHead>
