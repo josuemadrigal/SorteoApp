@@ -50,6 +50,19 @@ class RegistrosService {
     return response;
   }
 
+  public async getRegistrosGanadores(
+    municipio: string,
+    ronda: string,
+    premio: string
+  ): Promise<AxiosResponse<GetRegistrosResponse>> {
+    const jsonPar: any = { municipio, ronda, premio };
+    const params = new URLSearchParams(jsonPar);
+    const response = await http.get<GetRegistrosResponse>(
+      `/registros/getGanadores?${params}`
+    );
+    return response;
+  }
+
   public async getCedula(
     cedula: string
   ): Promise<AxiosResponse<GetCedulaResponse>> {

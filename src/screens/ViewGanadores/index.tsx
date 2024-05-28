@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../App.css";
 import SearchIcon from "@mui/icons-material/Search";
-import SaveIcon from "@mui/icons-material/Save";
 import { useMutation } from "react-query";
 import "animate.css";
 import {
@@ -19,56 +18,51 @@ import Swal from "sweetalert2";
 import PremioSelect from "./components/PremioSelect";
 import MunicipioSelect from "./components/MunicipioSelect";
 import CustomButton from "./components/CustomButton";
-import TablePremios from "./components/TableGanadores";
+import TableGanadores from "../ViewPremios/components/TableGanadores";
 
 interface FormValues {
-  municipio: string;
-  premio: string;
-  status: number;
-  cantidad: number;
-  ronda: string;
+  nombre: string;
   cedula: string;
+  premio: string;
+  ronda: string;
+  municipio: string;
 }
 
 interface Registro {
-  cedula: any;
   nombre: string;
+  cedula: string;
+  premio: string;
+  ronda: string;
+  municipio: string;
 }
 
 interface GetRegistrosResponse {
   registros: Registro[];
 }
 
-const ViewPremios = () => {
+interface Premio {
+  slug_premio: string;
+  premio: string;
+  la_romana: string;
+  caleta: string;
+  villa_hermosa: string;
+  cumayasa: string;
+  guaymate: string;
+}
+
+const ViewGanadores: React.FC = () => {
   const { getValues, register } = useForm<FormValues>({
     defaultValues: {
-      municipio: "",
       premio: "",
-      status: 1,
-      cantidad: 4,
-      ronda: "1",
+      ronda: "",
+      municipio: "",
     },
   });
-  const [ronda, setRonda] = useState("");
-  const [checkList, setCheckList] = useState<Registro[]>([]);
-  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
-  const [unCheckList, setUnCheckList] = useState<string[]>([]);
-  const [premio, setPremio] = useState("");
-  const [premioTitle, setPremioTitle] = useState("");
-  const [municipioT, setMunicipioT] = useState("");
-  const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
-  const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
-  const [premios, setPremios] = useState<
-    {
-      slug_premio: string;
-      premio: string;
-      la_romana: string;
-      caleta: string;
-      villa_hermosa: string;
-      cumayasa: string;
-      guaymate: string;
-    }[]
-  >([]);
+  const [ronda, setRonda] = useState<string>("");
+  const [premio, setPremio] = useState<string>("");
+  const [municipioT, setMunicipioT] = useState<string>("");
+  const [premios, setPremios] = useState<Premio[]>([]);
+  const [ganadores, setGanadores] = useState<Registro[]>([]);
 
   useEffect(() => {
     const fetchPremios = async () => {
@@ -95,7 +89,6 @@ const ViewPremios = () => {
       (item) => item.slug_premio === selectedPremioValue
     );
     if (selectedPremio) {
-      setPremioTitle(selectedPremio.premio);
       setPremio(selectedPremioValue);
     }
   };
@@ -106,24 +99,17 @@ const ViewPremios = () => {
     FormValues
   >(
     async (param: FormValues) => {
-      const response = await registrosService.getRegistros(
-        param.status,
+      const response = await registrosService.getRegistrosGanadores(
         param.municipio,
-        param.cantidad
+        param.ronda,
+        param.premio
       );
       return response.data;
     },
     {
       onSuccess: (data) => {
         const registros = data.registros || [];
-        setCheckList(registros);
-        const checkedNames = new Set(
-          registros.map((registro) => registro.cedula)
-        );
-        setCheckedItems(checkedNames);
-        setUnCheckList([]);
-        setIsSearchButtonDisabled(true);
-        setIsSaveButtonDisabled(false);
+        setGanadores(registros);
       },
       onError: () => {
         Swal.fire({
@@ -133,7 +119,6 @@ const ViewPremios = () => {
           showConfirmButton: false,
           timer: 7000,
         });
-        setIsSearchButtonDisabled(false);
       },
     }
   );
@@ -142,14 +127,15 @@ const ViewPremios = () => {
     const param: FormValues = getValues();
     param.municipio = municipioT;
     param.ronda = ronda;
+    param.premio = premio;
 
-    if (param.cantidad > 0 && param.municipio !== "") {
+    if (param.ronda !== "" && param.municipio !== "" && param.premio !== "") {
       getRegistros(param);
     } else {
       return Swal.fire({
         position: "center",
         icon: "error",
-        title: "Verifique los parámetros",
+        title: "Verifique los filtros",
         showConfirmButton: false,
         timer: 7000,
       });
@@ -167,7 +153,7 @@ const ViewPremios = () => {
 
   return (
     <Grid container my={1} rowSpacing={1} columnSpacing={1}>
-      {/* <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
+      <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
         <Item sx={{ height: "40vh", width: "220px" }}>
           <MunicipioSelect
             value={municipioT}
@@ -190,16 +176,11 @@ const ViewPremios = () => {
               <MenuItem value="" disabled>
                 Seleccione la ronda
               </MenuItem>
-              <MenuItem value="1">1</MenuItem>
-              <MenuItem value="2">2</MenuItem>
-              <MenuItem value="3">3</MenuItem>
-              <MenuItem value="4">4</MenuItem>
-              <MenuItem value="5">5</MenuItem>
-              <MenuItem value="6">6</MenuItem>
-              <MenuItem value="7">7</MenuItem>
-              <MenuItem value="8">8</MenuItem>
-              <MenuItem value="9">9</MenuItem>
-              <MenuItem value="10">10</MenuItem>
+              {[...Array(10).keys()].map((n) => (
+                <MenuItem key={n + 1} value={n + 1}>
+                  {n + 1}
+                </MenuItem>
+              ))}
             </Select>
           </div>
           <PremioSelect
@@ -215,13 +196,13 @@ const ViewPremios = () => {
             color="success"
           />
         </Item>
-      </Grid> */}
+      </Grid>
 
       <Grid item md={12}>
         <Item
           sx={{
             height: "calc(100vh)",
-            marginX: "250px",
+            marginLeft: "250px",
             backgroundColor: "#06502a",
             justifyContent: "center",
           }}
@@ -232,7 +213,7 @@ const ViewPremios = () => {
             sx={{
               justifyContent: "center",
 
-              flex: 1,
+              // flex: 1,
               width: "100%",
               minHeight: "200px",
             }}
@@ -251,9 +232,10 @@ const ViewPremios = () => {
               gutterBottom
               textAlign="center"
             >
-              Lista de premios
+              Lista de ganadores
             </Typography>
-            <TablePremios premios={premios} />
+
+            <TableGanadores premios={ganadores} />
           </Grid>
         </Item>
       </Grid>
@@ -261,4 +243,4 @@ const ViewPremios = () => {
   );
 };
 
-export default ViewPremios;
+export default ViewGanadores;
