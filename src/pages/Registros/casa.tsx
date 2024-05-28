@@ -12,7 +12,7 @@ const Home = () => {
   const vistas = [
     { municipio: "Sorteo", value: "consulta" },
     { municipio: "Vista premios", value: "viewPremios" },
-    { municipio: "Vista ganadores", value: "#" },
+    { municipio: "Vista ganadores", value: "viewGanadores" },
   ];
 
   const navigate = useNavigate();

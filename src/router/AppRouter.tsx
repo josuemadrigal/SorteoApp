@@ -11,6 +11,7 @@ import Verificar from "../screens/Verificar";
 import Home from "../pages/Registros/casa";
 import RegistroGeneral from "../pages/Registros/RegistroPageGeneral";
 import ViewPremios from "../screens/ViewPremios";
+import ViewGanadores from "../screens/ViewGanadores";
 
 export const AppRouter = (): any => {
   return (
@@ -26,6 +27,7 @@ export const AppRouter = (): any => {
       <Route path="/consulta" element={<Consulta />} />
       <Route path="/verificar" element={<Verificar />} />
       <Route path="/viewPremios" element={<ViewPremios />} />
+      <Route path="/viewGanadores" element={<ViewGanadores />} />
       {/* <Route path="/view" element={<View />} /> */}
     </Routes>
   );
