@@ -71,6 +71,7 @@ const RegistroGeneral: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cedulaNotFound, setCedulaNotFound] = useState(false);
   const [cedulaParticipando, setCedulaParticipando] = useState(false);
+  const [buttonText, setButtonText] = useState("Buscar");
 
   const errorMessages = {
     invalidMunicipio: "Seleccione un municipio o distrito válido",
@@ -122,6 +123,7 @@ const RegistroGeneral: React.FC = () => {
         setCedulaParticipando(false);
         setCedulaNotFound(false);
         setIsSubmitting(false);
+        setButtonText("Buscar");
         return;
       }
 
@@ -136,6 +138,7 @@ const RegistroGeneral: React.FC = () => {
         setCedula(cedula);
         setCedulaNotFound(false);
         setIsSubmitting(false);
+        setButtonText("Registrar");
       }
 
       if (!cedulaParti && response.data.ok === false) {
@@ -144,6 +147,7 @@ const RegistroGeneral: React.FC = () => {
         setNombre("");
         setCedula(cedula);
         setIsSubmitting(false);
+        setButtonText("Registrar");
         if (nombre) {
           await handleRegister({
             nombre,
@@ -156,6 +160,7 @@ const RegistroGeneral: React.FC = () => {
       }
     } catch (error) {
       console.error(error);
+      setButtonText("Buscar");
     }
   };
 
@@ -172,6 +177,7 @@ const RegistroGeneral: React.FC = () => {
         setCedula("");
         setCedulaNotFound(false);
         setCedulaParticipando(false);
+        setButtonText("Buscar");
       } else if (response.status === 201) {
         showSuccess(
           `Registro de la cédula ${data.cedula} COMPLETADO (${data.nombre})`
@@ -181,10 +187,12 @@ const RegistroGeneral: React.FC = () => {
         setCedula("");
         setCedulaNotFound(false);
         setCedulaParticipando(false);
+        setButtonText("Buscar");
       }
     } catch (error) {
       console.error(error);
       showError(`Intente más tarde ${municipioNombre}`);
+      setButtonText("Buscar");
     } finally {
       setIsSubmitting(false);
     }
@@ -331,12 +339,12 @@ const RegistroGeneral: React.FC = () => {
 
               <Button
                 variant="contained"
-                color="success"
+                color={buttonText === "Buscar" ? "info" : "success"}
                 type="submit"
                 sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
                 disabled={isSubmitting || cedulaParticipando}
               >
-                Registrar
+                {buttonText}
               </Button>
             </form>
           </CardContent>

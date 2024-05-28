@@ -6,14 +6,12 @@ interface MunicipioSelectProps {
   value: string;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   register: UseFormRegister<any>;
-  disabled: boolean;
 }
 
 const MunicipioSelect: React.FC<MunicipioSelectProps> = ({
   value,
   onChange,
   register,
-  disabled,
 }) => {
   return (
     <>
@@ -24,7 +22,6 @@ const MunicipioSelect: React.FC<MunicipioSelectProps> = ({
         color="success"
         onChange={onChange}
         sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
-        disabled={disabled}
       >
         <MenuItem value="caleta">Caleta</MenuItem>
         <MenuItem value="cumayasa">Cumayasa</MenuItem>

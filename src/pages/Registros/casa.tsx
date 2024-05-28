@@ -7,7 +7,12 @@ const Home = () => {
     { municipio: "Registro por municipio", value: "registro" },
     { municipio: "Registrar Premios", value: "reg-premios" },
     { municipio: "Registrar Cedula", value: "reg-cedula" },
+  ];
+
+  const vistas = [
     { municipio: "Sorteo", value: "consulta" },
+    { municipio: "Vista premios", value: "viewPremios" },
+    { municipio: "Vista ganadores", value: "#" },
   ];
 
   const navigate = useNavigate();
@@ -35,6 +40,22 @@ const Home = () => {
           Eduard Web App
         </Typography>
       </Grid>
+      <Typography
+        style={{
+          fontWeight: "bold",
+          textTransform: "uppercase",
+          fontSize: "25px",
+          marginTop: "55px",
+          color: "white",
+          backgroundColor: "seagreen",
+          padding: "10px",
+          borderRadius: "10px",
+        }}
+        gutterBottom
+        textAlign="center"
+      >
+        Registros
+      </Typography>
       <Grid item container spacing={2} justifyContent="center">
         {municipios.map((item) => (
           <Grid item key={item.value}>
@@ -50,7 +71,52 @@ const Home = () => {
                 }}
                 elevation={3}
               >
-                <Typography style={{ fontWeight: "bold" }} variant="h5">
+                <Typography
+                  style={{ fontWeight: "bold", color: "darkolivegreen" }}
+                  variant="h5"
+                >
+                  {item.municipio}
+                </Typography>
+              </Paper>
+            </Button>
+          </Grid>
+        ))}
+      </Grid>
+      <Typography
+        style={{
+          fontWeight: "bold",
+          textTransform: "uppercase",
+          fontSize: "25px",
+          marginTop: "55px",
+          color: "white",
+          backgroundColor: "seagreen",
+          padding: "10px",
+          borderRadius: "10px",
+        }}
+        gutterBottom
+        textAlign="center"
+      >
+        Vistas
+      </Typography>
+      <Grid item container spacing={2} justifyContent="center">
+        {vistas.map((item) => (
+          <Grid item key={item.value}>
+            <Button onClick={() => handleClick(item)} style={{ padding: 0 }}>
+              <Paper
+                sx={{
+                  width: 200,
+                  height: 200,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "yellowgreen",
+                }}
+                elevation={3}
+              >
+                <Typography
+                  style={{ fontWeight: "bold", color: "darkolivegreen" }}
+                  variant="h5"
+                >
                   {item.municipio}
                 </Typography>
               </Paper>

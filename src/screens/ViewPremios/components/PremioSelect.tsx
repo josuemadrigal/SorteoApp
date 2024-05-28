@@ -10,14 +10,12 @@ interface PremioSelectProps {
   value: string;
   onChange: (event: SelectChangeEvent<string>) => void;
   premios: Premio[];
-  disabled: boolean;
 }
 
 const PremioSelect: React.FC<PremioSelectProps> = ({
   value,
   onChange,
   premios,
-  disabled,
 }) => {
   return (
     <Select
@@ -25,7 +23,6 @@ const PremioSelect: React.FC<PremioSelectProps> = ({
       onChange={onChange}
       color="success"
       sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
-      disabled={disabled}
     >
       <MenuItem value="" disabled>
         Seleccione el premio

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "../../App.css";
-import GifTombola from "/gif-padresLow.gif";
 import SearchIcon from "@mui/icons-material/Search";
 import SaveIcon from "@mui/icons-material/Save";
 import { useMutation } from "react-query";
@@ -17,11 +16,10 @@ import {
 import { useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
-import { RenderBoletas } from "../../components/RenderBoletas";
 import PremioSelect from "./components/PremioSelect";
 import MunicipioSelect from "./components/MunicipioSelect";
-import CantidadInput from "./components/CantidadInput";
 import CustomButton from "./components/CustomButton";
+import TablePremios from "./components/TablePremios";
 
 interface FormValues {
   municipio: string;
@@ -41,7 +39,7 @@ interface GetRegistrosResponse {
   registros: Registro[];
 }
 
-const Consulta = () => {
+const ViewPremios = () => {
   const { getValues, register } = useForm<FormValues>({
     defaultValues: {
       municipio: "",
@@ -61,7 +59,15 @@ const Consulta = () => {
   const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
   const [premios, setPremios] = useState<
-    { slug_premio: string; premio: string }[]
+    {
+      slug_premio: string;
+      premio: string;
+      la_romana: string;
+      caleta: string;
+      villa_hermosa: string;
+      cumayasa: string;
+      guaymate: string;
+    }[]
   >([]);
 
   useEffect(() => {
@@ -137,19 +143,7 @@ const Consulta = () => {
     param.municipio = municipioT;
     param.ronda = ronda;
 
-    if (param.cantidad <= 0) {
-      return Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "La cantidad no puede ser 0",
-        showConfirmButton: false,
-        timer: 7000,
-      });
-    }
-
     if (param.cantidad > 0 && param.municipio !== "") {
-      setIsSearchButtonDisabled(true);
-      setIsSaveButtonDisabled(true);
       getRegistros(param);
     } else {
       return Swal.fire({
@@ -162,49 +156,8 @@ const Consulta = () => {
     }
   };
 
-  const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
-    setCheckedItems((prev) => {
-      const updated = new Set(prev);
-      if (checked) {
-        updated.add(value);
-      } else {
-        updated.delete(value);
-      }
-      return updated;
-    });
-  };
-
-  const isChecked = (cedula: string) => {
-    return checkedItems.has(cedula);
-  };
-
-  const ActualizarRegistros = async () => {
-    setIsSaveButtonDisabled(true);
-    setIsSearchButtonDisabled(true);
-
-    for (const element of checkList) {
-      const status = checkedItems.has(element.cedula) ? 3 : 0;
-      const premioText = checkedItems.has(element.cedula)
-        ? premio
-        : "No presente";
-      await registrosService.startUpdate(
-        String(element.cedula),
-        status,
-        premioText,
-        ronda
-      );
-    }
-
-    setCheckList([]);
-    setCheckedItems(new Set());
-    setUnCheckList([]);
-    setIsSearchButtonDisabled(false);
-  };
-
   const handleRondaChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setRonda(event.target.value as string);
-    //register("ronda", event.target.value as string);
   };
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -212,20 +165,14 @@ const Consulta = () => {
     textAlign: "center",
   }));
 
-  const filteredCheckList = checkList.filter((item) =>
-    checkedItems.has(item.cedula)
-  );
-
   return (
-    <Grid container my={1} rowSpacing={2} columnSpacing={1}>
-      <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
-        <Item sx={{ height: "94vh", width: "220px" }}>
-          <img src={GifTombola} alt="TOMBOLA" width="90%" />
+    <Grid container my={1} rowSpacing={1} columnSpacing={1}>
+      {/* <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
+        <Item sx={{ height: "40vh", width: "220px" }}>
           <MunicipioSelect
             value={municipioT}
             onChange={handleMunicipio}
             register={register}
-            disabled={isSearchButtonDisabled}
           />
           <div style={{ display: "flex" }}>
             <InputLabel sx={{ marginTop: "20px", width: "40%" }}>
@@ -239,7 +186,6 @@ const Consulta = () => {
               color="success"
               sx={{ margin: "5px 5px 15px 0px", width: "58%" }}
               inputProps={{ "aria-label": "Without label" }}
-              disabled={isSearchButtonDisabled}
             >
               <MenuItem value="" disabled>
                 Seleccione la ronda
@@ -260,11 +206,6 @@ const Consulta = () => {
             value={premio}
             onChange={handlePremio}
             premios={premios}
-            disabled={isSearchButtonDisabled}
-          />
-          <CantidadInput
-            register={register}
-            disabled={isSearchButtonDisabled}
           />
 
           <CustomButton
@@ -272,77 +213,47 @@ const Consulta = () => {
             icon={<SearchIcon />}
             text="Buscar"
             color="success"
-            disabled={isSearchButtonDisabled}
           />
-
-          <CustomButton
-            onClick={ActualizarRegistros}
-            icon={<SaveIcon />}
-            text="Guardar"
-            color="info"
-            disabled={isSaveButtonDisabled}
-          />
-          {/* <CheckList
-            checkList={checkList}
-            checkedItems={checkedItems}
-            handleCheck={handleCheck}
-            isChecked={isChecked}
-          />
-          <p>{`Boletas presentes:  ${Array.from(checkedItems).join(", ")}`}</p>
-          <p>{`Boletas ausentes:  ${JSON.stringify(
-            checkList
-              .filter((item) => !checkedItems.has(item.nombre))
-              .map((item) => item.nombre)
-          )}`}</p> */}
         </Item>
-      </Grid>
+      </Grid> */}
 
       <Grid item md={12}>
         <Item
           sx={{
             height: "calc(100vh)",
-            marginLeft: "250px",
+            marginX: "250px",
             backgroundColor: "#06502a",
             justifyContent: "center",
           }}
         >
-          <Typography
-            gutterBottom
-            variant="h3"
-            component="div"
-            sx={{ color: "#fff", backgroundColor: "#ef5061", fontSize: 30 }}
-          >
-            Ganadoras de{" "}
-            <span
-              style={{
-                color: "#fff",
-                backgroundColor: "#ef5061",
-                fontSize: 40,
-                fontWeight: "bold",
-              }}
-            >
-              {premioTitle}
-            </span>
-          </Typography>
           <Grid
             container
             columnSpacing={1}
             sx={{
               justifyContent: "center",
-              transition: "ease-in",
+
               flex: 1,
               width: "100%",
               minHeight: "200px",
-              overflowY: "auto",
-              overflowX: "hidden",
-              maxHeight: "calc(95vh - 64px)",
             }}
           >
-            {filteredCheckList.length <= 0 ? (
-              <p>------</p>
-            ) : (
-              <RenderBoletas items={filteredCheckList} />
-            )}
+            <Typography
+              style={{
+                fontWeight: "bold",
+                textTransform: "uppercase",
+                fontSize: "25px",
+                marginTop: "55px",
+                color: "white",
+                backgroundColor: "seagreen",
+                padding: "10px",
+                borderRadius: "10px",
+              }}
+              gutterBottom
+              textAlign="center"
+            >
+              Lista de premios
+            </Typography>
+            <TablePremios premios={premios} />
           </Grid>
         </Item>
       </Grid>
@@ -350,4 +261,4 @@ const Consulta = () => {
   );
 };
 
-export default Consulta;
+export default ViewPremios;
