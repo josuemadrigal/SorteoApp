@@ -34,6 +34,7 @@ const TablePremios: React.FC<PremioSelectProps> = ({ premios }) => {
                 fontWeight: "bold",
                 fontSize: "1rem",
                 color: "white",
+                textAlign: "center",
               },
             }}
           >
@@ -43,17 +44,51 @@ const TablePremios: React.FC<PremioSelectProps> = ({ premios }) => {
             <TableCell>Cumayasa</TableCell>
             <TableCell>Villa Hermosa</TableCell>
             <TableCell>Guaymate</TableCell>
+            <TableCell>Total</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {premios.map((row) => (
             <TableRow key={row.premio} sx={{ cursor: "pointer" }}>
-              <TableCell>{row.premio}</TableCell>
-              <TableCell>{row.la_romana}</TableCell>
-              <TableCell>{row.villa_hermosa}</TableCell>
-              <TableCell>{row.caleta}</TableCell>
-              <TableCell>{row.guaymate}</TableCell>
-              <TableCell>{row.cumayasa}</TableCell>
+              <TableCell
+                style={{
+                  backgroundColor: "seagreen",
+                  color: "white",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                }}
+              >
+                {row.premio}
+              </TableCell>
+              <TableCell style={{ textAlign: "center" }}>
+                {row.la_romana}
+              </TableCell>
+              <TableCell style={{ textAlign: "center" }}>
+                {row.villa_hermosa}
+              </TableCell>
+              <TableCell style={{ textAlign: "center" }}>
+                {row.caleta}
+              </TableCell>
+              <TableCell style={{ textAlign: "center" }}>
+                {row.guaymate}
+              </TableCell>
+              <TableCell style={{ textAlign: "center" }}>
+                {row.cumayasa}
+              </TableCell>
+              <TableCell
+                style={{
+                  textAlign: "center",
+                  backgroundColor: "darkgreen",
+                  color: "white",
+                  fontWeight: "bold",
+                }}
+              >
+                {parseInt(row.la_romana) +
+                  parseInt(row.villa_hermosa) +
+                  parseInt(row.caleta) +
+                  parseInt(row.guaymate) +
+                  parseInt(row.cumayasa)}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
