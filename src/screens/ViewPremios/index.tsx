@@ -19,7 +19,7 @@ import Swal from "sweetalert2";
 import PremioSelect from "./components/PremioSelect";
 import MunicipioSelect from "./components/MunicipioSelect";
 import CustomButton from "./components/CustomButton";
-import TablePremios from "./components/TableGanadores";
+import TablePremios from "./components/TablePremios";
 
 interface FormValues {
   municipio: string;
