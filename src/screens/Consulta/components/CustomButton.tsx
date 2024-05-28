@@ -22,7 +22,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       variant="contained"
       color={color}
       size="large"
-      sx={{ width: "100%", marginBottom: "90px", marginTop: "20px" }}
+      sx={{ width: "100%", marginBottom: "90px", marginTop: "10px" }}
       endIcon={icon}
       disabled={disabled} // Usar la propiedad disabled
     >

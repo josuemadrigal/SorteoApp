@@ -27,7 +27,7 @@ export const Boleta = ({ item }: Props) => {
         }}
       >
         <motion.h2
-          style={{ fontSize: 55, textTransform: "uppercase" }}
+          style={{ fontSize: 35, textTransform: "uppercase" }}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{
             opacity: 1,
@@ -38,7 +38,15 @@ export const Boleta = ({ item }: Props) => {
           transition={{ duration: 2 }}
         >
           {item.nombre}
-          <Typography style={{ fontSize: 40, fontWeight: "bold" }}>
+          <Typography
+            style={{
+              fontSize: 30,
+              fontWeight: "bold",
+              backgroundColor: "darkseagreen",
+              borderRadius: 10,
+              padding: 5,
+            }}
+          >
             {boletaCedula}
           </Typography>
         </motion.h2>

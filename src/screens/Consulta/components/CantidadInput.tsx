@@ -17,7 +17,7 @@ const CantidadInput: React.FC<CantidadInputProps> = ({ register }) => {
       sx={{
         minWidth: "20%",
         width: "100%",
-        margin: "5px 5px 15px 0px",
+        margin: "5px 5px 5px 0px",
         textAlign: "center",
       }}
     />
