@@ -18,7 +18,7 @@ import Swal from "sweetalert2";
 import PremioSelect from "./components/PremioSelect";
 import MunicipioSelect from "./components/MunicipioSelect";
 import CustomButton from "./components/CustomButton";
-import TableGanadores from "../ViewPremios/components/TableGanadores";
+import TableGanadores from "./components/TableGanadores";
 
 interface FormValues {
   nombre: string;
