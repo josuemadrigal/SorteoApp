@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const municipios = [
-    { municipio: "Registro Sorteo", value: "select" },
-
+    { municipio: "Registro Sorteo", value: "registroG" },
+    { municipio: "Registro por municipio", value: "registro" },
     { municipio: "Registrar Premios", value: "reg-premios" },
     { municipio: "Registrar Cedula", value: "reg-cedula" },
     { municipio: "Sorteo", value: "consulta" },
@@ -32,7 +32,7 @@ const Home = () => {
           gutterBottom
           textAlign="center"
         >
-          Eduard App
+          Eduard Web App
         </Typography>
       </Grid>
       <Grid item container spacing={2} justifyContent="center">
