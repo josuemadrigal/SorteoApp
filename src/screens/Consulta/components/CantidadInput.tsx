@@ -4,9 +4,13 @@ import { UseFormRegister } from "react-hook-form";
 
 interface CantidadInputProps {
   register: UseFormRegister<any>;
+  disabled: boolean;
 }
 
-const CantidadInput: React.FC<CantidadInputProps> = ({ register }) => {
+const CantidadInput: React.FC<CantidadInputProps> = ({
+  register,
+  disabled,
+}) => {
   return (
     <TextField
       type="number"
@@ -20,6 +24,7 @@ const CantidadInput: React.FC<CantidadInputProps> = ({ register }) => {
         margin: "5px 5px 5px 0px",
         textAlign: "center",
       }}
+      disabled={disabled}
     />
   );
 };

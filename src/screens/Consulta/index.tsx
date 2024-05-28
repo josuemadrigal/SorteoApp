@@ -225,6 +225,7 @@ const Consulta = () => {
             value={municipioT}
             onChange={handleMunicipio}
             register={register}
+            disabled={isSearchButtonDisabled}
           />
           <div style={{ display: "flex" }}>
             <InputLabel sx={{ marginTop: "20px", width: "40%" }}>
@@ -238,6 +239,7 @@ const Consulta = () => {
               color="success"
               sx={{ margin: "5px 5px 15px 0px", width: "58%" }}
               inputProps={{ "aria-label": "Without label" }}
+              disabled={isSearchButtonDisabled}
             >
               <MenuItem value="" disabled>
                 Seleccione la ronda
@@ -258,8 +260,12 @@ const Consulta = () => {
             value={premio}
             onChange={handlePremio}
             premios={premios}
+            disabled={isSearchButtonDisabled}
           />
-          <CantidadInput register={register} />
+          <CantidadInput
+            register={register}
+            disabled={isSearchButtonDisabled}
+          />
 
           <CustomButton
             onClick={CustomGetRegistros}
