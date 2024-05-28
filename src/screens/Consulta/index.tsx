@@ -5,7 +5,15 @@ import SearchIcon from "@mui/icons-material/Search";
 import SaveIcon from "@mui/icons-material/Save";
 import { useMutation } from "react-query";
 import "animate.css";
-import { Grid, Paper, Typography, styled } from "@mui/material";
+import {
+  Grid,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  Typography,
+  styled,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
@@ -43,7 +51,7 @@ const Consulta = () => {
       ronda: "1",
     },
   });
-
+  const [ronda, setRonda] = useState("");
   const [checkList, setCheckList] = useState<Registro[]>([]);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
   const [unCheckList, setUnCheckList] = useState<string[]>([]);
@@ -127,6 +135,7 @@ const Consulta = () => {
   const CustomGetRegistros = async () => {
     const param: FormValues = getValues();
     param.municipio = municipioT;
+    param.ronda = ronda;
 
     if (param.cantidad <= 0) {
       return Swal.fire({
@@ -183,7 +192,7 @@ const Consulta = () => {
         String(element.cedula),
         status,
         premioText,
-        "1"
+        ronda
       );
     }
 
@@ -191,6 +200,11 @@ const Consulta = () => {
     setCheckedItems(new Set());
     setUnCheckList([]);
     setIsSearchButtonDisabled(false);
+  };
+
+  const handleRondaChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setRonda(event.target.value as string);
+    //register("ronda", event.target.value as string);
   };
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -205,20 +219,48 @@ const Consulta = () => {
   return (
     <Grid container my={1} rowSpacing={2} columnSpacing={1}>
       <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
-        <Item sx={{ height: "850px", width: "220px" }}>
+        <Item sx={{ height: "94vh", width: "220px" }}>
           <img src={GifTombola} alt="TOMBOLA" width="90%" />
           <MunicipioSelect
             value={municipioT}
             onChange={handleMunicipio}
             register={register}
           />
-
-          <CantidadInput register={register} />
+          <div style={{ display: "flex" }}>
+            <InputLabel sx={{ marginTop: "20px", width: "40%" }}>
+              RONDA #
+            </InputLabel>
+            <Select
+              value={ronda}
+              onChange={handleRondaChange}
+              displayEmpty
+              variant="filled"
+              color="success"
+              sx={{ margin: "5px 5px 15px 0px", width: "58%" }}
+              inputProps={{ "aria-label": "Without label" }}
+            >
+              <MenuItem value="" disabled>
+                Seleccione la ronda
+              </MenuItem>
+              <MenuItem value="1">1</MenuItem>
+              <MenuItem value="2">2</MenuItem>
+              <MenuItem value="3">3</MenuItem>
+              <MenuItem value="4">4</MenuItem>
+              <MenuItem value="5">5</MenuItem>
+              <MenuItem value="6">6</MenuItem>
+              <MenuItem value="7">7</MenuItem>
+              <MenuItem value="8">8</MenuItem>
+              <MenuItem value="9">9</MenuItem>
+              <MenuItem value="10">10</MenuItem>
+            </Select>
+          </div>
           <PremioSelect
             value={premio}
             onChange={handlePremio}
             premios={premios}
           />
+          <CantidadInput register={register} />
+
           <CustomButton
             onClick={CustomGetRegistros}
             icon={<SearchIcon />}
@@ -262,9 +304,19 @@ const Consulta = () => {
             gutterBottom
             variant="h3"
             component="div"
-            sx={{ color: "#fff", backgroundColor: "#ef5061" }}
+            sx={{ color: "#fff", backgroundColor: "#ef5061", fontSize: 30 }}
           >
-            Ganadoras de: {premioTitle}
+            Ganadoras de{" "}
+            <span
+              style={{
+                color: "#fff",
+                backgroundColor: "#ef5061",
+                fontSize: 40,
+                fontWeight: "bold",
+              }}
+            >
+              {premioTitle}
+            </span>
           </Typography>
           <Grid
             container

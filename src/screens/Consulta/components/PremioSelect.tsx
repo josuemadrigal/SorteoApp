@@ -24,6 +24,9 @@ const PremioSelect: React.FC<PremioSelectProps> = ({
       color="success"
       sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
     >
+      <MenuItem value="" disabled>
+        Seleccione el premio
+      </MenuItem>
       {premios.map((e) => (
         <MenuItem key={e.slug_premio} value={e.slug_premio}>
           {e.premio}
