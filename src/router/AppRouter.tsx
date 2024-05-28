@@ -10,6 +10,7 @@ import { RegistroCedula } from "../pages/Registros/RegistroCedula";
 import Consulta from "../screens/Consulta";
 import Verificar from "../screens/Verificar";
 import Home from "../pages/Registros/casa";
+import RegistroGeneral from "../pages/Registros/RegistroPageGeneral";
 
 export const AppRouter = (): any => {
   return (
@@ -17,6 +18,7 @@ export const AppRouter = (): any => {
       <Route path="/" element={<Home />} />
       <Route path="/select" element={<SelectMunicio />} />
       <Route path="/registro" element={<SelectMunicio />} />
+      <Route path="/registroG" element={<RegistroGeneral />} />
       <Route path="/reg-premios" element={<RegistroPremios />} />
       <Route path="/reg-cedula" element={<RegistroCedula />} />
       <Route path="/view-premios" element={<ViewPremios />} />
