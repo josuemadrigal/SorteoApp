@@ -74,7 +74,9 @@ const Registro: React.FC = () => {
     invalidBoleta: "Ingrese una cédula válida",
     duplicateBoleta: "Esta cédula ya ha sido registrada",
     cedulaNotFound: "No se encontró un registro con esa cédula",
-    cedulaParticipando: `${nombreDB} Esta cédula ya está participando`,
+    cedulaNoValida: "Ingrese un numero de cedula valido",
+
+    cedulaParticipando: `Esta cédula ya está participando`,
     nombreRequerido: "El nombre es necesario",
   };
 
@@ -100,57 +102,62 @@ const Registro: React.FC = () => {
     const participandoResponse = await RegistrosService.checkParticipando(
       cedula
     );
-
     if (participandoResponse.data.participando) {
       showError(errorMessages.cedulaParticipando);
-      reset({ ...defaultValues, municipio: municipioNombre });
-      reset({ ...defaultValues, municipio: municipioNombre });
-      setNombre("");
-      setCedula("");
-      setCedulaNotFound(false);
-      setCedulaParticipando(false);
+      return true;
     } else {
-      setCedulaParticipando(false);
-      setNombre("");
-      setNombreDB("");
-      setCedula(cedula);
-      setCedulaNotFound(true);
-      setIsSubmitting(false);
+      return false;
     }
   };
+
   const checkCedula = async (cedula: string) => {
     try {
       const response = await RegistrosService.getCedula(cedula);
-      const nombre = response.data.registro.nombre.toUpperCase();
-      setNombreDB(nombre);
-      if (response.data.registro && response.data.registro.nombre) {
+
+      const cedulaParti = await checkParticipando(cedula);
+
+      if (cedulaParti) {
+        setNombreDB("");
+        setNombre("");
+        setCedula("");
+        reset({ ...defaultValues, municipio: municipioNombre });
+        setCedulaParticipando(false);
+        setCedulaNotFound(false);
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (
+        response.data.registro &&
+        response.data.registro.nombre &&
+        !cedulaParti
+      ) {
+        const nombre = response.data.registro.nombre.toUpperCase();
         setNombre(nombre);
         setNombreDB(nombre);
         setCedula(cedula);
         setCedulaNotFound(false);
         setIsSubmitting(false);
-        checkParticipando(cedula);
-        setCedulaNotFound(false);
-        setIsSubmitting(false);
+      }
 
-        // Verificar si está participando
-      } else {
+      if (!cedulaParti && response.data.ok === false) {
         setNombreDB(nombre);
-        checkParticipando(cedula);
-
-        // setNombre("");
-        // setCedula(cedula);
-        // setCedulaNotFound(true);
-        // setIsSubmitting(false);
+        setCedulaNotFound(true);
+        setNombre("");
+        setCedula(cedula);
+        setIsSubmitting(false);
+        if (nombre) {
+          await handleRegister({
+            nombre,
+            cedula,
+            municipio: municipioNombre,
+            premio: "-",
+            status: 1,
+          });
+        }
       }
     } catch (error) {
-      checkParticipando(cedula);
-      console.log(error);
-
-      setNombre(nombre);
-      setCedula(cedula);
-      setCedulaNotFound(true);
-      setIsSubmitting(false);
+      console.error(error);
     }
   };
 
@@ -158,13 +165,10 @@ const Registro: React.FC = () => {
     try {
       setIsSubmitting(true);
 
-      defaultValues.premio = "-";
-      defaultValues.status = 1;
       const response = await RegistrosService.crearRegistros(data);
       if (response.status === 203) {
         showError(errorMessages.cedulaParticipando);
         reset({ ...defaultValues, municipio: municipioNombre });
-        reset({ cedula: "" });
         setNombre("");
         setCedula("");
         setCedulaNotFound(false);
@@ -216,6 +220,8 @@ const Registro: React.FC = () => {
         premio: "-",
         status: 1,
       });
+    } else {
+      showError(errorMessages.cedulaNoValida);
     }
   };
 
