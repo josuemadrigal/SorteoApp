@@ -545,23 +545,6 @@ export const RegistroPremios = () => {
                   variant="filled"
                   type="number"
                   color="success"
-                  placeholder="Caleta"
-                  label="Caleta"
-                  inputProps={{ maxLength: 60, min: 1 }}
-                  required
-                  {...register("caleta", {
-                    required: true,
-                    maxLength: 80,
-                    min: 1,
-                  })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-                  error={!!errors.caleta}
-                  helperText={errors.caleta ? "Cantidad no puede ser 0" : ""}
-                />
-                <TextField
-                  variant="filled"
-                  type="number"
-                  color="success"
                   placeholder="Villa Hermosa"
                   label="Villa Hermosa"
                   inputProps={{ maxLength: 60, min: 1 }}
@@ -577,6 +560,24 @@ export const RegistroPremios = () => {
                     errors.villa_hermosa ? "Cantidad no puede ser 0" : ""
                   }
                 />
+                <TextField
+                  variant="filled"
+                  type="number"
+                  color="success"
+                  placeholder="Caleta"
+                  label="Caleta"
+                  inputProps={{ maxLength: 60, min: 1 }}
+                  required
+                  {...register("caleta", {
+                    required: true,
+                    maxLength: 80,
+                    min: 1,
+                  })}
+                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
+                  error={!!errors.caleta}
+                  helperText={errors.caleta ? "Cantidad no puede ser 0" : ""}
+                />
+
                 <TextField
                   variant="filled"
                   type="number"
