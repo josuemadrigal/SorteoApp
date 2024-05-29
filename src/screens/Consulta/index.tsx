@@ -136,7 +136,7 @@ const Consulta = () => {
     const param: FormValues = getValues();
     param.municipio = municipioT;
     param.ronda = ronda;
-
+    param.premio = premio;
     if (param.cantidad <= 0) {
       return Swal.fire({
         position: "center",
@@ -147,7 +147,12 @@ const Consulta = () => {
       });
     }
 
-    if (param.cantidad > 0 && param.municipio !== "") {
+    if (
+      param.cantidad > 0 &&
+      param.municipio !== "" &&
+      param.ronda !== "" &&
+      param.premio !== ""
+    ) {
       setIsSearchButtonDisabled(true);
       setIsSaveButtonDisabled(true);
       getRegistros(param);
@@ -155,7 +160,7 @@ const Consulta = () => {
       return Swal.fire({
         position: "center",
         icon: "error",
-        title: "Verifique los parámetros",
+        title: "Verifique los filtros",
         showConfirmButton: false,
         timer: 7000,
       });
