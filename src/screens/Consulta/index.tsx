@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../App.css";
-import GifTombola from "/gif-padresLow.gif";
+import GifTombola from "../../../public/gif-TOMBOLA.gif";
 import SearchIcon from "@mui/icons-material/Search";
 import SaveIcon from "@mui/icons-material/Save";
 import { useMutation } from "react-query";
@@ -52,17 +52,19 @@ const Consulta = () => {
     },
   });
   const [ronda, setRonda] = useState("");
+  const [rondaId, setRondaId] = useState(0);
   const [checkList, setCheckList] = useState<Registro[]>([]);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
   const [unCheckList, setUnCheckList] = useState<string[]>([]);
   const [premio, setPremio] = useState("");
   const [premioTitle, setPremioTitle] = useState("");
   const [municipioT, setMunicipioT] = useState("");
-  const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
+  const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(true);
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
   const [premios, setPremios] = useState<
     { slug_premio: string; premio: string }[]
   >([]);
+  const [cantiRonda, setCantiRonda] = useState("");
 
   useEffect(() => {
     const fetchPremios = async () => {
@@ -79,6 +81,10 @@ const Consulta = () => {
     fetchPremios();
   }, []);
 
+  useEffect(() => {
+    fetchRonda();
+  }, [premio]);
+
   const handleMunicipio = (event: React.ChangeEvent<{ value: unknown }>) => {
     setMunicipioT(event.target.value as string);
   };
@@ -91,7 +97,10 @@ const Consulta = () => {
     if (selectedPremio) {
       setPremioTitle(selectedPremio.premio);
       setPremio(selectedPremioValue);
+      //fetchRonda();
     }
+    setIsSearchButtonDisabled(false);
+    setIsSaveButtonDisabled(true);
   };
 
   const { mutate: getRegistros } = useMutation<
@@ -132,28 +141,48 @@ const Consulta = () => {
     }
   );
 
-  const CustomGetRegistros = async () => {
+  const fetchRonda = async () => {
+    try {
+      const response = await registrosService.getRonda(municipioT, premio);
+      setCantiRonda(response.data.ronda[0]?.cantidad);
+      setRonda(response.data.ronda[0]?.ronda);
+      setRondaId(response.data.ronda[0]?.id);
+      console.log("desde ronda: ", cantiRonda);
+    } catch (error) {
+      console.error("Error fetching premios", error);
+    }
+  };
+
+  const buscarRegistros = async () => {
+    //fetchRonda();
+
+    console.log(cantiRonda);
     const param: FormValues = getValues();
     param.municipio = municipioT;
     param.ronda = ronda;
     param.premio = premio;
+    param.cantidad = cantiRonda ? parseInt(cantiRonda) : 0;
+
+    console.log("param: ", cantiRonda);
+
+    console.log("paso: ", param.cantidad);
     if (param.cantidad <= 0) {
       return Swal.fire({
         position: "center",
         icon: "error",
-        title: "La cantidad no puede ser 0",
+        title: `Al parecer no hay mas rondas para ${premio.toUpperCase()} en ${municipioT.toUpperCase()}`,
         showConfirmButton: false,
-        timer: 7000,
+        timer: 5000,
       });
     }
 
     if (
-      param.cantidad > 0 &&
+      //param.cantidad > 0 &&
       param.municipio !== "" &&
-      param.ronda !== "" &&
+      //param.ronda !== "" &&
       param.premio !== ""
     ) {
-      setIsSearchButtonDisabled(true);
+      setIsSearchButtonDisabled(false);
       setIsSaveButtonDisabled(true);
       getRegistros(param);
     } else {
@@ -167,26 +196,25 @@ const Consulta = () => {
     }
   };
 
-  const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
-    setCheckedItems((prev) => {
-      const updated = new Set(prev);
-      if (checked) {
-        updated.add(value);
-      } else {
-        updated.delete(value);
-      }
-      return updated;
-    });
-  };
+  // const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { value, checked } = event.target;
+  //   setCheckedItems((prev) => {
+  //     const updated = new Set(prev);
+  //     if (checked) {
+  //       updated.add(value);
+  //     } else {
+  //       updated.delete(value);
+  //     }
+  //     return updated;
+  //   });
+  // };
 
-  const isChecked = (cedula: string) => {
-    return checkedItems.has(cedula);
-  };
+  // const isChecked = (cedula: string) => {
+  //   return checkedItems.has(cedula);
+  // };
 
   const ActualizarRegistros = async () => {
     setIsSaveButtonDisabled(true);
-    setIsSearchButtonDisabled(true);
 
     for (const element of checkList) {
       const status = checkedItems.has(element.cedula) ? 3 : 0;
@@ -201,16 +229,26 @@ const Consulta = () => {
       );
     }
 
+    await registrosService.updateRonda(
+      rondaId,
+      "no activa",
+      municipioT,
+      ronda,
+      premio
+    );
+    setCantiRonda("");
+    setRonda("");
+    setPremio("");
     setCheckList([]);
     setCheckedItems(new Set());
     setUnCheckList([]);
-    setIsSearchButtonDisabled(false);
+    setIsSearchButtonDisabled(true);
   };
 
-  const handleRondaChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setRonda(event.target.value as string);
-    //register("ronda", event.target.value as string);
-  };
+  // const handleRondaChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //   setRonda(event.target.value as string);
+  //   //register("ronda", event.target.value as string);
+  // };
 
   const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -230,50 +268,18 @@ const Consulta = () => {
             value={municipioT}
             onChange={handleMunicipio}
             register={register}
-            disabled={isSearchButtonDisabled}
+            disabled={!isSaveButtonDisabled}
           />
-          <div style={{ display: "flex" }}>
-            <InputLabel sx={{ marginTop: "20px", width: "40%" }}>
-              RONDA #
-            </InputLabel>
-            <Select
-              value={ronda}
-              onChange={handleRondaChange}
-              displayEmpty
-              variant="filled"
-              color="success"
-              sx={{ margin: "5px 5px 15px 0px", width: "58%" }}
-              inputProps={{ "aria-label": "Without label" }}
-              disabled={isSearchButtonDisabled}
-            >
-              <MenuItem value="" disabled>
-                Seleccione la ronda
-              </MenuItem>
-              <MenuItem value="1">1</MenuItem>
-              <MenuItem value="2">2</MenuItem>
-              <MenuItem value="3">3</MenuItem>
-              <MenuItem value="4">4</MenuItem>
-              <MenuItem value="5">5</MenuItem>
-              <MenuItem value="6">6</MenuItem>
-              <MenuItem value="7">7</MenuItem>
-              <MenuItem value="8">8</MenuItem>
-              <MenuItem value="9">9</MenuItem>
-              <MenuItem value="10">10</MenuItem>
-            </Select>
-          </div>
+
           <PremioSelect
             value={premio}
             onChange={handlePremio}
             premios={premios}
-            disabled={isSearchButtonDisabled}
-          />
-          <CantidadInput
-            register={register}
-            disabled={isSearchButtonDisabled}
+            disabled={!isSaveButtonDisabled}
           />
 
           <CustomButton
-            onClick={CustomGetRegistros}
+            onClick={buscarRegistros}
             icon={<SearchIcon />}
             text="Buscar"
             color="success"
@@ -284,21 +290,9 @@ const Consulta = () => {
             onClick={ActualizarRegistros}
             icon={<SaveIcon />}
             text="Guardar"
-            color="info"
+            color="error"
             disabled={isSaveButtonDisabled}
           />
-          {/* <CheckList
-            checkList={checkList}
-            checkedItems={checkedItems}
-            handleCheck={handleCheck}
-            isChecked={isChecked}
-          />
-          <p>{`Boletas presentes:  ${Array.from(checkedItems).join(", ")}`}</p>
-          <p>{`Boletas ausentes:  ${JSON.stringify(
-            checkList
-              .filter((item) => !checkedItems.has(item.nombre))
-              .map((item) => item.nombre)
-          )}`}</p> */}
         </Item>
       </Grid>
 
@@ -311,24 +305,53 @@ const Consulta = () => {
             justifyContent: "center",
           }}
         >
-          <Typography
-            gutterBottom
-            variant="h3"
-            component="div"
-            sx={{ color: "#fff", backgroundColor: "#ef5061", fontSize: 30 }}
+          <div
+            style={{
+              backgroundColor: "#ef5061",
+              minWidth: "100%",
+              minHeight: "50px",
+              padding: "10px 0px 10px 0px",
+            }}
           >
-            Ganadoras de{" "}
-            <span
-              style={{
+            <Typography
+              gutterBottom
+              variant="h3"
+              component="div"
+              sx={{
                 color: "#fff",
-                backgroundColor: "#ef5061",
-                fontSize: 40,
-                fontWeight: "bold",
+                textTransform: "uppercase",
+                fontSize: 15,
+                borderRadius: "5px",
               }}
             >
-              {premioTitle}
-            </span>
-          </Typography>
+              {`Ronda # ${ronda ? ronda : "-"}`}
+            </Typography>
+
+            <Typography
+              gutterBottom
+              variant="h3"
+              component="div"
+              sx={{
+                color: "#fff",
+                backgroundColor: "#ef5061",
+                fontSize: 30,
+                borderRadius: "5px",
+                textTransform: "uppercase",
+              }}
+            >
+              {`${cantiRonda ? cantiRonda + " ganadoras de " : ""} `}
+              <span
+                style={{
+                  color: "#fff",
+                  backgroundColor: "#ef5061",
+                  fontSize: 40,
+                  fontWeight: "bold",
+                }}
+              >
+                {cantiRonda ? premioTitle : ""}
+              </span>
+            </Typography>
+          </div>
           <Grid
             container
             columnSpacing={1}
@@ -344,7 +367,17 @@ const Consulta = () => {
             }}
           >
             {filteredCheckList.length <= 0 ? (
-              <p>------</p>
+              <p
+                style={{
+                  opacity: "50%",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5rem",
+                  marginTop: "10rem",
+                  color: "silver",
+                }}
+              >
+                Presiona el botón buscar
+              </p>
             ) : (
               <RenderBoletas items={filteredCheckList} />
             )}
