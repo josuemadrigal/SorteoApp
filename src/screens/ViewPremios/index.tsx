@@ -221,7 +221,7 @@ const ViewPremios = () => {
         <Item
           sx={{
             height: "calc(100vh)",
-            marginX: "250px",
+            marginX: "5%",
             backgroundColor: "#06502a",
             justifyContent: "center",
           }}

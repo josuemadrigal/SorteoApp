@@ -153,7 +153,7 @@ const ViewGanadores: React.FC = () => {
 
   return (
     <Grid container my={1} rowSpacing={1} columnSpacing={1}>
-      <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
+      <Grid item sm={12} md={2} sx={{ position: "fixed" }}>
         <Item sx={{ height: "40vh", width: "220px" }}>
           <MunicipioSelect
             value={municipioT}
@@ -198,10 +198,10 @@ const ViewGanadores: React.FC = () => {
         </Item>
       </Grid>
 
-      <Grid item md={12}>
+      <Grid item sm={12} md={12}>
         <Item
           sx={{
-            height: "calc(100vh)",
+            height: "100%",
             marginLeft: "250px",
             backgroundColor: "#06502a",
             justifyContent: "center",
