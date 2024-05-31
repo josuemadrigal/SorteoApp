@@ -63,18 +63,6 @@ class RegistrosService {
     return response;
   }
 
-  public async getRonda(
-    municipio: string,
-    premio: string
-  ): Promise<AxiosResponse<GetRondaResponse>> {
-    const jsonPar: any = { municipio, premio };
-    const params = new URLSearchParams(jsonPar);
-    const response = await http.get<GetRondaResponse>(
-      `/registros/getRonda?${params}`
-    );
-    return response;
-  }
-
   public async getRegistrosGanadores(
     municipio: string,
     ronda: string,
@@ -135,8 +123,7 @@ class RegistrosService {
 
   public async regPremio(param: any): Promise<AxiosResponse<any>> {
     const response = await http.post<any>("/registros/regPremio", param);
-    console.log("param: ", param);
-    console.log(response);
+
     return response;
   }
 
@@ -154,6 +141,36 @@ class RegistrosService {
     ronda: string
   ): Promise<AxiosResponse<any>> {
     return await http.put(`registros/` + cedula, { status, premio, ronda });
+  }
+
+  public async regRonda(param: any): Promise<AxiosResponse<any>> {
+    const response = await http.post<any>("/registros/regRonda", param);
+
+    return response;
+  }
+
+  public async getRonda(
+    municipio: string,
+    premio: string
+  ): Promise<AxiosResponse<GetRondaResponse>> {
+    const jsonPar: any = { municipio, premio };
+    const params = new URLSearchParams(jsonPar);
+    const response = await http.get<GetRondaResponse>(
+      `/registros/getRonda?${params}`
+    );
+    return response;
+  }
+
+  public async getRondaNum(
+    municipio: string,
+    premio: string
+  ): Promise<AxiosResponse<GetRondaResponse>> {
+    const jsonPar: any = { municipio, premio };
+    const params = new URLSearchParams(jsonPar);
+    const response = await http.get<GetRondaResponse>(
+      `/registros/getRondaNum?${params}`
+    );
+    return response;
   }
 
   async updateRonda(

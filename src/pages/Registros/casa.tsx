@@ -7,12 +7,14 @@ const Home = () => {
     { municipio: "Registro por municipio", value: "registro" },
     { municipio: "Registrar Premios", value: "reg-premios" },
     { municipio: "Registrar Cedula", value: "reg-cedula" },
+    { municipio: "Registrar Ronda", value: "reg-ronda" },
   ];
 
   const vistas = [
     { municipio: "Sorteo", value: "consulta" },
     { municipio: "Vista premios", value: "viewPremios" },
     { municipio: "Vista ganadores", value: "viewGanadores" },
+    //{ municipio: "Vista Rondas", value: "viewRondas" },
   ];
 
   const navigate = useNavigate();

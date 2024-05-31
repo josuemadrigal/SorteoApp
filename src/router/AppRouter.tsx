@@ -12,6 +12,7 @@ import Home from "../pages/Registros/casa";
 import RegistroGeneral from "../pages/Registros/RegistroPageGeneral";
 import ViewPremios from "../screens/ViewPremios";
 import ViewGanadores from "../screens/ViewGanadores";
+import { RegistroRonda } from "../pages/Registros/RegistroRonda";
 
 export const AppRouter = (): any => {
   return (
@@ -22,12 +23,14 @@ export const AppRouter = (): any => {
       <Route path="/registroG" element={<RegistroGeneral />} />
       <Route path="/reg-premios" element={<RegistroPremios />} />
       <Route path="/reg-cedula" element={<RegistroCedula />} />
+      <Route path="/reg-ronda" element={<RegistroRonda />} />
 
       <Route path="/registro/:id" element={<Registro />} />
       <Route path="/consulta" element={<Consulta />} />
       <Route path="/verificar" element={<Verificar />} />
       <Route path="/viewPremios" element={<ViewPremios />} />
       <Route path="/viewGanadores" element={<ViewGanadores />} />
+      <Route path="/viewRondas" element={<ViewPremios />} />
       {/* <Route path="/view" element={<View />} /> */}
     </Routes>
   );

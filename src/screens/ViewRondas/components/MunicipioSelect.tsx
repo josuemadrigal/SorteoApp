@@ -20,7 +20,6 @@ const MunicipioSelect: React.FC<MunicipioSelectProps> = ({
         value={value}
         {...register("municipio", { required: true, maxLength: 10 })}
         color="success"
-        variant="filled"
         onChange={onChange}
         sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
       >
