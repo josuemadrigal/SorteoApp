@@ -7,6 +7,14 @@ interface Registro {
   cedula: string;
 }
 
+interface RegistroByCedula {
+  nombre: string;
+  cedula: string;
+  premio: string;
+  municipio: string;
+  status: string;
+}
+
 interface Ronda {
   id: number;
   municipio: string;
@@ -23,6 +31,10 @@ interface Cedula {
 
 interface GetRegistrosResponse {
   registros: Registro[];
+}
+
+interface GetRegistroByResponse {
+  registros: RegistroByCedula[];
 }
 
 interface GetRondaResponse {
@@ -59,6 +71,17 @@ class RegistrosService {
     const params = new URLSearchParams(jsonPar);
     const response = await http.get<GetRegistrosResponse>(
       `/registros?${params}`
+    );
+    return response;
+  }
+  public async getRegistroByCedula(
+    status: number,
+    cedula: any
+  ): Promise<AxiosResponse<GetRegistroByResponse>> {
+    const jsonPar: any = { status, cedula };
+    const params = new URLSearchParams(jsonPar);
+    const response = await http.get<GetRegistroByResponse>(
+      `/registros/getRegistrosByCedula?${params}`
     );
     return response;
   }
@@ -141,6 +164,10 @@ class RegistrosService {
     ronda: string
   ): Promise<AxiosResponse<any>> {
     return await http.put(`registros/` + cedula, { status, premio, ronda });
+  }
+
+  async startUpdateByCedula(param: any): Promise<AxiosResponse<any>> {
+    return await http.put(`registros/upDateByCedula`, param);
   }
 
   public async regRonda(param: any): Promise<AxiosResponse<any>> {

@@ -11,9 +11,11 @@ const Home = () => {
   ];
 
   const vistas = [
-    { municipio: "Sorteo", value: "consulta" },
+    // { municipio: "Sorteo", value: "consulta" },
     { municipio: "Vista premios", value: "viewPremios" },
     { municipio: "Vista ganadores", value: "viewGanadores" },
+    { municipio: "Mostrar ganadores en pantalla", value: "view-Ganadores" },
+    { municipio: "Verificar", value: "verficar" },
     //{ municipio: "Vista Rondas", value: "viewRondas" },
   ];
 
@@ -61,7 +63,11 @@ const Home = () => {
       <Grid item container spacing={2} justifyContent="center">
         {municipios.map((item) => (
           <Grid item key={item.value}>
-            <Button onClick={() => handleClick(item)} style={{ padding: 0 }}>
+            <Button
+              onClick={() => handleClick(item)}
+              style={{ padding: 0 }}
+              disabled={true}
+            >
               <Paper
                 sx={{
                   width: 200,
@@ -69,7 +75,7 @@ const Home = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  backgroundColor: "yellowgreen",
+                  backgroundColor: "gray",
                 }}
                 elevation={3}
               >
