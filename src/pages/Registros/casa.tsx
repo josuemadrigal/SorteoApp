@@ -15,7 +15,7 @@ const Home = () => {
     { municipio: "Vista premios", value: "viewPremios" },
     { municipio: "Vista ganadores", value: "viewGanadores" },
     { municipio: "Mostrar ganadores en pantalla", value: "view-Ganadores" },
-    { municipio: "Verificar", value: "verficar" },
+    { municipio: "Verificar", value: "verificar" },
     //{ municipio: "Vista Rondas", value: "viewRondas" },
   ];
 

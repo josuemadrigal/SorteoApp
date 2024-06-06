@@ -90,11 +90,9 @@ const Verificar = () => {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const [checkList, setCheckList] = useState<Registro[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [buttonText, setButtonText] = useState("Buscar");
   const [cedula, setCedula] = useState("");
-  const [cedulaNotFound, setCedulaNotFound] = useState(false);
   const [persona, setPersona] = useState<
     {
       nombre: string;
@@ -127,7 +125,7 @@ const Verificar = () => {
 
   const ActualizarRegistros = async () => {
     console.log("update: ", cedula);
-    await registrosService.startUpdateByCedula(cedula, 4);
+    await registrosService.startUpdateByCedula(cedula);
   };
 
   const handleKeyPress = async (
