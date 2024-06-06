@@ -68,6 +68,7 @@ export const RegistroRonda = () => {
   };
 
   const registerSubmit = async (objeto: any) => {
+    console.log("entro");
     const errorMessages = {
       invalidMunicipio: "Seleccione un municipio o distrito válido",
       invalidBoleta: "Ingrese un premio válido ",
@@ -128,6 +129,7 @@ export const RegistroRonda = () => {
   };
 
   const handleMunicipio = (event: React.ChangeEvent<{ value: unknown }>) => {
+    console.log(event.target.value as string);
     setMunicipioT(event.target.value as string);
     if (premio !== "") {
       fetchRonda(event.target.value as string, premio);

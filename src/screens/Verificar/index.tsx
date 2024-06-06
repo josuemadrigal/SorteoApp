@@ -1,26 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import InputMask from "react-input-mask";
 import "../../App.css";
+import gifLoading from "../../../public/loading.gif";
 import { useMutation } from "react-query";
 import "animate.css";
 import {
+  Button,
   Grid,
-  InputLabel,
-  MenuItem,
   Paper,
-  Select,
+  TextField,
+  Typography,
   styled,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
 
 interface FormValues {
-  municipio: string;
-  premio: string;
   status: number;
-  cantidad: number;
-  ronda: string;
-  cedula: string;
+  cedula: any;
 }
 
 interface Registro {
@@ -32,132 +30,126 @@ interface GetRegistrosResponse {
   registros: Registro[];
 }
 
+const defaultValues: FormValues = {
+  cedula: "",
+  status: 1,
+};
+
+const showError = (title: string) => {
+  Swal.fire({
+    position: "center",
+    icon: "error",
+    title,
+    showConfirmButton: false,
+    timer: 2000,
+  });
+};
+
+const premios = [
+  { premio: "Abanico", slug: "abanicos" },
+  { premio: "Bono de $5 mil pesos", slug: "bonos_de_$5_mil_pesos" },
+  { premio: "Cilindro de gas", slug: "cilindro_de_gas" },
+  { premio: "Estufa de horno", slug: "estufa_de_horno" },
+  { premio: "Estufa mesa 4 hornillas", slug: "estufa_mesa_4_hornillas" },
+  { premio: "Freidora", slug: "freidoras" },
+  { premio: "Juego de colcha", slug: "juego_de_colcha" },
+  { premio: "Lavadora", slug: "lavadoras" },
+  { premio: "Licuadora", slug: "licuadoras" },
+  { premio: "Microonda", slug: "microondas" },
+  { premio: "Nevera", slug: "nevera" },
+  { premio: "Olla de presión", slug: "ollas_de_presion" },
+  { premio: "Televisor", slug: "televisores" },
+];
+
+const municipios = [
+  { municipio: "La Romana", slug: "la-romana" },
+  { municipio: "Villa Hermosa", slug: "villa-hermosa" },
+  { municipio: "Guaymate", slug: "guaymate" },
+];
+
 const Verificar = () => {
-  const { getValues, register } = useForm<FormValues>({
-    defaultValues: {
-      municipio: "",
-      premio: "",
-      status: 1,
-      cantidad: 4,
-      ronda: "1",
-    },
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues,
   });
 
+  const errorMessages = {
+    invalidMunicipio: "Seleccione un municipio o distrito válido",
+    invalidBoleta: "Ingrese una cédula válida",
+    duplicateBoleta: "Esta cédula ya ha sido registrada",
+    cedulaNotFound: "No se encontró un registro con esa cédula",
+    cedulaNoValida: "Ingrese un numero de cedula valido",
+    cedulaParticipando: `Esta cédula ya está participando`,
+    nombreRequerido: "El nombre es necesario",
+  };
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const [checkList, setCheckList] = useState<Registro[]>([]);
-  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
-
-  const [premio, setPremio] = useState("");
-
-  const [ronda, setRonda] = useState("");
-
-  const [premios, setPremios] = useState<
-    { slug_premio: string; premio: string }[]
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [buttonText, setButtonText] = useState("Buscar");
+  const [cedula, setCedula] = useState("");
+  const [cedulaNotFound, setCedulaNotFound] = useState(false);
+  const [persona, setPersona] = useState<
+    {
+      nombre: string;
+      cedula: string;
+      premio: string;
+      municipio: string;
+      status: string;
+    }[]
   >([]);
 
   useEffect(() => {
-    const fetchPremios = async () => {
-      try {
-        const response = await registrosService.getPremios();
-        if (response.data.ok) {
-          setPremios(response.data.premios);
-        }
-      } catch (error) {
-        console.error("Error fetching premios", error);
-      }
-    };
-
-    fetchPremios();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, []);
 
-  const { mutate: getRegistros } = useMutation<
-    GetRegistrosResponse,
-    Error,
-    FormValues
-  >(
-    async (param: FormValues) => {
-      const response = await registrosService.getRegistros(
-        param.status,
-        param.municipio,
-        param.cantidad
-      );
-      return response.data;
-    },
-    {
-      onSuccess: (data) => {
-        const registros = data.registros || [];
-        setCheckList(registros);
-        const checkedNames = new Set(
-          registros.map((registro) => registro.cedula)
-        );
-      },
-      onError: () => {
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Error al obtener los registros",
-          showConfirmButton: false,
-          timer: 7000,
-        });
-      },
+  const getByCedula = async (cedula: string) => {
+    setPersona([]); // Clear current persona before fetching new data
+    setIsSubmitting(true); // Disable form while fetching
+    try {
+      const response = await registrosService.getRegistroByCedula(3, cedula);
+      setPersona(response.data.registros);
+    } catch (error) {
+      console.error(error);
+      setButtonText("Buscar");
+    } finally {
+      setIsSubmitting(false); // Enable form after fetching
     }
-  );
-
-  const CustomGetRegistros = async () => {
-    const param: FormValues = getValues();
-
-    if (param.cantidad <= 0) {
-      return Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "La cantidad no puede ser 0",
-        showConfirmButton: false,
-        timer: 7000,
-      });
-    }
-
-    if (param.cantidad > 0 && param.municipio !== "") {
-      getRegistros(param);
-    } else {
-      return Swal.fire({
-        position: "center",
-        icon: "error",
-        title: "Verifique los parámetros",
-        showConfirmButton: false,
-        timer: 7000,
-      });
-    }
-  };
-
-  const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
-    setCheckedItems((prev) => {
-      const updated = new Set(prev);
-      if (checked) {
-        updated.add(value);
-      } else {
-        updated.delete(value);
-      }
-      return updated;
-    });
-  };
-
-  const isChecked = (cedula: string) => {
-    return checkedItems.has(cedula);
   };
 
   const ActualizarRegistros = async () => {
-    for (const element of checkList) {
-      const status = checkedItems.has(element.cedula) ? 3 : 0;
-      const premioText = checkedItems.has(element.cedula)
-        ? premio
-        : "No presente";
-      await registrosService.startUpdate(
-        String(element.cedula),
-        status,
-        premioText,
-        "1"
-      );
+    console.log("update: ", cedula);
+    await registrosService.startUpdateByCedula(cedula, 4);
+  };
+
+  const handleKeyPress = async (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      const cedulaValue = (event.target as HTMLInputElement).value;
+      if (cedulaValue.length === 13) {
+        await getByCedula(cedulaValue);
+      }
     }
+  };
+
+  const registerSubmit: SubmitHandler<FormValues> = async (data) => {
+    if (data.cedula.length === 13) {
+      setCedula(data.cedula);
+      await getByCedula(data.cedula);
+    } else {
+      showError(errorMessages.cedulaNoValida);
+    }
+    reset({ ...defaultValues, cedula: "" });
   };
 
   const Item = styled(Paper)(({ theme }) => ({
@@ -165,45 +157,212 @@ const Verificar = () => {
     textAlign: "center",
   }));
 
-  const filteredCheckList = checkList.filter((item) =>
-    checkedItems.has(item.cedula)
-  );
-
   return (
-    <Grid container my={1} rowSpacing={2} columnSpacing={1}>
-      <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
-        <Item sx={{ minHeight: "850px", width: "320px" }}>
-          <InputLabel sx={{ marginTop: "20px", width: "100%" }}>
-            Ronda #
-          </InputLabel>
-          <Select sx={{ width: "100%" }}>
-            <MenuItem>hola</MenuItem>
-          </Select>
-        </Item>
-      </Grid>
-
-      <Grid item md={12}>
+    <Grid
+      container
+      my={1}
+      rowSpacing={2}
+      columnSpacing={1}
+      sx={{
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Grid
+        item
+        md={12}
+        sm={10}
+        sx={{ display: "flex", justifyContent: "center" }}
+      >
         <Item
           sx={{
-            height: "calc(100vh)",
-            marginLeft: "250px",
-            backgroundColor: "#06502a",
+            minHeight: "100%",
+            width: "400px",
             justifyContent: "center",
           }}
         >
-          <Grid
-            container
-            columnSpacing={1}
-            sx={{
-              flex: 1,
-              width: "100%",
-              minHeight: "200px",
-              overflowY: "auto",
-              overflowX: "hidden",
-              maxHeight: "calc(95vh - 64px)",
-            }}
-          ></Grid>
+          <form onSubmit={handleSubmit(registerSubmit)}>
+            <InputMask
+              mask="999-9999999-9"
+              maskChar=""
+              {...register("cedula", {
+                required: true,
+                maxLength: 13,
+              })}
+              disabled={isSubmitting}
+            >
+              {(inputProps) => (
+                <TextField
+                  {...inputProps}
+                  variant="outlined"
+                  color="success"
+                  type="text"
+                  label="Cédula"
+                  sx={{ minWidth: "40%", margin: "5px 5px 15px 0px" }}
+                  inputRef={inputRef}
+                  onKeyDown={handleKeyPress}
+                  disabled={isSubmitting}
+                />
+              )}
+            </InputMask>
+            <Button
+              variant="contained"
+              color="success"
+              type="submit"
+              sx={{ minWidth: "30%", margin: "5px 5px 15px 0px" }}
+              disabled={isSubmitting}
+            >
+              {buttonText}
+            </Button>
+          </form>
         </Item>
+      </Grid>
+
+      <Grid
+        item
+        md={12}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        {persona && persona.length > 0 ? (
+          <Grid style={{ justifyContent: "center", alignItems: "center" }}>
+            <Item
+              sx={{
+                height: "100%",
+                width: "400px",
+                backgroundColor: "seagreen",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginBottom: 5,
+              }}
+            >
+              <Grid
+                container
+                columnSpacing={1}
+                sx={{
+                  flex: 1,
+                  width: "100%",
+                  minHeight: "200px",
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                  maxHeight: "100%",
+                }}
+              >
+                {persona.map((e) => (
+                  <Grid item md={12} key={e.cedula}>
+                    <Typography
+                      variant="h2"
+                      style={{
+                        fontSize: "52px",
+                        fontWeight: "bold",
+                        color: "wheat",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      {e.nombre}
+                    </Typography>
+                    <Typography
+                      variant="h5"
+                      style={{
+                        marginTop: 5,
+                        backgroundColor: "darkseagreen",
+                        borderRadius: 5,
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {e.cedula}
+                    </Typography>
+                    <Typography
+                      variant="h5"
+                      style={{
+                        marginTop: 5,
+                        backgroundColor: "coral",
+                        borderRadius: 5,
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {
+                        premios.find((premio) => premio.slug === e.premio)
+                          ?.premio
+                      }
+                    </Typography>
+
+                    <Typography
+                      variant="h5"
+                      style={{
+                        marginTop: 5,
+                        backgroundColor: "darkgreen",
+                        borderRadius: 5,
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {
+                        municipios.find(
+                          (municipio) => municipio.slug === e.municipio
+                        )?.municipio
+                      }
+                    </Typography>
+                    <Typography
+                      variant="subtitle1"
+                      style={{
+                        fontWeight: "bold",
+                        borderRadius: 5,
+                        marginTop: 10,
+                        padding: 10,
+                        backgroundColor:
+                          e.status == "3" ? "greenyellow" : "darkred",
+                      }}
+                    >
+                      {e.status == "3"
+                        ? "Premio no entregado"
+                        : "Premio entregado"}
+                    </Typography>
+                  </Grid>
+                ))}
+              </Grid>
+            </Item>
+            <Button
+              variant="contained"
+              color="error"
+              type="button"
+              sx={{ width: "100%", margin: "5px 5px 15px 0px" }}
+              disabled={isSubmitting}
+              onClick={ActualizarRegistros}
+            >
+              Actualizar
+            </Button>
+          </Grid>
+        ) : (
+          <>
+            {isSubmitting ? (
+              <Grid
+                style={{
+                  display: "block",
+                  alignContent: "center",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <img
+                  src={gifLoading}
+                  alt="TOMBOLA"
+                  style={{ width: "100px" }}
+                />
+                <Typography style={{ color: "darkgreen" }}>
+                  Cargando...
+                </Typography>
+              </Grid>
+            ) : (
+              ""
+            )}
+          </>
+        )}
       </Grid>
     </Grid>
   );

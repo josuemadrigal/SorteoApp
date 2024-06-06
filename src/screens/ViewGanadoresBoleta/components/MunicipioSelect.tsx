@@ -29,7 +29,6 @@ const MunicipioSelect: React.FC<MunicipioSelectProps> = ({
         <MenuItem value="guaymate">Guaymate</MenuItem>
         <MenuItem value="la-romana">La Romana</MenuItem>
         <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
-        <MenuItem value="V-H">VH</MenuItem>
       </Select>
     </>
   );

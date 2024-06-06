@@ -156,16 +156,12 @@ const Consulta = () => {
   const buscarRegistros = async () => {
     //fetchRonda();
 
-    console.log(cantiRonda);
     const param: FormValues = getValues();
     param.municipio = municipioT;
     param.ronda = ronda;
     param.premio = premio;
     param.cantidad = cantiRonda ? parseInt(cantiRonda) : 0;
 
-    console.log("param: ", cantiRonda);
-
-    console.log("paso: ", param.cantidad);
     if (param.cantidad <= 0) {
       return Swal.fire({
         position: "center",
@@ -366,7 +362,7 @@ const Consulta = () => {
               maxHeight: "calc(95vh - 64px)",
             }}
           >
-            {filteredCheckList.length <= 0 ? (
+            {filteredCheckList.length <= 0 && isSearchButtonDisabled == true ? (
               <p
                 style={{
                   opacity: "50%",
