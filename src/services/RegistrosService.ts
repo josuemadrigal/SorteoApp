@@ -13,6 +13,7 @@ interface RegistroByCedula {
   premio: string;
   municipio: string;
   status: string;
+  coment: string;
 }
 
 interface Ronda {
@@ -166,12 +167,19 @@ class RegistrosService {
     return await http.put(`registros/` + cedula, { status, premio, ronda });
   }
 
-  async startUpdateByCedula(param: any): Promise<AxiosResponse<any>> {
-    return await http.put(`registros/upDateByCedula`, param);
+  async startUpdateByCedula(
+    cedula: any,
+    coment: string,
+    status: number
+  ): Promise<AxiosResponse<any>> {
+    return await http.put(`registros/upDateByCedula/` + cedula, {
+      coment,
+      status,
+    });
   }
 
   public async regRonda(param: any): Promise<AxiosResponse<any>> {
-    const response = await http.post<any>("/registros/regRonda", param);
+    const response = await http.post<any>("/registros/regRonda", { param });
 
     return response;
   }
