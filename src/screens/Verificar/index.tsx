@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import InputMask from "react-input-mask";
 import "../../App.css";
 import gifLoading from "../../../public/loading.gif";
-import { useMutation } from "react-query";
 import "animate.css";
 import {
   Button,
@@ -19,6 +18,7 @@ import Swal from "sweetalert2";
 interface FormValues {
   status: number;
   cedula: any;
+  coment: string;
 }
 
 interface Registro {
@@ -32,13 +32,24 @@ interface GetRegistrosResponse {
 
 const defaultValues: FormValues = {
   cedula: "",
+  coment: "",
   status: 1,
 };
 
 const showError = (title: string) => {
   Swal.fire({
     position: "center",
-    icon: "error",
+    icon: "warning",
+    title,
+    showConfirmButton: false,
+    timer: 2000,
+  });
+};
+
+const success = (title: string) => {
+  Swal.fire({
+    position: "center",
+    icon: "success",
     title,
     showConfirmButton: false,
     timer: 2000,
@@ -91,7 +102,7 @@ const Verificar = () => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [buttonText, setButtonText] = useState("Buscar");
+  const [entregadoTrue, setEntregadoTrue] = useState(false);
   const [cedula, setCedula] = useState("");
   const [persona, setPersona] = useState<
     {
@@ -99,9 +110,16 @@ const Verificar = () => {
       cedula: string;
       premio: string;
       municipio: string;
+      coment: string;
       status: string;
     }[]
   >([]);
+
+  const [text, setText] = useState("");
+
+  const handleTextChange = (event) => {
+    setText(event.target.value);
+  };
 
   useEffect(() => {
     if (inputRef.current) {
@@ -114,18 +132,80 @@ const Verificar = () => {
     setIsSubmitting(true); // Disable form while fetching
     try {
       const response = await registrosService.getRegistroByCedula(3, cedula);
+
+      if (response.data.registros.length < 1) {
+        console.log("no ganó");
+        showError("Esta cedula no fue ganadora");
+        return;
+      }
+
+      setEntregadoTrue(
+        response.data.registros[0]?.status === "4" ? true : false
+      );
+      console.log(entregadoTrue);
+      setText(response.data.registros[0].coment);
       setPersona(response.data.registros);
     } catch (error) {
       console.error(error);
-      setButtonText("Buscar");
     } finally {
       setIsSubmitting(false); // Enable form after fetching
     }
   };
 
   const ActualizarRegistros = async () => {
-    console.log("update: ", cedula);
-    await registrosService.startUpdateByCedula(cedula);
+    console.log("update: ", text);
+    if (!text) {
+      showError("Debe escribir un comentario");
+      return;
+    }
+
+    setIsSubmitting(true);
+    const reponse = await registrosService.startUpdateByCedula(cedula, text, 4);
+    if (reponse.status === 200) {
+      success("Listo!");
+      setText("");
+      setPersona([]);
+      setIsSubmitting(false);
+    } else {
+      showError("Intente nuevamente");
+      setPersona([]);
+      setIsSubmitting(false);
+    }
+  };
+
+  const openSwalForNumber = async () => {
+    if (!text) {
+      showError("Debe escribir un comentario");
+      return;
+    }
+    const { value: number } = await Swal.fire({
+      title: "Código de autorización",
+      input: "password",
+      inputLabel: "Sólo guarde cuando entregue el premio (no revele su codigo)",
+      inputPlaceholder: "Ingrese su código",
+      showCancelButton: true,
+      confirmButtonText: "Guardar", // Texto del botón "Guardar"
+      cancelButtonText: "Abortar",
+      confirmButtonColor: "#06502a",
+      cancelButtonColor: "red",
+      inputAttributes: {
+        maxlength: 4, // Limitar la longitud máxima si es necesario
+        inputmode: "numeric", // Sugerir teclado numérico en dispositivos móviles
+      },
+      inputValidator: (value) => {
+        if (!value) {
+          return "Necesita ingresar un número!";
+        }
+        if (isNaN(Number(value))) {
+          return "El valor debe ser un número válido!";
+        }
+        return null;
+      },
+    });
+
+    if (number === "2569") {
+      ActualizarRegistros();
+    }
   };
 
   const handleKeyPress = async (
@@ -163,6 +243,7 @@ const Verificar = () => {
       columnSpacing={1}
       sx={{
         alignItems: "center",
+
         justifyContent: "center",
       }}
     >
@@ -210,7 +291,7 @@ const Verificar = () => {
               sx={{ minWidth: "30%", margin: "5px 5px 15px 0px" }}
               disabled={isSubmitting}
             >
-              {buttonText}
+              Buscar
             </Button>
           </form>
         </Item>
@@ -228,7 +309,7 @@ const Verificar = () => {
           <Grid style={{ justifyContent: "center", alignItems: "center" }}>
             <Item
               sx={{
-                height: "100%",
+                height: "70%",
                 width: "400px",
                 backgroundColor: "seagreen",
                 display: "flex",
@@ -325,16 +406,34 @@ const Verificar = () => {
                 ))}
               </Grid>
             </Item>
-            <Button
-              variant="contained"
-              color="error"
-              type="button"
-              sx={{ width: "100%", margin: "5px 5px 15px 0px" }}
-              disabled={isSubmitting}
-              onClick={ActualizarRegistros}
-            >
-              Actualizar
-            </Button>
+            <form onSubmit={handleSubmit(ActualizarRegistros)}>
+              <label style={{ width: "100%", marginTop: "15px" }}>
+                <Typography variant="h6">Ingrese algún comentario:</Typography>
+                <textarea
+                  style={{
+                    width: "100%",
+                    height: "100px",
+                    fontSize: "16px",
+                    padding: "10px",
+                    boxSizing: "border-box",
+                    marginTop: "20px",
+                  }}
+                  value={text}
+                  onChange={handleTextChange}
+                  disabled={isSubmitting || entregadoTrue}
+                />
+              </label>
+              <Button
+                variant="contained"
+                color="error"
+                type="submit"
+                sx={{ width: "100%", margin: "5px 5px 15px 0px" }}
+                disabled={isSubmitting || entregadoTrue}
+                onClick={openSwalForNumber}
+              >
+                Actualizar
+              </Button>
+            </form>
           </Grid>
         ) : (
           <>
@@ -349,7 +448,7 @@ const Verificar = () => {
               >
                 <img
                   src={gifLoading}
-                  alt="TOMBOLA"
+                  alt="loading"
                   style={{ width: "100px" }}
                 />
                 <Typography style={{ color: "darkgreen" }}>
