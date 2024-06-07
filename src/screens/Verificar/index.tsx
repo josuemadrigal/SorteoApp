@@ -178,6 +178,7 @@ const Verificar = () => {
       showError("Debe escribir un comentario");
       return;
     }
+    const expectedCode = "2569";
     const { value: number } = await Swal.fire({
       title: "Código de autorización",
       input: "password",
@@ -194,16 +195,19 @@ const Verificar = () => {
       },
       inputValidator: (value) => {
         if (!value) {
-          return "Necesita ingresar un número!";
+          return "Debe ingresar su código";
         }
         if (isNaN(Number(value))) {
-          return "El valor debe ser un número válido!";
+          return "Ingrese un código válido!";
+        }
+        if (value !== expectedCode) {
+          return "Ingrese un código válido!";
         }
         return null;
       },
     });
 
-    if (number === "2569") {
+    if (number === expectedCode) {
       ActualizarRegistros();
     }
   };
