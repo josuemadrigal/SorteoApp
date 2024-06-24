@@ -8,17 +8,18 @@ import { RegistroPremios } from "../pages/Registros/RegistroPremios";
 import { RegistroCedula } from "../pages/Registros/RegistroCedula";
 import Consulta from "../screens/Consulta";
 import Verificar from "../screens/Verificar";
-import Home from "../pages/Registros/casa";
+//import Home from "../pages/Registros/casa";
 import RegistroGeneral from "../pages/Registros/RegistroPageGeneral";
 import ViewPremios from "../screens/ViewPremios";
 import ViewGanadores from "../screens/ViewGanadores";
 import { RegistroRonda } from "../pages/Registros/RegistroRonda";
 import ViewGanadoresBoleta from "../screens/ViewGanadoresBoleta";
+import HomePadres from "../pages/Registros/padres";
 
 export const AppRouter = (): any => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<HomePadres />} />
       <Route path="/select" element={<SelectMunicio />} />
       <Route path="/registro" element={<SelectMunicio />} />
       <Route path="/registroG" element={<RegistroGeneral />} />
