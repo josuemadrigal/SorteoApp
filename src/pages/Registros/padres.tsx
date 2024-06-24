@@ -1,6 +1,6 @@
 import { Button, Grid, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import gifLoading from "../../../public/loading.gif";
+import gifLoading from "../../../public/padres.gif";
 
 const HomePadres = () => {
   const navigate = useNavigate();
