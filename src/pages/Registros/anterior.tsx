@@ -21,7 +21,6 @@ const modelo = {
     municipio: "",
     status: 1,
     premio: "",
-    prefijo: "",
   },
 };
 
