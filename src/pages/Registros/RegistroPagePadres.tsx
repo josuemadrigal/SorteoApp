@@ -379,15 +379,6 @@ const RegistroPadres: React.FC = () => {
                   minLength: 8,
                   maxLength: 8,
                 })}
-                sx={{
-                  minWidth: "100%",
-                  margin: "5px 5px 15px 0px",
-                  "& input": {
-                    textTransform: "uppercase",
-                  },
-                  minLength: 8,
-                  maxLength: 8,
-                }}
                 inputRef={(node) => {
                   register(node);
                   inputRef.current = node;
@@ -404,6 +395,16 @@ const RegistroPadres: React.FC = () => {
                     error={!!errors.boleto}
                     helperText={errors.boleto ? errors.boleto.message : ""}
                     label="Número de boleta"
+                    sx={{
+                      minWidth: "100%",
+                      margin: "5px 5px 15px 0px",
+                      "& input": {
+                        textTransform: "uppercase",
+                      },
+                      minLength: 8,
+                      maxLength: 8,
+                    }}
+                    inputRef={inputRef}
                   />
                 )}
               </InputMask>
@@ -431,7 +432,6 @@ const RegistroPadres: React.FC = () => {
                       minLength: 13,
                       maxLength: 13,
                     }}
-                    inputRef={inputRef}
                     onKeyDown={handleKeyPress}
                   />
                 )}
@@ -469,7 +469,7 @@ const RegistroPadres: React.FC = () => {
                 disabled
               >
                 <MenuItem value="" disabled>
-                  Seleccione un municipio
+                  Introduzca una boleta válida
                 </MenuItem>
                 <MenuItem value="la-romana">La Romana</MenuItem>
                 <MenuItem value="caleta">Caleta</MenuItem>
