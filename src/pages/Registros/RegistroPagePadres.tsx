@@ -362,7 +362,7 @@ const RegistroPadres: React.FC = () => {
             sx={{
               height: "auto",
               width: "100%",
-              minWidth: "600px",
+
               borderRadius: "10px",
             }}
           />
