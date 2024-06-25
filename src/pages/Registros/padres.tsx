@@ -1,14 +1,7 @@
-import { Button, Grid, Paper, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Grid, Typography } from "@mui/material";
 import gifLoading from "../../../public/padres.gif";
 
 const HomePadres = () => {
-  const navigate = useNavigate();
-
-  const handleClick = (item: { municipio: string; value: string }) => {
-    //const parametros = { ...item, municipio: item.municipio };
-    navigate(`/${item.value}`);
-  };
   return (
     <Grid
       container
