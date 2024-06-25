@@ -15,14 +15,15 @@ import ViewGanadores from "../screens/ViewGanadores";
 import { RegistroRonda } from "../pages/Registros/RegistroRonda";
 import ViewGanadoresBoleta from "../screens/ViewGanadoresBoleta";
 import HomePadres from "../pages/Registros/padres";
+import RegistroPadres from "../pages/Registros/RegistroPagePadres";
 
 export const AppRouter = (): any => {
   return (
     <Routes>
-      <Route path="/" element={<HomePadres />} />
+      <Route path="/" element={<RegistroPadres />} />
       <Route path="/select" element={<SelectMunicio />} />
       <Route path="/registro" element={<SelectMunicio />} />
-      <Route path="/registroG" element={<RegistroGeneral />} />
+      <Route path="/registroG" element={<RegistroPadres />} />
       <Route path="/reg-premios" element={<RegistroPremios />} />
       <Route path="/reg-cedula" element={<RegistroCedula />} />
       <Route path="/reg-ronda" element={<RegistroRonda />} />

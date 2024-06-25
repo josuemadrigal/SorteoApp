@@ -140,6 +140,11 @@ class RegistrosService {
     return response;
   }
 
+  public async crearRegistrosPadres(param: any): Promise<AxiosResponse<any>> {
+    const response = await http.post<any>("/registros/padres", param);
+    return response;
+  }
+
   public async crearTemporal(param: any): Promise<AxiosResponse<any>> {
     const response = await http.post<any>("/registros/temporal", param);
     return response;
