@@ -14,6 +14,8 @@ interface RegistroByCedula {
   municipio: string;
   status: string;
   coment: string;
+  boleto: string;
+  telefono: string;
 }
 
 interface Ronda {

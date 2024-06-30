@@ -20,6 +20,7 @@ interface FormValues {
   cedula: string;
   municipio: string;
   boleto: string;
+  telefono: string;
   status: number;
   premio: string;
 }
@@ -29,6 +30,7 @@ const defaultValues: FormValues = {
   cedula: "",
   municipio: "",
   boleto: "",
+  telefono: "",
   status: 1,
   premio: "-",
 };
@@ -155,6 +157,7 @@ const RegistroPadres: React.FC = () => {
             cedula,
             municipio: municipioNombre,
             boleto: "",
+            telefono: "",
             premio: "-",
             status: 1,
           });
@@ -238,12 +241,12 @@ const RegistroPadres: React.FC = () => {
             setButtonText("Buscar");
           } else if (response.status === 206) {
             showError("Esta boleta participando");
-            reset({ ...defaultValues, municipio: municipioNombre });
-            setNombre("");
-            setCedula("");
-            setCedulaNotFound(false);
-            setCedulaParticipando(false);
-            setButtonText("Buscar");
+            //reset({ ...defaultValues, municipio: municipioNombre });
+            //setNombre("");
+            //setCedula("");
+            //setCedulaNotFound(false);
+            // setCedulaParticipando(false);
+            // setButtonText("Buscar");
           } else if (response.status === 201) {
             showSuccess(
               `Registro de la cédula ${data.cedula} COMPLETADO (${data.nombre})`
@@ -375,14 +378,18 @@ const RegistroPadres: React.FC = () => {
                 maskPlaceholder={null}
                 required
                 {...register("boleto", {
-                  required: true,
+                  required: "El número de boleta es obligatorio",
+                  pattern: {
+                    value: /^[A-Za-z]{2}\d{6}$/,
+                    message: "Formato de boleta inválido",
+                  },
                   minLength: 8,
                   maxLength: 8,
                 })}
-                inputRef={(node) => {
-                  register(node);
-                  inputRef.current = node;
-                }}
+                // inputRef={(node) => {
+                //   register(node);
+                //   inputRef.current = node;
+                // }}
                 onKeyDown={handleKeyPress}
                 onChange={handleBoletoChange}
               >
@@ -404,7 +411,7 @@ const RegistroPadres: React.FC = () => {
                       minLength: 8,
                       maxLength: 8,
                     }}
-                    inputRef={inputRef}
+                    //inputRef={inputRef}
                   />
                 )}
               </InputMask>
@@ -436,6 +443,19 @@ const RegistroPadres: React.FC = () => {
                   />
                 )}
               </InputMask>
+              {isSubmitting && (
+                <Typography
+                  variant="h6"
+                  sx={{
+                    margin: "5px 5px 15px 0px",
+                    fontSize: "13px",
+                    color: "sandybrown",
+                  }}
+                >
+                  Estamos buscando su cédula en la base de datos. Mientras puede
+                  ir llenando los demás datos del formulario.
+                </Typography>
+              )}
               {nombre && !cedulaNotFound && !cedulaParticipando && (
                 <Typography variant="h6" sx={{ margin: "5px 5px 15px 0px" }}>
                   Nombre: {nombre}
@@ -457,6 +477,42 @@ const RegistroPadres: React.FC = () => {
                   helperText={errors.nombre ? errors.nombre.message : ""}
                 />
               )}
+              <InputMask
+                mask="(999) 999-9999"
+                maskChar=""
+                maskPlaceholder={null}
+                required
+                {...register("telefono", {
+                  required: "El número de teléfono es obligatorio",
+                  pattern: {
+                    value: /^\(\d{3}\) \d{3}-\d{4}$/,
+                    message: "Formato de número de teléfono inválido",
+                  },
+                  minLength: 14,
+                  maxLength: 14,
+                })}
+              >
+                {(inputProps) => (
+                  <TextField
+                    {...inputProps}
+                    variant="filled"
+                    color="success"
+                    type="text"
+                    error={!!errors.telefono}
+                    helperText={errors.telefono ? errors.telefono.message : ""}
+                    label="Número de celular"
+                    sx={{
+                      minWidth: "100%",
+                      margin: "5px 5px 15px 0px",
+                      "& input": {
+                        textTransform: "uppercase",
+                      },
+                      minLength: 8,
+                      maxLength: 8,
+                    }}
+                  />
+                )}
+              </InputMask>
 
               <Select
                 value={municipio}
