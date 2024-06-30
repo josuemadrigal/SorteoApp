@@ -419,7 +419,11 @@ const RegistroPadres: React.FC = () => {
                 mask="999-9999999-9"
                 maskChar=""
                 {...register("cedula", {
-                  required: true,
+                  required: "La cédula obligatoria",
+                  pattern: {
+                    value: /^\d{3}-\d{7}-\d{1}$/,
+                    message: "Formato de cédula inválido",
+                  },
                   minLength: 13,
                   maxLength: 13,
                   onBlur: handleBlur,
