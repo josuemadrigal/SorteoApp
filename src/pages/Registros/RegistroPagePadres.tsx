@@ -196,11 +196,11 @@ const RegistroPadres: React.FC = () => {
         return;
       }
 
-      if (!validarMunicipio("la-romana", "LR")) return;
-      if (!validarMunicipio("caleta", "CA")) return;
-      if (!validarMunicipio("villa-hermosa", "VH")) return;
-      if (!validarMunicipio("cumayasa", "CU")) return;
-      if (!validarMunicipio("guaymate", "GU")) return;
+      // if (!validarMunicipio("la-romana", "LR")) return;
+      // if (!validarMunicipio("caleta", "CA")) return;
+      // if (!validarMunicipio("villa-hermosa", "VH")) return;
+      // if (!validarMunicipio("cumayasa", "CU")) return;
+      // if (!validarMunicipio("guaymate", "GU")) return;
 
       Swal.fire({
         title: "¿Están correctos sus datos?",
@@ -303,26 +303,26 @@ const RegistroPadres: React.FC = () => {
 
   const handleBoletoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const boletoValue = event.target.value.toUpperCase();
-    setValue("boleto", boletoValue);
-    if (boletoValue.startsWith("LR")) {
-      setMunicipio("la-romana");
-      setValue("municipio", "la-romana");
-    } else if (boletoValue.startsWith("CA")) {
-      setMunicipio("caleta");
-      setValue("municipio", "caleta");
-    } else if (boletoValue.startsWith("VH")) {
-      setMunicipio("villa-hermosa");
-      setValue("municipio", "villa-hermosa");
-    } else if (boletoValue.startsWith("CU")) {
-      setMunicipio("cumayasa");
-      setValue("municipio", "cumayasa");
-    } else if (boletoValue.startsWith("GU")) {
-      setMunicipio("guaymate");
-      setValue("municipio", "guaymate");
-    } else {
-      setMunicipio("");
-      setValue("municipio", "ERROR");
-    }
+    // setValue("boleto", boletoValue);
+    // if (boletoValue.startsWith("LR")) {
+    //   setMunicipio("la-romana");
+    //   setValue("municipio", "la-romana");
+    // } else if (boletoValue.startsWith("CA")) {
+    //   setMunicipio("caleta");
+    //   setValue("municipio", "caleta");
+    // } else if (boletoValue.startsWith("VH")) {
+    //   setMunicipio("villa-hermosa");
+    //   setValue("municipio", "villa-hermosa");
+    // } else if (boletoValue.startsWith("CU")) {
+    //   setMunicipio("cumayasa");
+    //   setValue("municipio", "cumayasa");
+    // } else if (boletoValue.startsWith("GU")) {
+    //   setMunicipio("guaymate");
+    //   setValue("municipio", "guaymate");
+    // } else {
+    //   setMunicipio("");
+    //   setValue("municipio", "ERROR");
+    // }
   };
 
   const registerSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -373,18 +373,20 @@ const RegistroPadres: React.FC = () => {
           <CardContent>
             <form onSubmit={handleSubmit(registerSubmit)}>
               <InputMask
-                mask="aa999999"
+                //mask="aa999999"
+                mask="99999"
                 maskChar=""
                 maskPlaceholder={null}
                 required
                 {...register("boleto", {
                   required: "El número de boleta es obligatorio",
                   pattern: {
-                    value: /^[A-Za-z]{2}\d{6}$/,
+                    //value: /^[A-Za-z]{2}\d{6}$/,
+                    value: /^\d{5}$/,
                     message: "Formato de boleta inválido",
                   },
-                  minLength: 8,
-                  maxLength: 8,
+                  minLength: 5,
+                  maxLength: 5,
                 })}
                 // inputRef={(node) => {
                 //   register(node);
@@ -400,7 +402,9 @@ const RegistroPadres: React.FC = () => {
                     color="success"
                     type="text"
                     error={!!errors.boleto}
-                    helperText={errors.boleto ? errors.boleto.message : ""}
+                    helperText={
+                      errors.boleto ? "Numero de boleto incorrecto" : ""
+                    }
                     label="Número de boleta"
                     sx={{
                       minWidth: "100%",
@@ -408,8 +412,8 @@ const RegistroPadres: React.FC = () => {
                       "& input": {
                         textTransform: "uppercase",
                       },
-                      minLength: 8,
-                      maxLength: 8,
+                      minLength: 5,
+                      maxLength: 5,
                     }}
                     //inputRef={inputRef}
                   />
@@ -526,10 +530,10 @@ const RegistroPadres: React.FC = () => {
                 color="success"
                 sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
                 inputProps={{ "aria-label": "Without label" }}
-                disabled
+                //disabled
               >
                 <MenuItem value="" disabled>
-                  Introduzca una boleta válida
+                  Seleccione el municipio
                 </MenuItem>
                 <MenuItem value="la-romana">La Romana</MenuItem>
                 <MenuItem value="caleta">Caleta</MenuItem>
