@@ -9,6 +9,7 @@ import {
   CardContent,
   Grid,
   MenuItem,
+  Modal,
   Select,
   TextField,
   Typography,
@@ -75,6 +76,7 @@ const RegistroPadres: React.FC = () => {
   const [cedulaNotFound, setCedulaNotFound] = useState(false);
   const [cedulaParticipando, setCedulaParticipando] = useState(false);
   const [buttonText, setButtonText] = useState("Buscar");
+  const [modalOpen, setModalOpen] = useState(false);
 
   const errorMessages = {
     invalidMunicipio: "Seleccione un municipio o distrito válido",
@@ -83,7 +85,7 @@ const RegistroPadres: React.FC = () => {
     cedulaNotFound: "No se encontró un registro con esa cédula",
     cedulaNoValida: "Ingrese un numero de cedula valido",
     cedulaParticipando: `Esta cédula ya está participando`,
-    nombreRequerido: "El nombre es necesario",
+    nombreRequerido: "El nombre y apellido son obligatorios",
   };
 
   const municipioNombre = municipio || "";
@@ -303,6 +305,22 @@ const RegistroPadres: React.FC = () => {
 
   const handleBoletoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const boletoValue = event.target.value.toUpperCase();
+
+    setValue("boleto", boletoValue);
+
+    // if (boletoValue.length === 5) {
+    //   setIsSubmitting(true);
+    //   setTimeout(() => {
+    //     window.open("https://www.instagram.com/eduardespiritusanto/", "_blank");
+    //     // Esperar 5 segundos y luego restablecer el estado o redirigir de vuelta
+    //     setTimeout(() => {
+    //       setIsSubmitting(false);
+    //       window.open("https://app.eduardespiritusanto.com/", "_blank");
+    //       // Código para volver a la página original o actualizar el estado necesario
+    //     }, 5000);
+    //   }, 2000);
+    // }
+
     // setValue("boleto", boletoValue);
     // if (boletoValue.startsWith("LR")) {
     //   setMunicipio("la-romana");
@@ -375,6 +393,7 @@ const RegistroPadres: React.FC = () => {
               <InputMask
                 //mask="aa999999"
                 mask="99999"
+                placeholder="XXXXX"
                 maskChar=""
                 maskPlaceholder={null}
                 required
@@ -421,9 +440,11 @@ const RegistroPadres: React.FC = () => {
               </InputMask>
               <InputMask
                 mask="999-9999999-9"
+                placeholder="___-_______-_"
                 maskChar=""
                 {...register("cedula", {
                   required: "La cédula obligatoria",
+
                   pattern: {
                     value: /^\d{3}-\d{7}-\d{1}$/,
                     message: "Formato de cédula inválido",
@@ -473,13 +494,20 @@ const RegistroPadres: React.FC = () => {
                 <TextField
                   {...register("nombre", {
                     required: errorMessages.nombreRequerido,
+                    validate: (value) =>
+                      /^[A-Za-z]{3,}\s[A-Za-z]{3,}$/.test(value) ||
+                      "Debe ingresar nombre y apellido",
                   })}
                   variant="filled"
                   color="success"
                   type="text"
-                  label="Nombre"
+                  label="Nombre y Apellido"
                   sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
                   inputRef={nombreRef}
+                  onInput={(e) => {
+                    const input = e.target as HTMLInputElement;
+                    input.value = input.value.replace(/[^a-zA-Z\s]/g, "");
+                  }}
                   disabled={isSubmitting}
                   error={!!errors.nombre}
                   helperText={errors.nombre ? errors.nombre.message : ""}
@@ -553,6 +581,28 @@ const RegistroPadres: React.FC = () => {
             </form>
           </CardContent>
         </Card>
+        <Modal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          aria-labelledby="modal-title"
+          aria-describedby="modal-description"
+        >
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+            padding={2}
+          >
+            <Card style={{ width: "80%", maxHeight: "80vh", overflow: "auto" }}>
+              <CardContent>
+                <Typography variant="h6" align="center" gutterBottom>
+                  Redireccionando a Instagram...
+                </Typography>
+              </CardContent>
+            </Card>
+          </Box>
+        </Modal>
       </Grid>
     </Grid>
   );
