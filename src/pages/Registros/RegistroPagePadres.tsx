@@ -242,7 +242,7 @@ const RegistroPadres: React.FC = () => {
             setCedulaParticipando(false);
             setButtonText("Buscar");
           } else if (response.status === 206) {
-            showError("Esta boleta participando");
+            showError("Esta participando");
             //reset({ ...defaultValues, municipio: municipioNombre });
             //setNombre("");
             //setCedula("");
