@@ -175,7 +175,7 @@ const RegistroPadres: React.FC = () => {
     try {
       setIsSubmitting(true);
       console.log(data);
-
+      ``;
       const municipioValido =
         data.municipio === "la-romana" ||
         data.municipio === "caleta" ||
@@ -210,7 +210,7 @@ const RegistroPadres: React.FC = () => {
                 <p> Cédula: <b>${data.cedula}</b></p>
                 
                 <p> Municipio: <b>${data.municipio}</b></p>
-                <p> # Boleta: <b>${data.boleto}</b></p>
+                
                 `,
 
         icon: "question",
@@ -390,7 +390,7 @@ const RegistroPadres: React.FC = () => {
 
           <CardContent>
             <form onSubmit={handleSubmit(registerSubmit)}>
-              <InputMask
+              {/* <InputMask
                 //mask="aa999999"
                 mask="99999"
                 placeholder="XXXXX"
@@ -437,7 +437,7 @@ const RegistroPadres: React.FC = () => {
                     //inputRef={inputRef}
                   />
                 )}
-              </InputMask>
+              </InputMask> */}
               <InputMask
                 mask="999-9999999-9"
                 placeholder="___-_______-_"
