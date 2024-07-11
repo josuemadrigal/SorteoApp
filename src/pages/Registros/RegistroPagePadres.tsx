@@ -286,6 +286,7 @@ const RegistroPadres: React.FC = () => {
         serieCedula === "026" ||
         serieCedula === "295" ||
         serieCedula === "103"
+
       ) {
         setIsSubmitting(true);
         await checkCedula(cedulaValue);
