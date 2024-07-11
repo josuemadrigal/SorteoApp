@@ -281,7 +281,12 @@ const RegistroPadres: React.FC = () => {
     if (cedulaValue.length === 13) {
       const serieCedula = cedulaValue.slice(0, 3);
       console.log(serieCedula);
-      if (serieCedula === "402" || serieCedula === "026") {
+      if (
+        serieCedula === "402" ||
+        serieCedula === "026" ||
+        serieCedula === "103" ||
+        serieCedula === "295"
+      ) {
         setIsSubmitting(true);
         await checkCedula(cedulaValue);
       } else {
