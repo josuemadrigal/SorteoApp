@@ -279,8 +279,28 @@ const RegistroPadres: React.FC = () => {
   const handleBlur = async (event: React.FocusEvent<HTMLInputElement>) => {
     const cedulaValue = event.target.value;
     if (cedulaValue.length === 13) {
-      setIsSubmitting(true);
-      await checkCedula(cedulaValue);
+      const serieCedula = cedulaValue.slice(0, 3);
+      console.log(serieCedula);
+      if (serieCedula === "402" || serieCedula === "026") {
+        setIsSubmitting(true);
+        await checkCedula(cedulaValue);
+      } else {
+        Swal.fire({
+          position: "center",
+          icon: "warning",
+          title: "Cédula no permitida",
+          text: "Debe dirigirse a un centro de registración.",
+          showConfirmButton: false,
+          timer: 6000,
+        });
+
+        reset({ ...defaultValues, municipio: municipioNombre });
+        setNombre("");
+        setCedula("");
+        setCedulaNotFound(false);
+        setCedulaParticipando(false);
+        setButtonText("Buscar");
+      }
     }
   };
 
@@ -447,6 +467,7 @@ const RegistroPadres: React.FC = () => {
 
                   pattern: {
                     value: /^\d{3}-\d{7}-\d{1}$/,
+                    //value: /^(402|026)-\d{7}-\d{1}$/,
                     message: "Formato de cédula inválido",
                   },
                   minLength: 13,
