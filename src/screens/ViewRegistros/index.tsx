@@ -73,6 +73,7 @@ const ViewRegistros = () => {
   const [registrosCountByMunicipio, setRegistrosCountByMunicipio] = useState<
     { municipio: string; count: number }[]
   >([]);
+  const [totalRegistros, setTotalRegistros] = useState<number>(0);
 
   useEffect(() => {
     const fetchRegistrosCountByMunicipio = async () => {
@@ -80,6 +81,12 @@ const ViewRegistros = () => {
         const response = await registrosService.getRegistrosCountByMunicipio();
         if (response.data.ok) {
           setRegistrosCountByMunicipio(response.data.registros);
+          // Calcular el total de registros
+          const total = response.data.registros.reduce(
+            (accumulator, current) => accumulator + current.count,
+            0
+          );
+          setTotalRegistros(total);
         }
       } catch (error) {
         console.error("Error fetching registros count by municipio", error);
@@ -126,6 +133,18 @@ const ViewRegistros = () => {
           >
             <RegistroCountByMunicipio registros={registrosCountByMunicipio} />
           </Grid>
+          <Typography
+            style={{
+              fontWeight: "bold",
+              fontSize: "32px",
+              marginTop: "20px",
+              color: "white",
+            }}
+            gutterBottom
+            textAlign="center"
+          >
+            Total de Registros: {totalRegistros}
+          </Typography>
         </Item>
       </Grid>
     </Grid>
