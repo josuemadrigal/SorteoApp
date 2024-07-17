@@ -524,8 +524,8 @@ const RegistroPadres: React.FC = () => {
                   {...register("nombre", {
                     required: errorMessages.nombreRequerido,
                     validate: (value) =>
-                      /^[A-Za-z]{3,}\s[A-Za-z]{3,}$/.test(value) ||
-                      "Debe ingresar nombre y apellido",
+                      /^[A-Za-z\s]{3,}(\s[A-Za-z\s]{3,})+$/.test(value) ||
+                      "Debe ingresar nombre y apellido, o nombre completo",
                   })}
                   variant="filled"
                   color="success"
