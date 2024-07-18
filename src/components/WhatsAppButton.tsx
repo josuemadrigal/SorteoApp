@@ -6,7 +6,7 @@ import "./WhatsAppButton.css";
 
 const WhatsAppButton: React.FC = () => {
   const [showMessage, setShowMessage] = useState(false);
-  const phoneNumber = "18092846378";
+  const phoneNumber = "18298074136";
   const message = "Hola, necesito ayuda para registrarme en sorteo.";
 
   useEffect(() => {
