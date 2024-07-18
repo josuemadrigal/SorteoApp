@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import RegistrosService from "../../services/RegistrosService";
+import WhatsAppButton from "../../components/WhatsAppButton";
 
 interface FormValues {
   nombre: string;
@@ -286,7 +287,6 @@ const RegistroPadres: React.FC = () => {
         serieCedula === "026" ||
         serieCedula === "295" ||
         serieCedula === "103"
-
       ) {
         setIsSubmitting(true);
         await checkCedula(cedulaValue);
@@ -393,6 +393,7 @@ const RegistroPadres: React.FC = () => {
         margin: 0,
       }}
     >
+      <WhatsAppButton />
       <Grid item>
         <Card
           sx={{
