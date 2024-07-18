@@ -121,6 +121,8 @@ const RegistroPadres: React.FC = () => {
 
       const cedulaParti = await checkParticipando(cedula);
 
+      const serieCedula = cedula.slice(0, 3);
+
       if (cedulaParti) {
         setNombreDB("");
         setNombre("");
@@ -148,22 +150,47 @@ const RegistroPadres: React.FC = () => {
       }
 
       if (!cedulaParti && response.data.ok === false) {
-        setNombreDB(nombre);
-        setCedulaNotFound(true);
-        setNombre("");
-        setCedula(cedula);
-        setIsSubmitting(false);
-        setButtonText("Registrar");
-        if (nombre) {
-          await handleRegister({
-            nombre,
-            cedula,
-            municipio: municipioNombre,
-            boleto: "",
-            telefono: "",
-            premio: "-",
-            status: 1,
+        if (
+          serieCedula === "402" ||
+          serieCedula === "026" ||
+          serieCedula === "295" ||
+          serieCedula === "103"
+        ) {
+          //setIsSubmitting(true);
+          setNombreDB(nombre);
+          setCedulaNotFound(true);
+          setNombre("");
+          setCedula(cedula);
+          setIsSubmitting(false);
+          setButtonText("Registrar");
+
+          if (nombre) {
+            await handleRegister({
+              nombre,
+              cedula,
+              municipio: municipioNombre,
+              boleto: "",
+              telefono: "",
+              premio: "-",
+              status: 1,
+            });
+          }
+        } else {
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: "Cédula no permitida",
+            text: "Debe dirigirse a un centro de registración.",
+            showConfirmButton: false,
+            timer: 6000,
           });
+
+          reset({ ...defaultValues, municipio: municipioNombre });
+          setNombre("");
+          setCedula("");
+          setCedulaNotFound(false);
+          setCedulaParticipando(false);
+          setButtonText("Buscar");
         }
       }
     } catch (error) {
@@ -283,32 +310,7 @@ const RegistroPadres: React.FC = () => {
       const serieCedula = cedulaValue.slice(0, 3);
       console.log(serieCedula);
 
-      if (
-        serieCedula === "402" ||
-        serieCedula === "026" ||
-        serieCedula === "295" ||
-        serieCedula === "103"
-      ) {
-
-        setIsSubmitting(true);
-        await checkCedula(cedulaValue);
-      } else {
-        Swal.fire({
-          position: "center",
-          icon: "warning",
-          title: "Cédula no permitida",
-          text: "Debe dirigirse a un centro de registración.",
-          showConfirmButton: false,
-          timer: 6000,
-        });
-
-        reset({ ...defaultValues, municipio: municipioNombre });
-        setNombre("");
-        setCedula("");
-        setCedulaNotFound(false);
-        setCedulaParticipando(false);
-        setButtonText("Buscar");
-      }
+      await checkCedula(cedulaValue);
     }
   };
 
