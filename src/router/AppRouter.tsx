@@ -16,6 +16,8 @@ import { RegistroRonda } from "../pages/Registros/RegistroRonda";
 import ViewGanadoresBoleta from "../screens/ViewGanadoresBoleta";
 import HomePadres from "../pages/Registros/padres";
 import RegistroPadres from "../pages/Registros/RegistroPagePadres";
+import ViewRegistros from "../screens/ViewRegistros";
+import Codigo from "../screens/Codigo";
 
 export const AppRouter = (): any => {
   return (
@@ -35,6 +37,7 @@ export const AppRouter = (): any => {
       <Route path="/viewGanadores" element={<ViewGanadores />} />
       <Route path="/view-Ganadores" element={<ViewGanadoresBoleta />} />
       <Route path="/viewRondas" element={<ViewPremios />} />
+      <Route path="/registrados" element={<Codigo />} />
       {/* <Route path="/view" element={<View />} /> */}
     </Routes>
   );

@@ -54,6 +54,16 @@ interface CheckParticipandoResponse {
   participando: boolean;
 }
 
+interface RegistroCountByMunicipio {
+  municipio: string;
+  count: number;
+}
+
+interface GetRegistrosCountByMunicipioResponse {
+  ok: boolean;
+  registros: RegistroCountByMunicipio[];
+}
+
 // interface Premio {
 //   cedula: string;
 //   nombre: string;
@@ -228,6 +238,15 @@ class RegistrosService {
       ronda,
       premio,
     });
+  }
+
+  public async getRegistrosCountByMunicipio(): Promise<
+    AxiosResponse<GetRegistrosCountByMunicipioResponse>
+  > {
+    const response = await http.get<GetRegistrosCountByMunicipioResponse>(
+      "/registros/countByMunicipio"
+    );
+    return response;
   }
 }
 

@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import RegistrosService from "../../services/RegistrosService";
+import WhatsAppButton from "../../components/WhatsAppButton";
 
 interface FormValues {
   nombre: string;
@@ -287,7 +288,6 @@ const RegistroPadres: React.FC = () => {
         serieCedula === "026" ||
         serieCedula === "295" ||
         serieCedula === "103"
-
       ) {
 
         setIsSubmitting(true);
@@ -395,6 +395,7 @@ const RegistroPadres: React.FC = () => {
         margin: 0,
       }}
     >
+      <WhatsAppButton />
       <Grid item>
         <Card
           sx={{
@@ -524,8 +525,8 @@ const RegistroPadres: React.FC = () => {
                   {...register("nombre", {
                     required: errorMessages.nombreRequerido,
                     validate: (value) =>
-                      /^[A-Za-z]{3,}\s[A-Za-z]{3,}$/.test(value) ||
-                      "Debe ingresar nombre y apellido",
+                      /^[A-Za-z\s]{3,}(\s[A-Za-z\s]{3,})+$/.test(value) ||
+                      "Debe ingresar nombre y apellido, o nombre completo",
                   })}
                   variant="filled"
                   color="success"
