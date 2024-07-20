@@ -409,7 +409,7 @@ const RegistroPadres: React.FC = () => {
         >
           <Box
             component="img"
-            src="/padre-portada.jpg"
+            src="/registrate-aqui-app.jpeg"
             alt="Padres banner"
             sx={{
               height: "auto",
