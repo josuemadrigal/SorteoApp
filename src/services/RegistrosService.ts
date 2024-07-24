@@ -196,8 +196,9 @@ class RegistrosService {
   }
 
   public async regRonda(param: any): Promise<AxiosResponse<any>> {
+    console.log("servicio: ", param);
     const response = await http.post<any>("/registros/regRonda", { param });
-
+    console.log("res: ", response);
     return response;
   }
 

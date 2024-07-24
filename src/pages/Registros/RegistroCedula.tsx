@@ -126,7 +126,7 @@ export const RegistroCedula = () => {
             gutterBottom
             variant="h3"
             component="div"
-            sx={{ color: "#f098", fontWeight: "bold", textAlign: "center" }}
+            sx={{ color: "#2e7d32", fontWeight: "bold", textAlign: "center" }}
           >
             Registro de cédula
           </Typography>
