@@ -28,6 +28,7 @@ const PremioSelect: React.FC<PremioSelectProps> = ({
         variant="filled"
         color="success"
         sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
+        defaultValue=""
         disabled={disabled}
       >
         <MenuItem value="" disabled>

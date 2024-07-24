@@ -98,6 +98,8 @@ export const RegistroRonda = () => {
     try {
       objeto.status = "activa";
 
+      console.log("hola: ", objeto);
+
       const response = await RegistrosService.regRonda(objeto);
 
       if (response.status === 203) {
@@ -178,7 +180,11 @@ export const RegistroRonda = () => {
               gutterBottom
               variant="h3"
               component="div"
-              sx={{ color: "#f098", fontWeight: "bold", textAlign: "center" }}
+              sx={{
+                color: "#2e7d32",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
             >
               {`Registro de ronda ${rondaNum ? `#${rondaNum}` : ``}`}
             </Typography>

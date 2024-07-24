@@ -56,7 +56,7 @@ const Consulta = () => {
   const [checkList, setCheckList] = useState<Registro[]>([]);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
   const [unCheckList, setUnCheckList] = useState<string[]>([]);
-  const [premio, setPremio] = useState("");
+  const [premio, setPremio] = useState("Motor");
   const [premioTitle, setPremioTitle] = useState("");
   const [municipioT, setMunicipioT] = useState("");
   const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(true);
@@ -83,10 +83,15 @@ const Consulta = () => {
 
   useEffect(() => {
     fetchRonda();
-  }, [premio]);
+  }, [premio, municipioT]);
 
   const handleMunicipio = (event: React.ChangeEvent<{ value: unknown }>) => {
     setMunicipioT(event.target.value as string);
+
+    setPremioTitle("Motor");
+    setPremio("motor");
+    setIsSearchButtonDisabled(false);
+    setIsSaveButtonDisabled(true);
   };
 
   const handlePremio = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -97,7 +102,6 @@ const Consulta = () => {
     if (selectedPremio) {
       setPremioTitle(selectedPremio.premio);
       setPremio(selectedPremioValue);
-      //fetchRonda();
     }
     setIsSearchButtonDisabled(false);
     setIsSaveButtonDisabled(true);
@@ -271,7 +275,8 @@ const Consulta = () => {
             value={premio}
             onChange={handlePremio}
             premios={premios}
-            disabled={!isSaveButtonDisabled}
+            //disabled={!isSaveButtonDisabled}
+            disabled
           />
 
           <CustomButton
@@ -303,13 +308,13 @@ const Consulta = () => {
         >
           <div
             style={{
-              backgroundColor: "#ef5061",
+              backgroundColor: "#2632ee",
               minWidth: "100%",
               minHeight: "50px",
               padding: "10px 0px 10px 0px",
             }}
           >
-            <Typography
+            {/* <Typography
               gutterBottom
               variant="h3"
               component="div"
@@ -321,7 +326,7 @@ const Consulta = () => {
               }}
             >
               {`Ronda # ${ronda ? ronda : "-"}`}
-            </Typography>
+            </Typography> */}
 
             <Typography
               gutterBottom
@@ -329,17 +334,23 @@ const Consulta = () => {
               component="div"
               sx={{
                 color: "#fff",
-                backgroundColor: "#ef5061",
+                backgroundColor: "#2632ee",
                 fontSize: 30,
                 borderRadius: "5px",
                 textTransform: "uppercase",
               }}
             >
-              {`${cantiRonda ? cantiRonda + " ganadoras de " : ""} `}
+              {`${
+                cantiRonda
+                  ? `${cantiRonda}  ${
+                      parseInt(cantiRonda) > 1 ? "ganadores de:" : "ganador de:"
+                    } `
+                  : ""
+              } `}
               <span
                 style={{
                   color: "#fff",
-                  backgroundColor: "#ef5061",
+                  backgroundColor: "#2632ee",
                   fontSize: 40,
                   fontWeight: "bold",
                 }}

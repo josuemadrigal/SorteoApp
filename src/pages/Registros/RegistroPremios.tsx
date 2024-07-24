@@ -487,7 +487,7 @@ export const RegistroPremios = () => {
               gutterBottom
               variant="h3"
               component="div"
-              sx={{ color: "#f098", fontWeight: "bold", textAlign: "center" }}
+              sx={{ color: "#2e7d32", fontWeight: "bold", textAlign: "center" }}
             >
               Registro de premios
             </Typography>
@@ -515,7 +515,7 @@ export const RegistroPremios = () => {
                   variant="h5"
                   component="div"
                   sx={{
-                    color: "#f69",
+                    color: "#2e7d32",
                     fontWeight: "bold",
                     textAlign: "center",
                     mt: 5,
@@ -618,7 +618,7 @@ export const RegistroPremios = () => {
                   variant="h5"
                   component="div"
                   sx={{
-                    color: "#f69",
+                    color: "#2e7d32",
                     fontWeight: "bold",
                     textAlign: "center",
                     mt: 5,
