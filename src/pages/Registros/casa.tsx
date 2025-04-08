@@ -63,11 +63,7 @@ const Home = () => {
       <Grid item container spacing={2} justifyContent="center">
         {municipios.map((item) => (
           <Grid item key={item.value}>
-            <Button
-              onClick={() => handleClick(item)}
-              style={{ padding: 0 }}
-              disabled={true}
-            >
+            <Button onClick={() => handleClick(item)} style={{ padding: 0 }}>
               <Paper
                 sx={{
                   width: 200,
@@ -75,7 +71,7 @@ const Home = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  backgroundColor: "gray",
+                  backgroundColor: "yellowgreen",
                 }}
                 elevation={3}
               >
