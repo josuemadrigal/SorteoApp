@@ -1,26 +1,13 @@
 import React, { useEffect, useState } from "react";
-import "../../App.css";
 import GifTombola from "../../../public/gif-TOMBOLA.gif";
-import SearchIcon from "@mui/icons-material/Search";
-import SaveIcon from "@mui/icons-material/Save";
+import { SearchIcon, SaveIcon } from "@heroicons/react/solid";
 import { useMutation } from "react-query";
-import "animate.css";
-import {
-  Grid,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  Typography,
-  styled,
-} from "@mui/material";
 import { useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
 import { RenderBoletas } from "../../components/RenderBoletas";
 import PremioSelect from "./components/PremioSelect";
 import MunicipioSelect from "./components/MunicipioSelect";
-import CantidadInput from "./components/CantidadInput";
 import CustomButton from "./components/CustomButton";
 
 interface FormValues {
@@ -85,17 +72,16 @@ const Consulta = () => {
     fetchRonda();
   }, [premio, municipioT]);
 
-  const handleMunicipio = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setMunicipioT(event.target.value as string);
-
+  const handleMunicipio = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setMunicipioT(event.target.value);
     setPremioTitle("Motor");
     setPremio("motor");
     setIsSearchButtonDisabled(false);
     setIsSaveButtonDisabled(true);
   };
 
-  const handlePremio = (event: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedPremioValue = event.target.value as string;
+  const handlePremio = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedPremioValue = event.target.value;
     const selectedPremio = premios.find(
       (item) => item.slug_premio === selectedPremioValue
     );
@@ -151,15 +137,12 @@ const Consulta = () => {
       setCantiRonda(response.data.ronda[0]?.cantidad);
       setRonda(response.data.ronda[0]?.ronda);
       setRondaId(response.data.ronda[0]?.id);
-      console.log("desde ronda: ", cantiRonda);
     } catch (error) {
       console.error("Error fetching premios", error);
     }
   };
 
   const buscarRegistros = async () => {
-    //fetchRonda();
-
     const param: FormValues = getValues();
     param.municipio = municipioT;
     param.ronda = ronda;
@@ -176,12 +159,7 @@ const Consulta = () => {
       });
     }
 
-    if (
-      //param.cantidad > 0 &&
-      param.municipio !== "" &&
-      //param.ronda !== "" &&
-      param.premio !== ""
-    ) {
+    if (param.municipio !== "" && param.premio !== "") {
       setIsSearchButtonDisabled(false);
       setIsSaveButtonDisabled(true);
       getRegistros(param);
@@ -195,23 +173,6 @@ const Consulta = () => {
       });
     }
   };
-
-  // const handleCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { value, checked } = event.target;
-  //   setCheckedItems((prev) => {
-  //     const updated = new Set(prev);
-  //     if (checked) {
-  //       updated.add(value);
-  //     } else {
-  //       updated.delete(value);
-  //     }
-  //     return updated;
-  //   });
-  // };
-
-  // const isChecked = (cedula: string) => {
-  //   return checkedItems.has(cedula);
-  // };
 
   const ActualizarRegistros = async () => {
     setIsSaveButtonDisabled(true);
@@ -245,153 +206,73 @@ const Consulta = () => {
     setIsSearchButtonDisabled(true);
   };
 
-  // const handleRondaChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-  //   setRonda(event.target.value as string);
-  //   //register("ronda", event.target.value as string);
-  // };
-
-  const Item = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(1),
-    textAlign: "center",
-  }));
-
   const filteredCheckList = checkList.filter((item) =>
     checkedItems.has(item.cedula)
   );
 
   return (
-    <Grid container my={1} rowSpacing={2} columnSpacing={1}>
-      <Grid item md={2} sm={10} sx={{ position: "fixed" }}>
-        <Item sx={{ height: "94vh", width: "220px" }}>
-          <img src={GifTombola} alt="TOMBOLA" width="90%" />
-          <MunicipioSelect
-            value={municipioT}
-            onChange={handleMunicipio}
-            register={register}
-            disabled={!isSaveButtonDisabled}
-          />
+    <div className="flex flex-col md:flex-row p-2 gap-2">
+      {/* Sidebar */}
+      <div className="w-full md:w-56 h-[94vh] bg-white shadow-md rounded-lg p-4 fixed md:relative">
+        <img src={GifTombola} alt="TOMBOLA" className="w-[90%] mx-auto" />
 
-          <PremioSelect
-            value={premio}
-            onChange={handlePremio}
-            premios={premios}
-            //disabled={!isSaveButtonDisabled}
-            disabled
-          />
+        <MunicipioSelect
+          value={municipioT}
+          onChange={handleMunicipio}
+          register={register}
+          disabled={!isSaveButtonDisabled}
+        />
 
-          <CustomButton
-            onClick={buscarRegistros}
-            icon={<SearchIcon />}
-            text="Buscar"
-            color="success"
-            disabled={isSearchButtonDisabled}
-          />
+        <PremioSelect
+          value={premio}
+          onChange={handlePremio}
+          premios={premios}
+          disabled
+        />
 
-          <CustomButton
-            onClick={ActualizarRegistros}
-            icon={<SaveIcon />}
-            text="Guardar"
-            color="error"
-            disabled={isSaveButtonDisabled}
-          />
-        </Item>
-      </Grid>
+        <CustomButton
+          onClick={buscarRegistros}
+          icon="search"
+          text="Buscar"
+          color="success"
+          disabled={isSearchButtonDisabled}
+        />
 
-      <Grid item md={12}>
-        <Item
-          sx={{
-            height: "calc(100vh)",
-            marginLeft: "250px",
-            backgroundColor: "#06502a",
-            justifyContent: "center",
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#2632ee",
-              minWidth: "100%",
-              minHeight: "50px",
-              padding: "10px 0px 10px 0px",
-            }}
-          >
-            {/* <Typography
-              gutterBottom
-              variant="h3"
-              component="div"
-              sx={{
-                color: "#fff",
-                textTransform: "uppercase",
-                fontSize: 15,
-                borderRadius: "5px",
-              }}
-            >
-              {`Ronda # ${ronda ? ronda : "-"}`}
-            </Typography> */}
+        <CustomButton
+          onClick={ActualizarRegistros}
+          icon="save"
+          text="Guardar"
+          color="error"
+          disabled={isSaveButtonDisabled}
+        />
+      </div>
 
-            <Typography
-              gutterBottom
-              variant="h3"
-              component="div"
-              sx={{
-                color: "#fff",
-                backgroundColor: "#2632ee",
-                fontSize: 30,
-                borderRadius: "5px",
-                textTransform: "uppercase",
-              }}
-            >
-              {`${
-                cantiRonda
-                  ? `${cantiRonda}  ${
-                      parseInt(cantiRonda) > 1 ? "ganadores de:" : "ganador de:"
-                    } `
-                  : ""
-              } `}
-              <span
-                style={{
-                  color: "#fff",
-                  backgroundColor: "#2632ee",
-                  fontSize: 40,
-                  fontWeight: "bold",
-                }}
-              >
-                {cantiRonda ? premioTitle : ""}
-              </span>
-            </Typography>
+      {/* Main Content */}
+      <div className="md:ml-60 w-full md:w-[calc(100%-14rem)] h-[100vh] bg-green-800 rounded-lg p-4">
+        <div className="w-full bg-blue-800 min-h-[50px] py-2 px-0 rounded-t-lg">
+          <div className="text-white text-center uppercase text-xl md:text-3xl">
+            {cantiRonda
+              ? `${cantiRonda} ${
+                  parseInt(cantiRonda) > 1 ? "ganadores de:" : "ganador de:"
+                } `
+              : ""}
+            <span className="font-bold text-2xl md:text-4xl">
+              {cantiRonda ? premioTitle : ""}
+            </span>
           </div>
-          <Grid
-            container
-            columnSpacing={1}
-            sx={{
-              justifyContent: "center",
-              transition: "ease-in",
-              flex: 1,
-              width: "100%",
-              minHeight: "200px",
-              overflowY: "auto",
-              overflowX: "hidden",
-              maxHeight: "calc(95vh - 64px)",
-            }}
-          >
-            {filteredCheckList.length <= 0 && isSearchButtonDisabled == true ? (
-              <p
-                style={{
-                  opacity: "50%",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.5rem",
-                  marginTop: "10rem",
-                  color: "silver",
-                }}
-              >
-                Presiona el botón buscar
-              </p>
-            ) : (
-              <RenderBoletas items={filteredCheckList} />
-            )}
-          </Grid>
-        </Item>
-      </Grid>
-    </Grid>
+        </div>
+
+        <div className="flex justify-center w-full min-h-[200px] overflow-y-auto max-h-[calc(95vh-64px)] bg-green-800 rounded-b-lg">
+          {filteredCheckList.length <= 0 && isSearchButtonDisabled ? (
+            <p className="opacity-50 uppercase tracking-wider mt-40 text-gray-300">
+              Presiona el botón buscar
+            </p>
+          ) : (
+            <RenderBoletas items={filteredCheckList} />
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

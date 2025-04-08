@@ -1,100 +1,45 @@
 import { motion } from "framer-motion";
-import "../App.css";
-import { Grid, Typography } from "@mui/material";
 
 interface Props {
   item: any;
 }
+
 export const Boleta = ({ item }: Props) => {
   const numCedula = item.cedula;
   const boletaCedula = numCedula.slice(-5);
 
   return (
-    <Grid item sm={12} md={4} lg={4}>
+    <div className="w-full sm:w-full md:w-1/3 lg:w-1/3 p-2">
       <motion.div
-        className="box"
+        className="bg-white rounded-lg shadow-lg overflow-hidden"
         initial={{ scale: 0, backgroundColor: "#fff" }}
         transition={{ duration: 5 }}
         animate={{
           backgroundColor: "#469957",
           scale: [0, 1, 0.9, 1],
-          borderRadius: ["100%", "1%"],
-          border: "20px",
+          borderRadius: ["100%", "0.25rem"],
+          borderWidth: "20px",
           borderColor: "blue",
           rotate: [100, 0],
           x: [-300, 0, 0],
-          overflow: "hidden",
         }}
       >
         <motion.h2
-          style={{ fontSize: 35, textTransform: "uppercase" }}
+          className="text-3xl uppercase text-green-50 p-4 text-center"
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{
             opacity: 1,
             scale: 1,
             rotate: [-1000, 0],
-            color: "#f0fdf8",
           }}
           transition={{ duration: 2 }}
         >
           {item.nombre}
-          <Typography
-            style={{
-              fontSize: 30,
-              fontWeight: "bold",
-              backgroundColor: "darkseagreen",
-              borderRadius: 10,
-              padding: 5,
-            }}
-          >
+          <div className="text-2xl font-bold bg-green-200 rounded-lg p-2 mt-2 text-green-900">
             {boletaCedula}
-          </Typography>
+          </div>
         </motion.h2>
       </motion.div>
-    </Grid>
+    </div>
   );
 };
-
-// import { motion } from "framer-motion";
-// import "../App.css";
-// import { Grid } from "@mui/material";
-
-// interface Props {
-//   item: any;
-// }
-
-// export const Boleta = ({ item }: Props) => {
-//   return (
-//     <Grid item sm={12} md={4} lg={4}>
-//       <motion.div
-//         className="box"
-//         initial={{ scale: 0, backgroundColor: "#fff" }}
-//         transition={{ duration: 0.5 }}
-//         animate={{
-//           backgroundColor: "#469957",
-//           scale: 1,
-//           borderRadius: ["100%", "1%"],
-//           border: "20px",
-//           borderColor: "blue",
-//           rotate: [100, 0],
-//           x: [300, 0],
-//           overflow: "hidden",
-//         }}
-//       >
-//         <motion.h2
-//           style={{ fontSize: 55 }}
-//           initial={{ opacity: 0, scale: 0.5 }}
-//           animate={{
-//             opacity: 1,
-//             scale: 1,
-//             rotate: [1000, 0],
-//             color: "#f0fdf8",
-//           }}
-//           transition={{ duration: 0.5 }}
-//         >
-//           {item.nombre}
-//         </motion.h2>
-//       </motion.div>
-//     </Grid>
-//   );
-// };

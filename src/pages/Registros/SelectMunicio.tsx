@@ -1,4 +1,3 @@
-import { Button, Grid, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const SelectMunicio = () => {
@@ -16,49 +15,30 @@ const SelectMunicio = () => {
     const parametros = { ...item, municipio: item.municipio };
     navigate(`/registro/${item.value}`, { state: { parametros } });
   };
+
   return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      style={{ minHeight: "100vh" }}
-      spacing={2}
-    >
-      <Grid item>
-        <Typography
-          style={{ fontWeight: "bold", textTransform: "uppercase" }}
-          variant="h3"
-          gutterBottom
-          textAlign="center"
-        >
-          Seleccione el municipio que va registrar
-        </Typography>
-      </Grid>
-      <Grid item container spacing={2} justifyContent="center">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50">
+      <h1 className="text-3xl md:text-4xl font-bold uppercase text-center mb-8 text-gray-800">
+        Seleccione el municipio que va registrar
+      </h1>
+
+      <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5   w-full max-w-4xl">
         {municipios.map((item) => (
-          <Grid item key={item.value}>
-            <Button onClick={() => handleClick(item)} style={{ padding: 0 }}>
-              <Paper
-                sx={{
-                  width: 200,
-                  height: 200,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "yellowgreen",
-                }}
-                elevation={3}
-              >
-                <Typography style={{ fontWeight: "bold" }} variant="h5">
+          <div key={item.value} className="flex justify-center">
+            <button
+              onClick={() => handleClick(item)}
+              className="p-0 border-none bg-transparent cursor-pointer focus:outline-none"
+            >
+              <div className="w-44 h-44 flex justify-center items-center bg-green-500 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-green-600">
+                <span className="font-bold text-xl text-white text-center px-2">
                   {item.municipio}
-                </Typography>
-              </Paper>
-            </Button>
-          </Grid>
+                </span>
+              </div>
+            </button>
+          </div>
         ))}
-      </Grid>
-    </Grid>
+      </div>
+    </div>
   );
 };
 

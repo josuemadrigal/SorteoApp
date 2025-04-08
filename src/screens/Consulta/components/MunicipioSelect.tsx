@@ -1,10 +1,9 @@
 import React from "react";
-import { Select, MenuItem, InputLabel } from "@mui/material";
 import { UseFormRegister } from "react-hook-form";
 
 interface MunicipioSelectProps {
   value: string;
-  onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   register: UseFormRegister<any>;
   disabled: boolean;
 }
@@ -16,24 +15,27 @@ const MunicipioSelect: React.FC<MunicipioSelectProps> = ({
   disabled,
 }) => {
   return (
-    <>
-      <InputLabel sx={{ marginTop: "20px" }}>Municipio / Distrito</InputLabel>
-      <Select
+    <div className="w-full mt-5">
+      <label className="block mb-2 text-sm font-medium text-gray-700">
+        Municipio / Distrito
+      </label>
+      <select
         value={value}
         {...register("municipio", { required: true, maxLength: 10 })}
-        color="success"
-        variant="filled"
         onChange={onChange}
-        sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
         disabled={disabled}
+        className={`w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+          disabled ? "bg-gray-100 cursor-not-allowed opacity-70" : ""
+        }`}
       >
-        <MenuItem value="caleta">Caleta</MenuItem>
-        <MenuItem value="cumayasa">Cumayasa</MenuItem>
-        <MenuItem value="guaymate">Guaymate</MenuItem>
-        <MenuItem value="la-romana">La Romana</MenuItem>
-        <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
-      </Select>
-    </>
+        <option value="">Seleccione un municipio</option>
+        <option value="caleta">Caleta</option>
+        <option value="cumayasa">Cumayasa</option>
+        <option value="guaymate">Guaymate</option>
+        <option value="la-romana">La Romana</option>
+        <option value="villa-hermosa">Villa Hermosa</option>
+      </select>
+    </div>
   );
 };
 

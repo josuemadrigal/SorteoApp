@@ -323,7 +323,7 @@ const RegistroPadres: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-green-900 p-4 ">
       {/* <WhatsAppButton /> */}
       <div className="w-full max-w-2xl">
         <div className="bg-white rounded-xl shadow-2xl overflow-hidden p-6">
