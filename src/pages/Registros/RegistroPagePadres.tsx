@@ -2,18 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import InputMask from "react-input-mask";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  MenuItem,
-  Modal,
-  Select,
-  TextField,
-  Typography,
-} from "@mui/material";
 import RegistrosService from "../../services/RegistrosService";
 import WhatsAppButton from "../../components/WhatsAppButton";
 
@@ -43,7 +31,7 @@ const showError = (title: string) => {
     icon: "error",
     title,
     showConfirmButton: false,
-    timer: 2000,
+    timer: 1000,
   });
 };
 
@@ -53,7 +41,7 @@ const showSuccess = (title: string) => {
     icon: "success",
     title,
     showConfirmButton: false,
-    timer: 2000,
+    timer: 3000,
   });
 };
 
@@ -156,7 +144,6 @@ const RegistroPadres: React.FC = () => {
           serieCedula === "295" ||
           serieCedula === "103"
         ) {
-          //setIsSubmitting(true);
           setNombreDB(nombre);
           setCedulaNotFound(true);
           setNombre("");
@@ -182,7 +169,7 @@ const RegistroPadres: React.FC = () => {
             title: "Cédula no permitida",
             text: "Debe dirigirse a un centro de registración.",
             showConfirmButton: false,
-            timer: 6000,
+            timer: 30000,
           });
 
           reset({ ...defaultValues, municipio: municipioNombre });
@@ -203,7 +190,6 @@ const RegistroPadres: React.FC = () => {
     try {
       setIsSubmitting(true);
       console.log(data);
-      ``;
       const municipioValido =
         data.municipio === "la-romana" ||
         data.municipio === "caleta" ||
@@ -226,21 +212,11 @@ const RegistroPadres: React.FC = () => {
         return;
       }
 
-      // if (!validarMunicipio("la-romana", "LR")) return;
-      // if (!validarMunicipio("caleta", "CA")) return;
-      // if (!validarMunicipio("villa-hermosa", "VH")) return;
-      // if (!validarMunicipio("cumayasa", "CU")) return;
-      // if (!validarMunicipio("guaymate", "GU")) return;
-
       Swal.fire({
         title: "¿Están correctos sus datos?",
         html: ` <p> Nombre: <b>${data.nombre}</b></p>
                 <p> Cédula: <b>${data.cedula}</b></p>
-                
-                <p> Municipio: <b>${data.municipio}</b></p>
-                
-                `,
-
+                <p> Municipio: <b>${data.municipio}</b></p>`,
         icon: "question",
         showCancelButton: true,
         cancelButtonText: "Editar datos",
@@ -271,12 +247,6 @@ const RegistroPadres: React.FC = () => {
             setButtonText("Buscar");
           } else if (response.status === 206) {
             showError("Esta participando");
-            //reset({ ...defaultValues, municipio: municipioNombre });
-            //setNombre("");
-            //setCedula("");
-            //setCedulaNotFound(false);
-            // setCedulaParticipando(false);
-            // setButtonText("Buscar");
           } else if (response.status === 201) {
             showSuccess(
               `Registro de la cédula ${data.cedula} COMPLETADO (${data.nombre})`
@@ -327,50 +297,15 @@ const RegistroPadres: React.FC = () => {
   };
 
   const handleMunicipioChange = (
-    event: React.ChangeEvent<{ value: unknown }>
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    setMunicipio(event.target.value as string);
-    setValue("municipio", event.target.value as string);
+    setMunicipio(event.target.value);
+    setValue("municipio", event.target.value);
   };
 
   const handleBoletoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const boletoValue = event.target.value.toUpperCase();
-
     setValue("boleto", boletoValue);
-
-    // if (boletoValue.length === 5) {
-    //   setIsSubmitting(true);
-    //   setTimeout(() => {
-    //     window.open("https://www.instagram.com/eduardespiritusanto/", "_blank");
-    //     // Esperar 5 segundos y luego restablecer el estado o redirigir de vuelta
-    //     setTimeout(() => {
-    //       setIsSubmitting(false);
-    //       window.open("https://app.eduardespiritusanto.com/", "_blank");
-    //       // Código para volver a la página original o actualizar el estado necesario
-    //     }, 5000);
-    //   }, 2000);
-    // }
-
-    // setValue("boleto", boletoValue);
-    // if (boletoValue.startsWith("LR")) {
-    //   setMunicipio("la-romana");
-    //   setValue("municipio", "la-romana");
-    // } else if (boletoValue.startsWith("CA")) {
-    //   setMunicipio("caleta");
-    //   setValue("municipio", "caleta");
-    // } else if (boletoValue.startsWith("VH")) {
-    //   setMunicipio("villa-hermosa");
-    //   setValue("municipio", "villa-hermosa");
-    // } else if (boletoValue.startsWith("CU")) {
-    //   setMunicipio("cumayasa");
-    //   setValue("municipio", "cumayasa");
-    // } else if (boletoValue.startsWith("GU")) {
-    //   setMunicipio("guaymate");
-    //   setValue("municipio", "guaymate");
-    // } else {
-    //   setMunicipio("");
-    //   setValue("municipio", "ERROR");
-    // }
   };
 
   const registerSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -388,97 +323,26 @@ const RegistroPadres: React.FC = () => {
   };
 
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      style={{
-        minHeight: "100vh",
-        margin: 0,
-      }}
-    >
-      <WhatsAppButton />
-      <Grid item>
-        <Card
-          sx={{
-            padding: "5%",
-            minWidth: "100px",
-            maxWidth: "700px",
-            boxShadow: 20,
-          }}
-        >
-          <Box
-            component="img"
-            src="/registrate-aqui-app.jpeg"
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+      {/* <WhatsAppButton /> */}
+      <div className="w-full max-w-2xl">
+        <div className="bg-white rounded-xl shadow-2xl overflow-hidden p-6">
+          <img
+            src="/registrate-aqui-ap.jpeg"
             alt="Padres banner"
-            sx={{
-              height: "auto",
-              width: "100%",
-
-              borderRadius: "10px",
-            }}
+            className="w-full h-auto rounded-lg mb-6"
           />
 
-          <CardContent>
-            <form onSubmit={handleSubmit(registerSubmit)}>
-              {/* <InputMask
-                //mask="aa999999"
-                mask="99999"
-                placeholder="XXXXX"
-                maskChar=""
-                maskPlaceholder={null}
-                required
-                {...register("boleto", {
-                  required: "El número de boleta es obligatorio",
-                  pattern: {
-                    //value: /^[A-Za-z]{2}\d{6}$/,
-                    value: /^\d{5}$/,
-                    message: "Formato de boleta inválido",
-                  },
-                  minLength: 5,
-                  maxLength: 5,
-                })}
-                // inputRef={(node) => {
-                //   register(node);
-                //   inputRef.current = node;
-                // }}
-                onKeyDown={handleKeyPress}
-                onChange={handleBoletoChange}
-              >
-                {(inputProps) => (
-                  <TextField
-                    {...inputProps}
-                    variant="filled"
-                    color="success"
-                    type="text"
-                    error={!!errors.boleto}
-                    helperText={
-                      errors.boleto ? "Numero de boleto incorrecto" : ""
-                    }
-                    label="Número de boleta"
-                    sx={{
-                      minWidth: "100%",
-                      margin: "5px 5px 15px 0px",
-                      "& input": {
-                        textTransform: "uppercase",
-                      },
-                      minLength: 5,
-                      maxLength: 5,
-                    }}
-                    //inputRef={inputRef}
-                  />
-                )}
-              </InputMask> */}
+          <form onSubmit={handleSubmit(registerSubmit)} className="space-y-4">
+            <div className="relative">
               <InputMask
                 mask="999-9999999-9"
                 placeholder="___-_______-_"
                 maskChar=""
                 {...register("cedula", {
                   required: "La cédula obligatoria",
-
                   pattern: {
                     value: /^\d{3}-\d{7}-\d{1}$/,
-                    //value: /^(402|026)-\d{7}-\d{1}$/,
                     message: "Formato de cédula inválido",
                   },
                   minLength: 13,
@@ -487,69 +351,71 @@ const RegistroPadres: React.FC = () => {
                 })}
                 disabled={isSubmitting}
               >
-                {(inputProps) => (
-                  <TextField
+                {(inputProps: any) => (
+                  <input
                     {...inputProps}
-                    variant="filled"
-                    color="success"
-                    type="text"
-                    label="Cédula"
-                    sx={{
-                      minWidth: "100%",
-                      margin: "5px 5px 15px 0px",
-                      minLength: 13,
-                      maxLength: 13,
-                    }}
+                    className={`w-full p-3 rounded-lg border ${
+                      errors.cedula ? "border-red-500" : "border-gray-300"
+                    } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
                     onKeyDown={handleKeyPress}
                   />
                 )}
               </InputMask>
-              {isSubmitting && (
-                <Typography
-                  variant="h6"
-                  sx={{
-                    margin: "5px 5px 15px 0px",
-                    fontSize: "13px",
-                    color: "sandybrown",
-                  }}
-                >
-                  Estamos buscando su cédula en la base de datos. Mientras puede
-                  ir llenando los demás datos del formulario.
-                </Typography>
+              <label className="absolute left-3 -top-2 bg-white px-1 text-sm text-gray-500">
+                Cédula
+              </label>
+              {errors.cedula && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.cedula.message}
+                </p>
               )}
-              {nombre && !cedulaNotFound && !cedulaParticipando && (
-                <Typography variant="h6" sx={{ margin: "5px 5px 15px 0px" }}>
-                  Nombre: {nombre}
-                </Typography>
-              )}
-              {cedulaNotFound && (
-                <TextField
+            </div>
+
+            {isSubmitting && (
+              <p className="text-sm text-yellow-600">
+                Estamos buscando su cédula en la base de datos. Mientras puede
+                ir llenando los demás datos del formulario.
+              </p>
+            )}
+
+            {nombre && !cedulaNotFound && !cedulaParticipando && (
+              <div className="p-3 bg-gray-100 rounded-lg">
+                <p className="font-medium">Nombre: {nombre}</p>
+              </div>
+            )}
+
+            {cedulaNotFound && (
+              <div className="relative">
+                <input
                   {...register("nombre", {
                     required: errorMessages.nombreRequerido,
                     validate: (value) =>
                       /^[A-Za-z\s]{3,}(\s[A-Za-z\s]{3,})+$/.test(value) ||
                       "Debe ingresar nombre y apellido, o nombre completo",
                   })}
-                  variant="filled"
-                  color="success"
-                  type="text"
-                  label="Nombre y Apellido"
-                  sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                  inputRef={nombreRef}
+                  className={`w-full p-3 rounded-lg border ${
+                    errors.nombre ? "border-red-500" : "border-gray-300"
+                  } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
+                  placeholder="Nombre y Apellido"
+                  ref={nombreRef}
                   onInput={(e) => {
                     const input = e.target as HTMLInputElement;
                     input.value = input.value.replace(/[^a-zA-Z\s]/g, "");
                   }}
                   disabled={isSubmitting}
-                  error={!!errors.nombre}
-                  helperText={errors.nombre ? errors.nombre.message : ""}
                 />
-              )}
+                {errors.nombre && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.nombre.message}
+                  </p>
+                )}
+              </div>
+            )}
+
+            <div className="relative">
               <InputMask
                 mask="(999) 999-9999"
                 maskChar=""
-                maskPlaceholder={null}
-                required
                 {...register("telefono", {
                   required: "El número de teléfono es obligatorio",
                   pattern: {
@@ -560,83 +426,79 @@ const RegistroPadres: React.FC = () => {
                   maxLength: 14,
                 })}
               >
-                {(inputProps) => (
-                  <TextField
+                {(inputProps: any) => (
+                  <input
                     {...inputProps}
-                    variant="filled"
-                    color="success"
-                    type="text"
-                    error={!!errors.telefono}
-                    helperText={errors.telefono ? errors.telefono.message : ""}
-                    label="Número de celular"
-                    sx={{
-                      minWidth: "100%",
-                      margin: "5px 5px 15px 0px",
-                      "& input": {
-                        textTransform: "uppercase",
-                      },
-                      minLength: 8,
-                      maxLength: 8,
-                    }}
+                    className={`w-full p-3 rounded-lg border ${
+                      errors.telefono ? "border-red-500" : "border-gray-300"
+                    } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
+                    placeholder="Número de celular"
                   />
                 )}
               </InputMask>
+              <label className="absolute left-3 -top-2 bg-white px-1 text-sm text-gray-500">
+                Teléfono
+              </label>
+              {errors.telefono && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.telefono.message}
+                </p>
+              )}
+            </div>
 
-              <Select
+            <div className="relative">
+              <select
                 value={municipio}
                 onChange={handleMunicipioChange}
-                displayEmpty
-                variant="filled"
-                color="success"
-                sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                inputProps={{ "aria-label": "Without label" }}
-                //disabled
+                className={`w-full p-3 rounded-lg border ${
+                  errors.municipio ? "border-red-500" : "border-gray-300"
+                } focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none bg-white`}
               >
-                <MenuItem value="" disabled>
+                <option value="" disabled>
                   Seleccione el municipio
-                </MenuItem>
-                <MenuItem value="la-romana">La Romana</MenuItem>
-                <MenuItem value="caleta">Caleta</MenuItem>
-                <MenuItem value="guaymate">Guaymate</MenuItem>
-                <MenuItem value="villa-hermosa">Villa Hermosa</MenuItem>
-                <MenuItem value="cumayasa">Cumayasa</MenuItem>
-              </Select>
-              <Button
-                variant="contained"
-                color={buttonText === "Buscar" ? "info" : "success"}
-                type="submit"
-                sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                disabled={isSubmitting || cedulaParticipando}
-              >
-                {buttonText}
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-        <Modal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-          aria-labelledby="modal-title"
-          aria-describedby="modal-description"
-        >
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            minHeight="100vh"
-            padding={2}
-          >
-            <Card style={{ width: "80%", maxHeight: "80vh", overflow: "auto" }}>
-              <CardContent>
-                <Typography variant="h6" align="center" gutterBottom>
-                  Redireccionando a Instagram...
-                </Typography>
-              </CardContent>
-            </Card>
-          </Box>
-        </Modal>
-      </Grid>
-    </Grid>
+                </option>
+                <option value="la-romana">La Romana</option>
+                <option value="caleta">Caleta</option>
+                <option value="guaymate">Guaymate</option>
+                <option value="villa-hermosa">Villa Hermosa</option>
+                <option value="cumayasa">Cumayasa</option>
+              </select>
+              <label className="absolute left-3 -top-2 bg-white px-1 text-sm text-gray-500">
+                Municipio
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              className={`w-full p-3 rounded-lg font-medium text-white ${
+                buttonText === "Buscar"
+                  ? "bg-blue-500 hover:bg-blue-600"
+                  : "bg-green-500 hover:bg-green-600"
+              } transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                buttonText === "Buscar"
+                  ? "focus:ring-blue-500"
+                  : "focus:ring-green-500"
+              } disabled:opacity-50`}
+              disabled={isSubmitting || cedulaParticipando}
+            >
+              {buttonText}
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg w-full max-w-md max-h-[80vh] overflow-auto">
+            <div className="p-6 text-center">
+              <h3 className="text-lg font-medium mb-4">
+                Redireccionando a Instagram...
+              </h3>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

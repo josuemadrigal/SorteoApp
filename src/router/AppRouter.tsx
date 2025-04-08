@@ -22,11 +22,12 @@ import Codigo from "../screens/Codigo";
 export const AppRouter = (): any => {
   return (
     <Routes>
-      <Route path="/" element={<RegistroPadres />} />
       <Route path="/home" element={<Home />} />
+      <Route path="/registroG" element={<RegistroPadres />} />
+      {/* <Route path="/" element={<RegistroPadres />} />
       <Route path="/select" element={<SelectMunicio />} />
       <Route path="/registro" element={<SelectMunicio />} />
-      <Route path="/registroG" element={<RegistroPadres />} />
+      
       <Route path="/reg-premios" element={<RegistroPremios />} />
       <Route path="/reg-cedula" element={<RegistroCedula />} />
       <Route path="/reg-ronda" element={<RegistroRonda />} />
@@ -39,7 +40,7 @@ export const AppRouter = (): any => {
       <Route path="/view-Ganadores" element={<ViewGanadoresBoleta />} />
       <Route path="/viewRondas" element={<ViewPremios />} />
       <Route path="/registrados" element={<Codigo />} />
-      <Route path="/view" element={<View />} />
+      <Route path="/view" element={<View />} /> */}
     </Routes>
   );
 };

@@ -1,18 +1,15 @@
-
-import { AppRouter } from './router/AppRouter'
-import { AppLayout } from './shared/layouts/template'
-
+import { AppRouter } from "./router/AppRouter";
 
 function App() {
   //const [count, setCount] = useState(0)
 
   return (
     <>
-    <AppLayout >
-      <AppRouter/>
-    </AppLayout>
+      {/* <AppLayout > */}
+      <AppRouter />
+      {/* </AppLayout> */}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

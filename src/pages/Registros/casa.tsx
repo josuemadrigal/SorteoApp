@@ -1,571 +1,501 @@
-import {
-  Box,
-  Typography,
-  useTheme,
-  useMediaQuery,
-  Container,
-  Avatar,
-  styled,
-  alpha,
-  Button,
-  Stack,
-  Grid,
-  Paper,
-} from "@mui/material";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Casino,
-  LocationCity,
-  EmojiEvents,
-  Badge,
-  Autorenew,
-  Visibility,
-  MilitaryTech,
-  Tv,
-  VerifiedUser,
-  Dashboard,
-  Settings,
-  Notifications,
-  AccountCircle,
-} from "@mui/icons-material";
-
-// Componente de tarjeta estilizada en 3D personalizado
-const Tarjeta3D = styled(Paper)(({ theme }) => ({
-  position: "relative",
-  borderRadius: "24px",
-  overflow: "hidden",
-  transformStyle: "preserve-3d",
-  transition: "all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-  boxShadow: `0 25px 50px -12px ${alpha(theme.palette.primary.main, 0.25)}`,
-  "&:hover": {
-    transform: "translateY(-10px) rotateX(5deg)",
-    boxShadow: `0 35px 60px -10px ${alpha(theme.palette.primary.main, 0.4)}`,
-    "&::before": {
-      opacity: 1,
-    },
-    "& .contenido-tarjeta": {
-      transform: "translateZ(20px)",
-    },
-    "& .icono-tarjeta": {
-      transform: "translateZ(30px) scale(1.1)",
-    },
-  },
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    inset: 0,
-    background: `linear-gradient(135deg, ${alpha(
-      theme.palette.primary.main,
-      0.2
-    )} 0%, ${alpha(theme.palette.secondary.main, 0.2)} 100%)`,
-    opacity: 0,
-    transition: "opacity 0.5s ease",
-    zIndex: 1,
-  },
-}));
-
-// Componente de barra de navegación flotante
-const NavegacionFlotante = styled(Box)(({ theme }) => ({
-  position: "fixed",
-  top: 20,
-  right: 20,
-  zIndex: 1000,
-  display: "flex",
-  gap: 8,
-  "& .MuiButton-root": {
-    minWidth: 40,
-    height: 40,
-    borderRadius: "12px",
-    padding: 0,
-    backgroundColor: alpha(theme.palette.background.paper, 0.8),
-    backdropFilter: "blur(10px)",
-    border: `1px solid ${alpha(theme.palette.divider, 0.2)}`,
-    color: theme.palette.text.primary,
-    boxShadow: theme.shadows[2],
-    "&:hover": {
-      backgroundColor: alpha(theme.palette.primary.main, 0.1),
-      color: theme.palette.primary.main,
-    },
-  },
-}));
+  BanknotesIcon,
+  MapPinIcon,
+  TrophyIcon,
+  IdentificationIcon,
+  ArrowPathIcon,
+  EyeIcon,
+  AcademicCapIcon,
+  ShieldCheckIcon,
+  SquaresPlusIcon,
+  Cog6ToothIcon,
+  BellAlertIcon,
+  UserCircleIcon,
+  ComputerDesktopIcon,
+  SparklesIcon,
+  ChartBarIcon,
+  UsersIcon,
+} from "@heroicons/react/24/solid";
 
 const Home = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
 
   const funcionalidades = [
     {
       titulo: "Gestión de Lotería",
-      icono: <Casino color="primary" sx={{ fontSize: 40 }} />,
+      icono: <BanknotesIcon className="text-blue-500" />,
       elementos: [
         {
           etiqueta: "Nueva Lotería",
           ruta: "registroG",
-          icono: <Casino sx={{ fontSize: 30 }} />,
+          icono: <BanknotesIcon />,
           descripcion: "Crear y gestionar sorteos de lotería",
-          color: theme.palette.primary.main,
+          color: "blue",
+          destacado: true,
         },
         {
           etiqueta: "Datos Municipales",
           ruta: "registro",
-          icono: <LocationCity sx={{ fontSize: 30 }} />,
+          icono: <MapPinIcon />,
           descripcion: "Gestionar registros municipales",
-          color: theme.palette.info.main,
+          color: "sky",
         },
         {
           etiqueta: "Centro de Premios",
           ruta: "reg-premios",
-          icono: <EmojiEvents sx={{ fontSize: 30 }} />,
+          icono: <TrophyIcon />,
           descripcion: "Configurar asignaciones de premios",
-          color: theme.palette.success.main,
+          color: "emerald",
+          destacado: true,
         },
         {
           etiqueta: "Verificación de ID",
           ruta: "reg-cedula",
-          icono: <Badge sx={{ fontSize: 30 }} />,
+          icono: <IdentificationIcon />,
           descripcion: "Verificar identidades de participantes",
-          color: theme.palette.warning.main,
+          color: "amber",
         },
         {
           etiqueta: "Configuración de Ronda",
           ruta: "reg-ronda",
-          icono: <Autorenew sx={{ fontSize: 30 }} />,
+          icono: <ArrowPathIcon />,
           descripcion: "Configurar rondas de lotería",
-          color: theme.palette.error.main,
+          color: "rose",
         },
       ],
     },
     {
       titulo: "Visualización",
-      icono: <Visibility color="secondary" sx={{ fontSize: 40 }} />,
+      icono: <EyeIcon className="text-indigo-500" />,
       elementos: [
         {
           etiqueta: "Galería de Premios",
           ruta: "viewPremios",
-          icono: <EmojiEvents sx={{ fontSize: 30 }} />,
+          icono: <TrophyIcon className="text-esmerald-600" />,
           descripcion: "Explorar todos los premios disponibles",
-          color: theme.palette.secondary.main,
+          color: "violet",
         },
         {
           etiqueta: "Salón de Ganadores",
           ruta: "viewGanadores",
-          icono: <MilitaryTech sx={{ fontSize: 30 }} />,
+          icono: <AcademicCapIcon className="text-esmerald-600" />,
           descripcion: "Ver todos los ganadores de la lotería",
-          color: theme.palette.success.main,
+          color: "emerald",
+          destacado: true,
         },
         {
           etiqueta: "Pantalla en Vivo",
           ruta: "view-Ganadores",
-          icono: <Tv sx={{ fontSize: 30 }} />,
+          icono: <ComputerDesktopIcon className="text-esmerald-600" />,
           descripcion: "Visualización pública de ganadores",
-          color: theme.palette.info.main,
+          color: "sky",
         },
         {
           etiqueta: "Validación",
           ruta: "verificar",
-          icono: <VerifiedUser sx={{ fontSize: 30 }} />,
+          icono: <ShieldCheckIcon className="text-esmerald-600" />,
           descripcion: "Verificar detalles de participantes",
-          color: theme.palette.warning.main,
+          color: "amber",
         },
       ],
     },
   ];
 
   const estadisticas = [
-    { valor: "24", etiqueta: "Loterías Activas" },
-    { valor: "1,842", etiqueta: "Participantes" },
-    { valor: "58", etiqueta: "Premios Disponibles" },
-    { valor: "12", etiqueta: "Municipios" },
+    {
+      valor: "24",
+      etiqueta: "Loterías Activas",
+      icono: <ChartBarIcon />,
+      tendencia: "↑ 12%",
+      iconColor: "blue", // Added explicit color
+    },
+    {
+      valor: "1,842",
+      etiqueta: "Participantes",
+      icono: <UsersIcon />,
+      tendencia: "↑ 5%",
+      iconColor: "sky",
+    },
+    {
+      valor: "58",
+      etiqueta: "Premios Disponibles",
+      icono: <TrophyIcon />,
+      tendencia: "→",
+      iconColor: "emerald",
+    },
+    {
+      valor: "12",
+      etiqueta: "Municipios",
+      icono: <MapPinIcon />,
+      tendencia: "↑ 3%",
+      iconColor: "amber",
+    },
   ];
 
   const manejarNavegacion = (ruta: string) => {
     navigate(`/${ruta}`);
   };
 
-  // Animación de tarjeta 3D
+  // Animaciones mejoradas
   const animacionTarjeta = {
-    oculto: { opacity: 0, y: 50 },
+    oculto: { opacity: 0, y: 30, rotateX: 15 },
     visible: {
       opacity: 1,
       y: 0,
+      rotateX: 0,
       transition: {
-        duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
+        duration: 0.8,
+        ease: [0.2, 0.8, 0.4, 1],
       },
     },
     hover: {
-      y: -10,
+      y: -15,
+      rotateX: 5,
+      scale: 1.03,
       transition: { duration: 0.3 },
     },
   };
 
-  return (
-    <Box
-      sx={{
-        background: `radial-gradient(circle at top right, ${alpha(
-          theme.palette.primary.light,
-          0.1
-        )}, ${alpha(theme.palette.background.default, 1)} 70%)`,
-        minHeight: "100vh",
-        pb: 15,
-      }}
-    >
-      {/* Navegación flotante */}
-      <NavegacionFlotante>
-        <Button>
-          <Dashboard />
-        </Button>
-        <Button>
-          <Notifications />
-        </Button>
-        <Button>
-          <Settings />
-        </Button>
-        <Button>
-          <AccountCircle />
-        </Button>
-      </NavegacionFlotante>
+  const animacionEntrada = {
+    oculto: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.6, 0.05, 0.3, 0.95],
+      },
+    },
+  };
 
-      <Container maxWidth="xl" sx={{ pt: 12, pb: 8 }}>
-        {/* Sección Hero */}
-        <Box
-          sx={{
-            textAlign: "center",
-            mb: 10,
-            position: "relative",
-          }}
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 pb-20 relative overflow-hidden">
+      {/* Efectos de fondo */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10">
+          <div className="absolute top-20 left-10 w-80 h-80 rounded-full bg-blue-200 blur-3xl"></div>
+          <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-indigo-200 blur-3xl"></div>
+        </div>
+      </div>
+
+      {/* Navegación flotante premium */}
+      <div className="fixed top-5 right-5 z-50 flex gap-3">
+        <motion.button
+          whileHover={{ y: -2, scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur-md border border-gray-200/80 text-gray-700 shadow-lg hover:shadow-xl hover:bg-blue-50 hover:text-blue-500 transition-all"
         >
-          <Box
-            component={motion.div}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            sx={{
-              position: "absolute",
-              top: -100,
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "600px",
-              height: "600px",
-              background: `radial-gradient(circle, ${alpha(
-                theme.palette.primary.main,
-                0.1
-              )} 0%, transparent 70%)`,
-              zIndex: -1,
-            }}
+          <SquaresPlusIcon className="w-5 h-5 mx-auto" />
+        </motion.button>
+        <motion.button
+          whileHover={{ y: -2, scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur-md border border-gray-200/80 text-gray-700 shadow-lg hover:shadow-xl hover:bg-amber-50 hover:text-amber-500 transition-all relative"
+        >
+          <BellAlertIcon className="w-5 h-5 mx-auto" />
+          <span className="absolute top-1 right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+        </motion.button>
+        <motion.button
+          whileHover={{ y: -2, scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="w-12 h-12 rounded-xl bg-white/90 backdrop-blur-md border border-gray-200/80 text-gray-700 shadow-lg hover:shadow-xl hover:bg-gray-100 hover:text-gray-800 transition-all"
+        >
+          <Cog6ToothIcon className="w-5 h-5 mx-auto" />
+        </motion.button>
+        <motion.button
+          whileHover={{ y: -2, scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-500 text-white shadow-lg hover:shadow-xl hover:from-blue-600 hover:to-indigo-600 transition-all"
+        >
+          <UserCircleIcon className="w-5 h-5 mx-auto" />
+        </motion.button>
+      </div>
+
+      <div className="container mx-auto px-5 pt-16 pb-10 max-w-7xl relative z-10">
+        {/* Sección Hero con animaciones mejoradas */}
+        <motion.div
+          initial="oculto"
+          animate="visible"
+          variants={animacionEntrada}
+          className="text-center mb-16"
+        >
+          <motion.div
+            variants={animacionEntrada}
+            className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/3 w-[800px] h-[800px] bg-gradient-radial from-blue-200/20 via-transparent to-transparent opacity-60 pointer-events-none"
           />
 
-          <Typography
-            variant="h2"
-            component={motion.h1}
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <motion.div
+            variants={animacionEntrada}
+            transition={{ delay: 0.1 }}
+            className="inline-flex items-center justify-center mb-6 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md border border-gray-200/50 shadow-sm text-sm font-medium text-gray-600"
+          >
+            <SparklesIcon className="w-4 h-4 mr-2 text-amber-400" />
+            Versión Premium 2.0
+          </motion.div>
+
+          <motion.h1
+            variants={animacionEntrada}
             transition={{ delay: 0.2 }}
-            sx={{
-              fontWeight: 900,
-              letterSpacing: "1px",
-              mb: 3,
-              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              fontSize: isMobile ? "2.5rem" : "4rem",
-              lineHeight: 1.2,
-            }}
+            className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-transparent bg-clip-text leading-tight"
           >
-            Gestión de Lotería Pro
-          </Typography>
+            Plataforma de Gestión
+            <br />
+            de Lotería <span className="whitespace-nowrap">Premium</span>
+          </motion.h1>
 
-          <Typography
-            variant="h6"
-            component={motion.p}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+          <motion.p
+            variants={animacionEntrada}
+            transition={{ delay: 0.3 }}
+            className="max-w-2xl mx-auto text-lg md:text-xl text-gray-600 mb-8"
+          >
+            Solución integral para la administración profesional de sorteos,
+            premios y validación de ganadores con tecnología de vanguardia.
+          </motion.p>
+
+          {/* Estadísticas mejoradas */}
+          <motion.div
+            variants={animacionEntrada}
             transition={{ delay: 0.4 }}
-            sx={{
-              maxWidth: 700,
-              mx: "auto",
-              mb: 6,
-              fontWeight: 400,
-              color: "text.secondary",
-            }}
-          >
-            Plataforma avanzada para el control completo de las operaciones de
-            lotería, distribución de premios y verificación de ganadores.
-          </Typography>
-
-          {/* Estadísticas */}
-          <Box
-            component={motion.div}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              gap: 4,
-              flexWrap: "wrap",
-            }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto"
           >
             {estadisticas.map((estadistica, indice) => (
-              <Box
+              <motion.div
                 key={estadistica.etiqueta}
-                component={motion.div}
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.7 + indice * 0.1 }}
-                sx={{
-                  textAlign: "center",
-                  p: 3,
-                  minWidth: 180,
-                  background: alpha(theme.palette.background.paper, 0.7),
-                  backdropFilter: "blur(10px)",
-                  borderRadius: "18px",
-                  border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-                  boxShadow: `0 8px 32px ${alpha(
-                    theme.palette.primary.main,
-                    0.1
-                  )}`,
-                }}
+                variants={animacionEntrada}
+                transition={{ delay: 0.5 + indice * 0.1 }}
+                className="p-4 bg-white/80 backdrop-blur-md rounded-xl border border-gray-200/50 shadow-sm hover:shadow-md transition-all"
               >
-                <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+                <div className="flex items-center justify-between mb-2">
+                  <div
+                    className={`p-2 rounded-lg bg-${estadistica.iconColor}-100`}
+                  >
+                    {React.cloneElement(estadistica.icono, {
+                      className: `w-5 h-5 text-${estadistica.iconColor}-600`,
+                    })}
+                  </div>
+                  <span
+                    className={`text-xs font-medium px-2 py-1 rounded-full ${
+                      estadistica.tendencia.includes("↑")
+                        ? "bg-green-100 text-green-800"
+                        : estadistica.tendencia.includes("↓")
+                        ? "bg-red-100 text-red-800"
+                        : "bg-gray-100 text-gray-800"
+                    }`}
+                  >
+                    {estadistica.tendencia}
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900">
                   {estadistica.valor}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {estadistica.etiqueta}
-                </Typography>
-              </Box>
+                </h3>
+                <p className="text-sm text-gray-500">{estadistica.etiqueta}</p>
+              </motion.div>
             ))}
-          </Box>
-        </Box>
+          </motion.div>
+        </motion.div>
 
-        {/* Secciones de Funcionalidades */}
-        {funcionalidades.map((seccion, indiceSeccion) => (
-          <Box key={seccion.titulo} sx={{ mb: 12 }}>
-            <Box
-              component={motion.div}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 + indiceSeccion * 0.1 }}
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 3,
-                mb: 6,
-              }}
+        {/* Secciones de Funcionalidades con diseño premium */}
+        <AnimatePresence>
+          {funcionalidades.map((seccion, indiceSeccion) => (
+            <motion.section
+              key={seccion.titulo}
+              initial="oculto"
+              animate="visible"
+              variants={animacionEntrada}
+              transition={{ delay: 0.6 + indiceSeccion * 0.2 }}
+              className="mb-16"
             >
-              <Avatar
-                sx={{
-                  width: 60,
-                  height: 60,
-                  bgcolor: alpha(
-                    seccion.icono.props.color
-                      ? theme.palette[seccion.icono.props.color].main
-                      : theme.palette.primary.main,
-                    0.1
-                  ),
-                  color:
-                    seccion.icono.props.color || theme.palette.primary.main,
-                }}
+              <motion.div
+                variants={animacionEntrada}
+                className="flex items-center justify-center gap-3 mb-8"
               >
-                {seccion.icono}
-              </Avatar>
-              <Typography
-                variant="h3"
-                sx={{
-                  fontWeight: 700,
-                  background: `linear-gradient(90deg, ${
-                    seccion.icono.props.color
-                      ? theme.palette[seccion.icono.props.color].main
-                      : theme.palette.primary.main
-                  }, ${theme.palette.text.primary})`,
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  fontSize: isMobile ? "2rem" : "2.5rem",
-                }}
-              >
-                {seccion.titulo}
-              </Typography>
-            </Box>
+                <div
+                  className={`p-3 rounded-xl bg-gradient-to-br from-${
+                    seccion.icono.props.className.includes("text-blue")
+                      ? "blue"
+                      : "indigo"
+                  }-100 to-${
+                    seccion.icono.props.className.includes("text-blue")
+                      ? "blue"
+                      : "indigo"
+                  }-50 border border-${
+                    seccion.icono.props.className.includes("text-blue")
+                      ? "blue"
+                      : "indigo"
+                  }-200/50 shadow-sm`}
+                >
+                  {React.cloneElement(seccion.icono, {
+                    className: `w-8 h-8 ${seccion.icono.props.className}`,
+                  })}
+                </div>
+                <h2
+                  className={`text-2xl md:text-3xl font-bold bg-gradient-to-r from-${
+                    seccion.icono.props.className.includes("text-blue")
+                      ? "blue"
+                      : "indigo"
+                  }-600 to-${
+                    seccion.icono.props.className.includes("text-blue")
+                      ? "blue"
+                      : "indigo"
+                  }-800 text-transparent bg-clip-text`}
+                >
+                  {seccion.titulo}
+                </h2>
+              </motion.div>
 
-            <Grid container spacing={isMobile ? 3 : 6} justifyContent="center">
-              {seccion.elementos.map((elemento, indiceElemento) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={elemento.ruta}>
-                  <Tarjeta3D
-                    component={motion.div}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+                {seccion.elementos.map((elemento, indiceElemento) => (
+                  <motion.div
+                    key={elemento.ruta}
                     variants={animacionTarjeta}
                     initial="oculto"
                     animate="visible"
                     whileHover="hover"
-                    custom={indiceElemento}
+                    transition={{ delay: 0.1 * indiceElemento }}
                     onClick={() => manejarNavegacion(elemento.ruta)}
-                    sx={{
-                      height: "100%",
-                      background: `linear-gradient(135deg, ${alpha(
-                        theme.palette.background.paper,
-                        0.9
-                      )} 0%, ${alpha(
-                        theme.palette.background.default,
-                        0.9
-                      )} 100%)`,
-                    }}
+                    className={`relative rounded-2xl overflow-hidden cursor-pointer group ${
+                      elemento.destacado ? "sm:col-span-2" : ""
+                    }`}
                   >
-                    <Box
-                      className="contenido-tarjeta"
-                      sx={{
-                        p: 4,
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        textAlign: "center",
-                        transition: "all 0.5s ease",
-                      }}
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br from-${elemento.color}-500 to-${elemento.color}-600 opacity-5 group-hover:opacity-10 transition-all`}
+                    ></div>
+                    <div
+                      className={`absolute top-0 right-0 w-16 h-16 rounded-bl-2xl bg-${elemento.color}-500/10 backdrop-blur-sm border-l border-b border-${elemento.color}-500/20 flex items-center justify-center`}
                     >
-                      <Avatar
-                        className="icono-tarjeta"
-                        sx={{
-                          mb: 3,
-                          width: 70,
-                          height: 70,
-                          bgcolor: alpha(elemento.color, 0.1),
-                          color: elemento.color,
-                          transition: "all 0.5s ease",
-                        }}
-                      >
-                        {elemento.icono}
-                      </Avatar>
-                      <Typography
-                        variant="h5"
-                        component="h3"
-                        sx={{
-                          fontWeight: 700,
-                          mb: 2,
-                          color: "text.primary",
-                        }}
-                      >
-                        {elemento.etiqueta}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{
-                          mb: 3,
-                          flexGrow: 1,
-                        }}
-                      >
-                        {elemento.descripcion}
-                      </Typography>
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                          borderRadius: "12px",
-                          px: 3,
-                          borderWidth: "2px",
-                          "&:hover": {
-                            borderWidth: "2px",
-                          },
-                        }}
-                      >
-                        Acceder
-                      </Button>
-                    </Box>
-                  </Tarjeta3D>
-                </Grid>
-              ))}
-            </Grid>
-          </Box>
-        ))}
+                      {React.cloneElement(elemento.icono, {
+                        className: `w-5 h-5 text-${elemento.color}-500`,
+                      })}
+                    </div>
 
-        {/* Sección CTA */}
-        <Box
-          component={motion.div}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+                    <div className="relative p-6 h-full flex flex-col bg-white/90 backdrop-blur-sm border border-gray-200/70 rounded-2xl shadow-sm hover:shadow-md transition-all">
+                      <div
+                        className={`w-14 h-14 rounded-lg bg-${elemento.color}-100 flex items-center justify-center mb-4 transition-transform group-hover:scale-110 group-hover:rotate-3`}
+                      >
+                        {React.cloneElement(elemento.icono, {
+                          className: `w-6 h-6 text-${elemento.color}-600`,
+                        })}
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        {elemento.etiqueta}
+                      </h3>
+                      <p className="text-gray-600 mb-5">
+                        {elemento.descripcion}
+                      </p>
+                      <div className="mt-auto">
+                        <button
+                          className={`px-4 py-2 rounded-lg text-sm font-medium bg-${elemento.color}-100 text-${elemento.color}-700 hover:bg-${elemento.color}-200 transition-all flex items-center gap-2`}
+                        >
+                          Acceder
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.section>
+          ))}
+        </AnimatePresence>
+
+        {/* Sección CTA Premium */}
+        <motion.section
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          sx={{
-            mt: 15,
-            p: 6,
-            borderRadius: "24px",
-            background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
-            color: "common.white",
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              top: -100,
-              right: -100,
-              width: "300px",
-              height: "300px",
-              background: `radial-gradient(circle, ${alpha(
-                theme.palette.common.white,
-                0.1
-              )} 0%, transparent 70%)`,
-              borderRadius: "50%",
-            },
-          }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="mt-20 p-8 md:p-10 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 text-white relative overflow-hidden"
         >
-          <Typography
-            variant="h3"
-            sx={{ fontWeight: 800, mb: 2, zIndex: 1, position: "relative" }}
-          >
-            ¿Listo para transformar su sistema de lotería?
-          </Typography>
-          <Typography
-            variant="h6"
-            sx={{ mb: 4, opacity: 0.9, zIndex: 1, position: "relative" }}
-          >
-            Experimente hoy la plataforma de gestión de lotería más avanzada.
-          </Typography>
-          <Stack
-            direction="row"
-            spacing={2}
-            justifyContent="center"
-            sx={{ zIndex: 1, position: "relative" }}
-          >
-            <Button
-              variant="contained"
-              color="secondary"
-              size="large"
-              sx={{
-                borderRadius: "12px",
-                px: 4,
-                fontWeight: 700,
-                boxShadow: `0 8px 24px ${alpha(
-                  theme.palette.secondary.main,
-                  0.3
-                )}`,
-              }}
-            >
-              Comenzar
-            </Button>
-            <Button
-              variant="outlined"
-              color="inherit"
-              size="large"
-              sx={{
-                borderRadius: "12px",
-                px: 4,
-                fontWeight: 700,
-                borderWidth: "2px",
-                "&:hover": {
-                  borderWidth: "2px",
-                  backgroundColor: alpha(theme.palette.common.white, 0.1),
-                },
-              }}
-            >
-              Más información
-            </Button>
-          </Stack>
-        </Box>
-      </Container>
-    </Box>
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-full opacity-20">
+              <div className="absolute top-1/4 left-1/4 w-48 h-48 rounded-full bg-blue-500 blur-3xl opacity-30"></div>
+              <div className="absolute bottom-1/3 right-1/4 w-64 h-64 rounded-full bg-indigo-500 blur-3xl opacity-30"></div>
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-gray-900/30"></div>
+          </div>
+
+          <div className="relative z-10 text-center max-w-4xl mx-auto">
+            <div className="inline-flex items-center justify-center mb-4 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-sm font-medium text-white">
+              <SparklesIcon className="w-4 h-4 mr-2 text-amber-300" />
+              ¿Listo para la transformación?
+            </div>
+            <h3 className="text-3xl md:text-4xl font-bold mb-4">
+              Lleve su gestión de lotería al siguiente nivel
+            </h3>
+            <p className="text-lg text-gray-300 mb-8">
+              Descubra cómo nuestra plataforma puede optimizar sus operaciones y
+              mejorar la experiencia de sus participantes.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <motion.button
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
+              >
+                Comenzar ahora
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </motion.button>
+              <motion.button
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="px-8 py-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 text-white font-semibold shadow-sm hover:bg-white/20 hover:shadow-md transition-all flex items-center justify-center gap-2"
+              >
+                Ver demostración
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                  />
+                </svg>
+              </motion.button>
+            </div>
+          </div>
+        </motion.section>
+      </div>
+    </div>
   );
 };
 
