@@ -18,6 +18,7 @@ import HomePadres from "../pages/Registros/padres";
 import RegistroPadres from "../pages/Registros/RegistroPagePadres";
 import ViewRegistros from "../screens/ViewRegistros";
 import Codigo from "../screens/Codigo";
+import ViewRondas from "../screens/ViewRondas";
 
 export const AppRouter = (): any => {
   return (
@@ -27,12 +28,15 @@ export const AppRouter = (): any => {
       <Route path="/select" element={<SelectMunicio />} />
       <Route path="/registro/:id" element={<Registro />} />
       <Route path="/consulta" element={<Consulta />} />
+      <Route path="/reg-ronda" element={<RegistroRonda />} />
+      <Route path="/viewRondas" element={<ViewRondas />} />
+
       {/* <Route path="/" element={<RegistroPadres />} />
       
       
       <Route path="/reg-premios" element={<RegistroPremios />} />
       <Route path="/reg-cedula" element={<RegistroCedula />} />
-      <Route path="/reg-ronda" element={<RegistroRonda />} />
+      
 
       <Route path="/registro/:id" element={<Registro />} />
   

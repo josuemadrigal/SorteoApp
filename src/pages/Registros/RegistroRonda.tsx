@@ -1,15 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2/dist/sweetalert2.all.js";
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
-
 import RegistrosService from "../../services/RegistrosService";
 import MunicipioSelect from "../../screens/ViewGanadores/components/MunicipioSelect";
 import PremioSelect from "../../screens/Consulta/components/PremioSelect";
@@ -68,7 +59,6 @@ export const RegistroRonda = () => {
   };
 
   const registerSubmit = async (objeto: any) => {
-    console.log("entro");
     const errorMessages = {
       invalidMunicipio: "Seleccione un municipio o distrito válido",
       invalidBoleta: "Ingrese un premio válido ",
@@ -97,8 +87,6 @@ export const RegistroRonda = () => {
 
     try {
       objeto.status = "activa";
-
-      console.log("hola: ", objeto);
 
       const response = await RegistrosService.regRonda(objeto);
 
@@ -130,23 +118,21 @@ export const RegistroRonda = () => {
     }
   };
 
-  const handleMunicipio = (event: React.ChangeEvent<{ value: unknown }>) => {
-    console.log(event.target.value as string);
-    setMunicipioT(event.target.value as string);
+  const handleMunicipio = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setMunicipioT(event.target.value);
     if (premio !== "") {
-      fetchRonda(event.target.value as string, premio);
+      fetchRonda(event.target.value, premio);
     }
   };
 
-  const handlePremio = async (event: React.ChangeEvent<{ value: unknown }>) => {
-    const selectedPremioValue = event.target.value as string;
+  const handlePremio = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedPremioValue = event.target.value;
     const selectedPremio = premios.find(
       (item) => item.slug_premio === selectedPremioValue
     );
     if (selectedPremio) {
       setPremio(selectedPremioValue);
       fetchRonda(municipioT, selectedPremioValue);
-      //fetchRonda();
     }
   };
 
@@ -157,88 +143,60 @@ export const RegistroRonda = () => {
   }, []);
 
   return (
-    <>
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        style={{
-          minHeight: "100vh",
-          margin: 0,
-        }}
-      >
-        <Grid item>
-          <Card
-            sx={{
-              padding: "5%",
-              minWidth: "100px",
-              maxWidth: "700px",
-              boxShadow: 20,
-            }}
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden p-6">
+        <h2 className="text-2xl font-bold text-green-700 text-center mb-6">
+          {`Registro de ronda ${rondaNum ? `#${rondaNum}` : ``}`}
+        </h2>
+
+        <form onSubmit={handleSubmit(registerSubmit)} className="space-y-4">
+          <MunicipioSelect
+            value={municipioT}
+            onChange={handleMunicipio}
+            register={register}
+          />
+
+          <PremioSelect
+            value={premio}
+            onChange={handlePremio}
+            premios={premios}
+            disabled={false}
+          />
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Cantidad
+            </label>
+            <input
+              type="number"
+              placeholder="Cantidad"
+              defaultValue={0}
+              min={1}
+              maxLength={60}
+              {...register("cantidad", {
+                required: true,
+                maxLength: 80,
+                min: 1,
+              })}
+              className={`w-full p-3 rounded-lg border ${
+                errors.cantidad ? "border-red-500" : "border-gray-300"
+              } bg-gray-50 text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent`}
+            />
+            {errors.cantidad && (
+              <p className="mt-1 text-sm text-red-500">
+                Cantidad no puede ser 0
+              </p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full p-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
           >
-            <Typography
-              gutterBottom
-              variant="h3"
-              component="div"
-              sx={{
-                color: "#2e7d32",
-                fontWeight: "bold",
-                textAlign: "center",
-              }}
-            >
-              {`Registro de ronda ${rondaNum ? `#${rondaNum}` : ``}`}
-            </Typography>
-            <CardContent>
-              <form onSubmit={(e) => e.preventDefault()}>
-                <MunicipioSelect
-                  value={municipioT}
-                  onChange={handleMunicipio}
-                  register={register}
-                />
-                <PremioSelect
-                  value={premio}
-                  onChange={handlePremio}
-                  premios={premios}
-                  disabled={false}
-                />
-
-                <TextField
-                  variant="filled"
-                  type="number"
-                  color="success"
-                  placeholder="Cantidad"
-                  label="Cantidad"
-                  defaultValue={0}
-                  inputProps={{ maxLength: 60, min: 1 }}
-                  required
-                  {...register("cantidad", {
-                    required: true,
-                    maxLength: 80,
-                    min: 1,
-                  })}
-                  sx={{
-                    width: "100%",
-                    margin: "5px 5px 15px 0px",
-                    marginTop: "25px",
-                  }}
-                  error={!!errors.cantidad}
-                  helperText={errors.cantidad ? "Cantidad no puede ser 0" : ""}
-                />
-
-                <Button
-                  variant="contained"
-                  color="success"
-                  type="submit"
-                  sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                  onClick={handleSubmit(registerSubmit)}
-                >
-                  Guardar
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    </>
+            Guardar
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };

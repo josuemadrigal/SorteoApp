@@ -328,7 +328,7 @@ const RegistroPadres: React.FC = () => {
       <div className="w-full max-w-2xl">
         <div className="bg-white rounded-xl shadow-2xl overflow-hidden p-6">
           <img
-            src="/registrate-aqui-ap.jpeg"
+            src="/registrate-aqui-app.jpeg"
             alt="Padres banner"
             className="w-full h-auto rounded-lg mb-6"
           />

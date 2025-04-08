@@ -1,5 +1,4 @@
 import React from "react";
-import { Select, MenuItem, SelectChangeEvent } from "@mui/material";
 
 interface Premio {
   premio: string;
@@ -8,7 +7,7 @@ interface Premio {
 
 interface PremioSelectProps {
   value: string;
-  onChange: (event: SelectChangeEvent<string>) => void;
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   premios: Premio[];
 }
 
@@ -18,21 +17,20 @@ const PremioSelect: React.FC<PremioSelectProps> = ({
   premios,
 }) => {
   return (
-    <Select
+    <select
       value={value}
       onChange={onChange}
-      color="success"
-      sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
+      className="w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent"
     >
-      <MenuItem value="" disabled>
+      <option value="" disabled>
         Seleccione el premio
-      </MenuItem>
+      </option>
       {premios.map((e) => (
-        <MenuItem key={e.slug_premio} value={e.slug_premio}>
+        <option key={e.slug_premio} value={e.slug_premio}>
           {e.premio}
-        </MenuItem>
+        </option>
       ))}
-    </Select>
+    </select>
   );
 };
 

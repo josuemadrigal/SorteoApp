@@ -6,39 +6,43 @@ interface Props {
 
 export const Boleta = ({ item }: Props) => {
   const numCedula = item.cedula;
-  const boletaCedula = numCedula.slice(-5);
+  const primerosDigitos = numCedula.slice(0, 3);
+  const ultimosDigitos = numCedula.slice(-4);
+  const codigoVerificacion = `${primerosDigitos}...${ultimosDigitos}`;
 
   return (
-    <div className="w-full sm:w-full md:w-1/3 lg:w-1/3 p-2">
+    <div className="w-full p-1 items-center justify-center ">
       <motion.div
-        className="bg-white rounded-lg shadow-lg overflow-hidden"
-        initial={{ scale: 0, backgroundColor: "#fff" }}
-        transition={{ duration: 5 }}
-        animate={{
-          backgroundColor: "#469957",
-          scale: [0, 1, 0.9, 1],
-          borderRadius: ["100%", "0.25rem"],
-          borderWidth: "20px",
-          borderColor: "blue",
-          rotate: [100, 0],
-          x: [-300, 0, 0],
-        }}
+        className="bg-pink-100 rounded-md shadow-sm overflow-hidden border border-gray-200 relative min-h-40 items-center justify-center align-middle"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
-        <motion.h2
-          className="text-3xl uppercase text-green-50 p-4 text-center"
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            rotate: [-1000, 0],
-          }}
-          transition={{ duration: 2 }}
-        >
-          {item.nombre}
-          <div className="text-2xl font-bold bg-green-200 rounded-lg p-2 mt-2 text-green-900">
-            {boletaCedula}
-          </div>
-        </motion.h2>
+        {/* Contenido compacto */}
+        <div className="px-3 py-2 items-center justify-center align-middle ">
+          <motion.div
+            className="flex text-center items-center"
+            initial={{ x: -10, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            <h3 className="text-lg text-center uppercase font-black text-pink-900 line-clamp-3">
+              {item.nombre}
+            </h3>
+          </motion.div>
+
+          {/* Pie pequeño */}
+          <motion.div
+            className="mt-1  text-center bg-blue-50 px-2 py-1 rounded border border-blue-100"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            <p className="text-lg font-black text-pink-400 tracking-tight">
+              {codigoVerificacion}
+            </p>
+          </motion.div>
+        </div>
       </motion.div>
     </div>
   );
