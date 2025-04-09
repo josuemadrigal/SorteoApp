@@ -59,6 +59,7 @@ const Consulta = () => {
         const response = await registrosService.getPremios();
         if (response.data.ok) {
           setPremios(response.data.premios);
+          console.log("Premios", response.data.premios);
         }
       } catch (error) {
         console.error("Error fetching premios", error);
@@ -211,9 +212,9 @@ const Consulta = () => {
   );
 
   return (
-    <div className="flex flex-col md:flex-row p-2 gap-2">
+    <div className="flex md:flex-row p-2 bg-emerald-900 min-h-screen overflow-auto">
       {/* Sidebar */}
-      <div className="w-full md:w-56 h-[94vh] bg-white shadow-md rounded-lg p-4 fixed md:relative">
+      <div className="w-full md:w-56 h-[94vh] bg-white shadow-md rounded-lg p-4 fixed md:relative ">
         <img src={GifTombola} alt="TOMBOLA" className="w-[90%] mx-auto" />
 
         <MunicipioSelect
@@ -227,7 +228,6 @@ const Consulta = () => {
           value={premio}
           onChange={handlePremio}
           premios={premios}
-          disabled
         />
 
         <CustomButton
@@ -248,7 +248,7 @@ const Consulta = () => {
       </div>
 
       {/* Main Content */}
-      <div className="md:ml-60 w-full md:w-[calc(100%-14rem)] h-[100vh] bg-green-800 rounded-lg p-4">
+      <div className="md:ml-5 w-full md:w-[calc(100%-10rem)] min-h-full bg-green-800 rounded-lg p-4 overflow-y-scroll">
         <div className="w-full bg-pink-600 min-h-[50px] py-2 px-0 rounded-t-lg">
           <div className="text-white text-center uppercase text-xl md:text-3xl">
             {cantiRonda
@@ -262,7 +262,7 @@ const Consulta = () => {
           </div>
         </div>
 
-        <div className="flex justify-center w-full min-h-[200px] overflow-y-auto max-h-[calc(95vh-64px)] bg-green-800 rounded-b-lg">
+        <div className="flex justify-center w-full  overflow-y-auto  bg-green-800 rounded-b-lg">
           {filteredCheckList.length <= 0 && isSearchButtonDisabled ? (
             <p className="opacity-50 uppercase tracking-wider mt-40 text-gray-300">
               Presiona el botón buscar

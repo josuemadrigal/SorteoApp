@@ -1,36 +1,48 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2/dist/sweetalert2.all.js";
 import RegistrosService from "../../services/RegistrosService";
 import MunicipioSelect from "../../screens/ViewGanadores/components/MunicipioSelect";
 import PremioSelect from "../../screens/Consulta/components/PremioSelect";
 
-const modelo = {
-  defaultValues: {
-    municipio: "",
-    premio: "",
-    ronda: "",
-    cantidad: 0,
-    status: "activa",
-  },
-};
+interface Premio {
+  slug_premio: string;
+  premio: string;
+}
+
+interface FormData {
+  municipio: string;
+  premio: string;
+  ronda: string;
+  cantidad: number;
+  status: string;
+}
 
 export const RegistroRonda = () => {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     reset,
     formState: { errors },
-  } = useForm(modelo);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  } = useForm<FormData>({
+    defaultValues: {
+      municipio: "",
+      premio: "",
+      ronda: "",
+      cantidad: 0,
+      status: "activa",
+    },
+  });
 
-  const [municipioT, setMunicipioT] = useState("");
-  const [premio, setPremio] = useState("");
-  const [rondaNum, setRondaNum] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [premios, setPremios] = useState<Premio[]>([]);
+  const [rondaNum, setRondaNum] = useState<number>(0);
 
-  const [premios, setPremios] = useState<
-    { slug_premio: string; premio: string }[]
-  >([]);
+  const municipio = watch("municipio");
+  const premio = watch("premio");
+  const cantidad = watch("cantidad");
 
   useEffect(() => {
     const fetchPremios = async () => {
@@ -45,122 +57,115 @@ export const RegistroRonda = () => {
     };
 
     fetchPremios();
-  }, [premio]);
+  }, []);
 
-  const fetchRonda = async (municipioT: string, premio: string) => {
-    try {
-      const response = await RegistrosService.getRondaNum(municipioT, premio);
-      const rondaRegistrada = parseInt(response.data.ronda[0]?.ronda);
-      const rondaSiguiente = rondaRegistrada ? rondaRegistrada + 1 : 1;
-      setRondaNum(rondaSiguiente);
-    } catch (error) {
-      console.error("Error fetching premios", error);
-    }
-  };
+  useEffect(() => {
+    const fetchRonda = async () => {
+      if (!municipio || !premio) return;
 
-  const registerSubmit = async (objeto: any) => {
-    const errorMessages = {
-      invalidMunicipio: "Seleccione un municipio o distrito válido",
-      invalidBoleta: "Ingrese un premio válido ",
-      duplicateBoleta: "Este premio ya ha sido registrado",
-      emptyFields: "Todos los campos son obligatorios",
-      zeroQuantity: "La cantidad de ningun premio puede ser 0",
+      try {
+        const response = await RegistrosService.getRondaNum(municipio, premio);
+        const rondaRegistrada = parseInt(response.data.ronda[0]?.ronda || "0");
+        const rondaSiguiente = rondaRegistrada + 1;
+        setRondaNum(rondaSiguiente);
+        setValue("ronda", rondaSiguiente.toString());
+      } catch (error) {
+        console.error("Error fetching ronda", error);
+        setRondaNum(1);
+        setValue("ronda", "1");
+      }
     };
 
-    const showError = (title: string) => {
-      Swal.fire({
-        position: "center",
+    fetchRonda();
+  }, [municipio, premio, setValue]);
+
+  const onSubmit = async (formData: FormData) => {
+    const payload = {
+      ...formData,
+      cantidad: Number(formData.cantidad),
+    };
+    console.log("Form data:", payload);
+    if (!payload.municipio || !formData.premio) {
+      return Swal.fire({
         icon: "error",
-        title,
-        showConfirmButton: false,
+        title: "Todos los campos son obligatorios",
         timer: 2000,
       });
-      reset({ premio: "" });
-    };
-    objeto.premio = premio;
-    objeto.ronda = rondaNum.toString();
+    }
 
-    if (!objeto.premio || objeto.cantidad <= 0) {
-      showError(errorMessages.emptyFields);
-      return;
+    if (isNaN(payload.cantidad)) {
+      return Swal.fire({
+        icon: "error",
+        title: "La cantidad debe ser un número válido",
+        timer: 2000,
+      });
+    }
+
+    if (payload.cantidad <= 0) {
+      return Swal.fire({
+        icon: "error",
+        title: "La cantidad debe ser mayor a 0",
+        timer: 2000,
+      });
     }
 
     try {
-      objeto.status = "activa";
-
-      const response = await RegistrosService.regRonda(objeto);
+      const response = await RegistrosService.regRonda(payload);
 
       if (response.status === 203) {
-        showError(errorMessages.duplicateBoleta);
-        reset({ premio: "" });
+        return Swal.fire({
+          icon: "error",
+          title: "Este premio ya ha sido registrado",
+          timer: 2000,
+        });
       }
 
       if (response.status === 201) {
         Swal.fire({
-          position: "center",
           icon: "success",
-          title: `Registro del premio ${objeto.premio} COMPLETADO`,
-          showConfirmButton: false,
+          title: `Ronda registrada para ${formData.premio}`,
           timer: 2000,
         });
 
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
         reset({
+          municipio: formData.municipio,
           premio: "",
+          ronda: "",
           cantidad: 0,
+          status: "activa",
         });
+
+        inputRef.current?.focus();
       }
     } catch (error) {
-      console.log(error);
-      showError("Intente más tarde");
+      console.error("Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error al registrar",
+        timer: 2000,
+      });
     }
   };
-
-  const handleMunicipio = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setMunicipioT(event.target.value);
-    if (premio !== "") {
-      fetchRonda(event.target.value, premio);
-    }
-  };
-
-  const handlePremio = async (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedPremioValue = event.target.value;
-    const selectedPremio = premios.find(
-      (item) => item.slug_premio === selectedPremioValue
-    );
-    if (selectedPremio) {
-      setPremio(selectedPremioValue);
-      fetchRonda(municipioT, selectedPremioValue);
-    }
-  };
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden p-6">
         <h2 className="text-2xl font-bold text-green-700 text-center mb-6">
-          {`Registro de ronda ${rondaNum ? `#${rondaNum}` : ``}`}
+          {rondaNum ? `Registro de ronda #${rondaNum}` : "Registro de ronda"}
         </h2>
 
-        <form onSubmit={handleSubmit(registerSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <MunicipioSelect
-            value={municipioT}
-            onChange={handleMunicipio}
+            value={municipio}
+            onChange={(e) => setValue("municipio", e.target.value)}
             register={register}
           />
 
           <PremioSelect
             value={premio}
-            onChange={handlePremio}
+            onChange={(e) => setValue("premio", e.target.value)}
             premios={premios}
-            disabled={false}
+            disabled={!municipio}
           />
 
           <div>
@@ -169,29 +174,32 @@ export const RegistroRonda = () => {
             </label>
             <input
               type="number"
-              placeholder="Cantidad"
-              defaultValue={0}
-              min={1}
-              maxLength={60}
+              min="1"
+              step="1"
               {...register("cantidad", {
-                required: true,
-                maxLength: 80,
-                min: 1,
+                required: "Cantidad es obligatoria",
+                min: { value: 1, message: "Mínimo 1" },
+                valueAsNumber: true,
               })}
               className={`w-full p-3 rounded-lg border ${
                 errors.cantidad ? "border-red-500" : "border-gray-300"
-              } bg-gray-50 text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent`}
+              } bg-gray-50 focus:ring-2 focus:ring-green-500`}
+              ref={inputRef}
+              onChange={(e) => {
+                const value = parseInt(e.target.value) || 0;
+                setValue("cantidad", value);
+              }}
             />
             {errors.cantidad && (
               <p className="mt-1 text-sm text-red-500">
-                Cantidad no puede ser 0
+                {errors.cantidad.message}
               </p>
             )}
           </div>
 
           <button
             type="submit"
-            className="w-full p-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
+            className="w-full p-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
           >
             Guardar
           </button>

@@ -29,9 +29,9 @@ const RenderBoletasComponent = ({ items }: Props) => {
   }, [items]);
 
   return (
-    <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5  w-full ">
+    <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5  ">
       {renderedItems.map((item, index) => (
-        <Boleta key={index} item={item} />
+        <Boleta key={index} item={item} index={index} />
       ))}
     </div>
   );

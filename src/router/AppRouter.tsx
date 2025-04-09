@@ -23,14 +23,14 @@ import ViewRondas from "../screens/ViewRondas";
 export const AppRouter = (): any => {
   return (
     <Routes>
-      <Route path="/home" element={<Home />} />
+      <Route path="/" element={<Home />} />
       <Route path="/registroG" element={<RegistroPadres />} />
       <Route path="/select" element={<SelectMunicio />} />
       <Route path="/registro/:id" element={<Registro />} />
       <Route path="/consulta" element={<Consulta />} />
       <Route path="/reg-ronda" element={<RegistroRonda />} />
       <Route path="/viewRondas" element={<ViewRondas />} />
-
+      <Route path="/reg-premios" element={<RegistroPremios />} />
       {/* <Route path="/" element={<RegistroPadres />} />
       
       
