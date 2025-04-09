@@ -2,15 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import InputMask from "react-input-mask";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
 import RegistrosService from "../../services/RegistrosService";
 import { useLocation, useParams } from "react-router-dom";
 
@@ -75,7 +66,6 @@ const Registro: React.FC = () => {
     duplicateBoleta: "Esta cédula ya ha sido registrada",
     cedulaNotFound: "No se encontró un registro con esa cédula",
     cedulaNoValida: "Ingrese un numero de cedula valido",
-
     cedulaParticipando: `Esta cédula ya está participando`,
     nombreRequerido: "El nombre es necesario",
   };
@@ -226,40 +216,22 @@ const Registro: React.FC = () => {
   };
 
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      style={{
-        minHeight: "100vh",
-        margin: 0,
-      }}
-    >
-      <Grid item>
-        <Card
-          sx={{
-            padding: "5%",
-            minWidth: "100px",
-            maxWidth: "700px",
-            boxShadow: 20,
-          }}
-        >
-          <Box
-            component="img"
-            //src="/mujer-portada.jpg"
-            // alt="Mujer Portada"
-            sx={{
-              height: "auto",
-              width: "100%",
-              minWidth: "600px",
-              borderRadius: "10px",
-            }}
+    <div className="min-h-screen flex items-center justify-center bg-green-900 p-4">
+      <div className="w-full md:max-w-xl bg-white rounded-xl shadow-xl overflow-hidden">
+        {/* Image removed since src was commented out in original */}
+
+        <div className="p-6">
+          <img
+            src="/registrate-aqui-app.jpeg"
+            alt="Padres banner"
+            className="w-full h-auto rounded-lg mb-6"
           />
+          <h1 className="text-2xl text-center uppercase font-black mb-4 text-green-900">
+            {municipio}
+          </h1>
 
-          <CardContent>
-            <h1>{municipio}</h1>
-
-            <form onSubmit={handleSubmit(registerSubmit)}>
+          <form onSubmit={handleSubmit(registerSubmit)} className="space-y-4">
+            <div>
               <InputMask
                 mask="999-9999999-9"
                 maskChar=""
@@ -270,57 +242,66 @@ const Registro: React.FC = () => {
                 })}
                 disabled={isSubmitting}
               >
-                {(inputProps) => (
-                  <TextField
+                {(inputProps: any) => (
+                  <input
                     {...inputProps}
-                    variant="filled"
-                    color="success"
-                    type="text"
-                    label="Cédula"
-                    sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                    inputRef={inputRef}
+                    ref={inputRef}
                     onKeyDown={handleKeyPress}
+                    className={`w-full p-3 rounded-lg border ${
+                      errors.cedula ? "border-red-500" : "border-gray-300"
+                    } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
+                    placeholder="Cédula (___-_______-_)"
                   />
                 )}
               </InputMask>
+            </div>
 
-              {nombre && !cedulaNotFound && !cedulaParticipando && (
-                <Typography variant="h6" sx={{ margin: "5px 5px 15px 0px" }}>
-                  Nombre: {nombre}
-                </Typography>
-              )}
+            {isSubmitting && (
+              <p className="text-sm text-yellow-600">
+                Buscando cédula en la base de datos...
+              </p>
+            )}
 
-              {cedulaNotFound && (
-                <TextField
+            {nombre && !cedulaNotFound && !cedulaParticipando && (
+              <div className="p-3 bg-gray-100 rounded-lg">
+                <p className="font-medium">Nombre: {nombre}</p>
+              </div>
+            )}
+
+            {cedulaNotFound && (
+              <div>
+                <input
                   {...register("nombre", {
                     required: errorMessages.nombreRequerido,
                   })}
-                  variant="filled"
-                  color="success"
-                  type="text"
-                  label="Nombre"
-                  sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                  inputRef={nombreRef}
+                  ref={nombreRef}
                   disabled={isSubmitting}
-                  error={!!errors.nombre}
-                  helperText={errors.nombre ? errors.nombre.message : ""}
+                  className={`w-full p-3 rounded-lg border ${
+                    errors.nombre ? "border-red-500" : "border-gray-300"
+                  } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
+                  placeholder="Nombre"
                 />
-              )}
+                {errors.nombre && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.nombre.message}
+                  </p>
+                )}
+              </div>
+            )}
 
-              <Button
-                variant="contained"
-                color="success"
-                type="submit"
-                sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                disabled={isSubmitting || cedulaParticipando}
-              >
-                Registrar
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </Grid>
-    </Grid>
+            <button
+              type="submit"
+              disabled={isSubmitting || cedulaParticipando}
+              className={`w-full p-3 rounded-lg font-medium text-white ${
+                isSubmitting ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
+              } transition-colors`}
+            >
+              {isSubmitting ? "Procesando..." : "Registrar"}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   );
 };
 

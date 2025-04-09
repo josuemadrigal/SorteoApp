@@ -1,18 +1,17 @@
-
-import { AppRouter } from './router/AppRouter'
-import { AppLayout } from './shared/layouts/template'
-
+import WhatsAppButton from "./components/WhatsAppButton";
+import { AppRouter } from "./router/AppRouter";
 
 function App() {
   //const [count, setCount] = useState(0)
 
   return (
     <>
-    <AppLayout >
-      <AppRouter/>
-    </AppLayout>
+      {/* <AppLayout > */}
+      <WhatsAppButton />
+      <AppRouter />
+      {/* </AppLayout> */}
     </>
-  )
+  );
 }
 
-export default App
+export default App;

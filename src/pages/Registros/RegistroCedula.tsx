@@ -2,18 +2,8 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import InputMask from "react-input-mask";
 import Swal from "sweetalert2/dist/sweetalert2.all.js";
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  TextFieldProps,
-  Typography,
-} from "@mui/material";
-
-import RegistrosService from "../../services/RegistrosService";
 import { useEffect, useRef } from "react";
+import RegistrosService from "../../services/RegistrosService";
 
 const modelo = {
   defaultValues: {
@@ -29,8 +19,9 @@ export const RegistroCedula = () => {
     handleSubmit,
     reset,
     formState: { errors },
+    setValue,
   } = useForm(modelo);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -40,7 +31,6 @@ export const RegistroCedula = () => {
   };
 
   const registerSubmit = async (objeto: any) => {
-    // Mensajes de error centralizados
     const errorMessages = {
       duplicateBoleta: "Esta cédula ya ha sido registrada",
       emptyFields: "Todos los campos son obligatorios",
@@ -57,16 +47,19 @@ export const RegistroCedula = () => {
       reset({ cedula: "" });
     };
 
-    // Verificar campos vacíos
     if (!objeto.cedula || !objeto.nombre) {
       showError(errorMessages.emptyFields);
       return;
     }
-    objeto.nombre = objeto.nombre.toUpperCase();
-    try {
-      objeto.status = 1;
 
-      const response = await RegistrosService.regCedula(objeto);
+    try {
+      const payload = {
+        ...objeto,
+        nombre: objeto.nombre.toUpperCase(),
+        status: 1,
+      };
+
+      const response = await RegistrosService.regCedula(payload);
 
       if (response.status === 203) {
         showError(errorMessages.duplicateBoleta);
@@ -82,111 +75,93 @@ export const RegistroCedula = () => {
           timer: 2000,
         });
 
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
-        // Limpiar el campo del premio
         reset({
           cedula: "",
           nombre: "",
         });
+        inputRef.current?.focus();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       showError("Intente más tarde");
     }
   };
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    inputRef.current?.focus();
   }, []);
 
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      style={{
-        minHeight: "100vh",
-        margin: 0,
-      }}
-    >
-      <Grid item>
-        <Card
-          sx={{
-            padding: "5%",
-            minWidth: "100px",
-            maxWidth: "700px",
-            boxShadow: 20,
-          }}
-        >
-          <Typography
-            gutterBottom
-            variant="h3"
-            component="div"
-            sx={{ color: "#2e7d32", fontWeight: "bold", textAlign: "center" }}
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden p-6">
+        <h1 className="text-3xl font-bold text-center text-green-800 mb-6">
+          Registro de cédula
+        </h1>
+
+        <form onSubmit={handleSubmit(registerSubmit)} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Cédula
+            </label>
+            <InputMask
+              mask="999-9999999-9"
+              maskChar=""
+              {...register("cedula", { required: true, maxLength: 13 })}
+              onChange={(e) => setValue("cedula", e.target.value)}
+            >
+              {(inputProps: any) => (
+                <input
+                  {...inputProps}
+                  type="text"
+                  className={`w-full p-3 rounded-lg border ${
+                    errors.cedula ? "border-red-500" : "border-gray-300"
+                  } bg-gray-50 focus:ring-2 focus:ring-green-500`}
+                  placeholder="000-0000000-0"
+                  ref={inputRef}
+                  onKeyDown={handleKeyPress}
+                />
+              )}
+            </InputMask>
+            {errors.cedula && (
+              <p className="mt-1 text-sm text-red-500">Cédula es requerida</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Nombre
+            </label>
+            <input
+              type="text"
+              className={`w-full p-3 rounded-lg border ${
+                errors.nombre ? "border-red-500" : "border-gray-300"
+              } bg-gray-50 focus:ring-2 focus:ring-green-500 uppercase`}
+              {...register("nombre", {
+                required: "Debe indicar el nombre",
+                maxLength: 80,
+                minLength: 1,
+                onChange: (e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                },
+              })}
+              onKeyDown={handleKeyPress}
+              maxLength={160}
+            />
+            {errors.nombre && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.nombre.message as string}
+              </p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full p-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
           >
-            Registro de cédula
-          </Typography>
-          <CardContent>
-            <form onSubmit={handleSubmit(registerSubmit)}>
-              <InputMask
-                mask="999-9999999-9"
-                maskChar=""
-                {...register("cedula", { required: true, maxLength: 13 })}
-              >
-                {(inputProps: TextFieldProps) => (
-                  <TextField
-                    {...inputProps}
-                    variant="filled"
-                    color="success"
-                    type="text"
-                    label="Cédula"
-                    sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                    inputRef={inputRef}
-                    error={!!errors.cedula}
-                    helperText={errors.cedula ? "Cédula es requerida" : ""}
-                    onKeyDown={handleKeyPress}
-                  />
-                )}
-              </InputMask>
-
-              <TextField
-                variant="filled"
-                type="text"
-                color="success"
-                placeholder="Nombre"
-                label="Nombre"
-                inputProps={{
-                  maxLength: 160,
-                  min: 1,
-                  style: { textTransform: "uppercase" },
-                }}
-                {...register("nombre", {
-                  required: "Debe indicar el nombre",
-                  maxLength: 80,
-                  minLength: 1,
-                })}
-                sx={{ width: "100%", margin: "5px 5px 15px 0px" }}
-                onKeyDown={handleKeyPress}
-                error={!!errors.nombre}
-                helperText={errors.nombre ? errors.nombre.message : ""}
-              />
-
-              <Button
-                variant="contained"
-                color="success"
-                type="submit"
-                sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-              >
-                Registrar
-              </Button>
-            </form>
-          </CardContent>
-        </Card>
-      </Grid>
-    </Grid>
+            Registrar
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };

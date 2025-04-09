@@ -1,100 +1,53 @@
 import { motion } from "framer-motion";
-import "../App.css";
-import { Grid, Typography } from "@mui/material";
 
 interface Props {
   item: any;
+  index: number; // Añadimos prop para el número de índice
 }
-export const Boleta = ({ item }: Props) => {
+
+export const Boleta = ({ item, index }: Props) => {
   const numCedula = item.cedula;
-  const boletaCedula = numCedula.slice(-5);
+  const primerosDigitos = numCedula.slice(0, 3);
+  const ultimosDigitos = numCedula.slice(-4);
+  const codigoVerificacion = `${primerosDigitos} ... ${ultimosDigitos}`;
 
   return (
-    <Grid item sm={12} md={4} lg={4}>
+    <div className="w-full p-1 items-center justify-center">
       <motion.div
-        className="box"
-        initial={{ scale: 0, backgroundColor: "#fff" }}
-        transition={{ duration: 5 }}
-        animate={{
-          backgroundColor: "#469957",
-          scale: [0, 1, 0.9, 1],
-          borderRadius: ["100%", "1%"],
-          border: "20px",
-          borderColor: "blue",
-          rotate: [100, 0],
-          x: [-300, 0, 0],
-          overflow: "hidden",
-        }}
+        className="bg-pink-100 rounded-md shadow-sm overflow-hidden border border-gray-200 relative min-h-40 items-center justify-center  flex flex-col"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
-        <motion.h2
-          style={{ fontSize: 35, textTransform: "uppercase" }}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            rotate: [-1000, 0],
-            color: "#f0fdf8",
-          }}
-          transition={{ duration: 2 }}
-        >
-          {item.nombre}
-          <Typography
-            style={{
-              fontSize: 30,
-              fontWeight: "bold",
-              backgroundColor: "darkseagreen",
-              borderRadius: 10,
-              padding: 5,
-            }}
+        <div className="absolute -top-2 -right-2 z-10 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md">
+          <span className="font-bold text-sm">{index + 1}</span>
+        </div>
+        {/* Contenido compacto */}
+        <div className="px-3 py-2 items-center justify-center align-middle content-center">
+          <motion.div
+            className=" text-center items-center"
+            initial={{ x: -10, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: 0.2 }}
           >
-            {boletaCedula}
-          </Typography>
-        </motion.h2>
+            <h3 className="text-lg text-center uppercase font-black text-pink-900 line-clamp-3">
+              {item.nombre}
+            </h3>
+          </motion.div>
+
+          {/* Pie pequeño */}
+          <motion.div
+            className="mt-1  text-center bg-pink-900 px-2 py-1 rounded border border-pink-900"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6 }}
+          >
+            <p className="text-2xl font-black text-pink-100 tracking-tight">
+              {codigoVerificacion}
+            </p>
+          </motion.div>
+        </div>
       </motion.div>
-    </Grid>
+    </div>
   );
 };
-
-// import { motion } from "framer-motion";
-// import "../App.css";
-// import { Grid } from "@mui/material";
-
-// interface Props {
-//   item: any;
-// }
-
-// export const Boleta = ({ item }: Props) => {
-//   return (
-//     <Grid item sm={12} md={4} lg={4}>
-//       <motion.div
-//         className="box"
-//         initial={{ scale: 0, backgroundColor: "#fff" }}
-//         transition={{ duration: 0.5 }}
-//         animate={{
-//           backgroundColor: "#469957",
-//           scale: 1,
-//           borderRadius: ["100%", "1%"],
-//           border: "20px",
-//           borderColor: "blue",
-//           rotate: [100, 0],
-//           x: [300, 0],
-//           overflow: "hidden",
-//         }}
-//       >
-//         <motion.h2
-//           style={{ fontSize: 55 }}
-//           initial={{ opacity: 0, scale: 0.5 }}
-//           animate={{
-//             opacity: 1,
-//             scale: 1,
-//             rotate: [1000, 0],
-//             color: "#f0fdf8",
-//           }}
-//           transition={{ duration: 0.5 }}
-//         >
-//           {item.nombre}
-//         </motion.h2>
-//       </motion.div>
-//     </Grid>
-//   );
-// };

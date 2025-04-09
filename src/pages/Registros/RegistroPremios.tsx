@@ -1,462 +1,162 @@
-// import * as React from "react";
-// import { useForm } from "react-hook-form";
-// import Swal from "sweetalert2/dist/sweetalert2.all.js";
-// import {
-//   Button,
-//   Card,
-//   CardContent,
-//   Grid,
-//   TextField,
-//   Typography,
-// } from "@mui/material";
-
-// import RegistrosService from "../../services/RegistrosService";
-// import { useEffect, useRef } from "react";
-// import { generateSlug } from "../../utils";
-
-// const modelo = {
-//   defaultValues: {
-//     premio: "",
-//     slug_premio: "",
-//     la_romana: 0,
-//     villa_hermosa: 0,
-//     caleta: 0,
-//     cumayasa: 0,
-//     guaymate: 0,
-//   },
-// };
-
-// export const RegistroPremios = () => {
-//   const {
-//     getValues,
-//     register,
-//     handleSubmit,
-//     reset,
-//     formState: { errors },
-//   } = useForm(modelo);
-//   const inputRef = useRef<HTMLInputElement | null>(null);
-
-//   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-//     if (event.key === "Enter") {
-//       event.preventDefault();
-//       handleSubmit(registerSubmit)();
-//     }
-//   };
-
-//   const registerSubmit = async (objeto: any) => {
-//     // Mensajes de error centralizados
-//     const errorMessages = {
-//       invalidMunicipio: "Seleccione un municipio o distrito válido",
-//       invalidBoleta: "Ingrese un premio válido ",
-//       duplicateBoleta: "Este premio ya ha sido registrado",
-//       emptyFields: "Todos los campos son obligatorios",
-//       zeroQuantity: "La cantidad de ningun premio puede ser 0",
-//     };
-
-//     const showError = (title: string) => {
-//       Swal.fire({
-//         position: "center",
-//         icon: "error",
-//         title,
-//         showConfirmButton: false,
-//         timer: 2000,
-//       });
-//       reset({ premio: "" });
-//     };
-
-//     // Verificar campos vacíos
-//     if (
-//       !objeto.premio ||
-//       !objeto.la_romana ||
-//       !objeto.villa_hermosa ||
-//       !objeto.guaymate ||
-//       !objeto.caleta ||
-//       !objeto.cumayasa
-//     ) {
-//       showError(errorMessages.emptyFields);
-//       return;
-//     }
-
-//     // Verificar cantidades no sean 0
-//     if (
-//       objeto.la_romana <= 0 ||
-//       objeto.villa_hermosa <= 0 ||
-//       objeto.caleta <= 0 ||
-//       objeto.cumayasa <= 0 ||
-//       objeto.guaymate <= 0
-//     ) {
-//       showError(errorMessages.zeroQuantity);
-//       return;
-//     }
-
-//     try {
-//       objeto.status = 1;
-//       objeto.slug_premio = generateSlug(objeto.premio);
-
-//       const response = await RegistrosService.regPremio(objeto);
-
-//       if (response.status === 203) {
-//         showError(errorMessages.duplicateBoleta);
-//         reset({ premio: "" });
-//       }
-
-//       if (response.status === 201) {
-//         Swal.fire({
-//           position: "center",
-//           icon: "success",
-//           title: `Registro del premio ${objeto.premio} COMPLETADO`,
-//           showConfirmButton: false,
-//           timer: 2000,
-//         });
-
-//         if (inputRef.current) {
-//           inputRef.current.focus();
-//         }
-//         // Limpiar el campo del premio
-//         reset({
-//           premio: "",
-//           la_romana: 0,
-//           caleta: 0,
-//           cumayasa: 0,
-//           guaymate: 0,
-//           villa_hermosa: 0,
-//         });
-//       }
-//     } catch (error) {
-//       console.log(error);
-//       showError("Intente más tarde");
-//     }
-//   };
-
-//   useEffect(() => {
-//     if (inputRef.current) {
-//       inputRef.current.focus();
-//     }
-//   }, []);
-
-//   const calculoTotal = () => {
-//     const la_romana = 0;
-//     const total = 0;
-//   };
-
-//   return (
-//     <>
-//       <Grid
-//         container
-//         justifyContent="center"
-//         alignItems="center"
-//         style={{
-//           minHeight: "100vh",
-//           margin: 0,
-//         }}
-//       >
-//         <Grid item>
-//           <Card
-//             sx={{
-//               padding: "5%",
-//               minWidth: "100px",
-//               maxWidth: "700px",
-//               boxShadow: 20,
-//             }}
-//           >
-//             <Typography
-//               gutterBottom
-//               variant="h3"
-//               component="div"
-//               sx={{ color: "#f098", fontWeight: "bold", textAlign: "center" }}
-//             >
-//               Registro de premios
-//             </Typography>{" "}
-//             <CardContent>
-//               <form onSubmit={(e) => e.preventDefault()}>
-//                 <TextField
-//                   variant="filled"
-//                   type="text"
-//                   color="success"
-//                   placeholder="Premio"
-//                   label="Premio"
-//                   inputProps={{
-//                     maxLength: 60,
-//                     style: { textTransform: "uppercase" },
-//                   }}
-//                   required
-//                   {...register("premio", { required: true, maxLength: 80 })}
-//                   sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-//                   error={!!errors.premio}
-//                   helperText={errors.premio ? "Campo obligatorio" : ""}
-//                 />
-
-//                 <Typography
-//                   gutterBottom
-//                   variant="h5"
-//                   component="div"
-//                   sx={{
-//                     color: "#f69",
-//                     fontWeight: "bold",
-//                     textAlign: "center",
-//                     mt: 5,
-//                   }}
-//                 >
-//                   {" "}
-//                   Cantidad de premios por municipio
-//                 </Typography>
-//                 <TextField
-//                   variant="filled"
-//                   type="number"
-//                   color="success"
-//                   placeholder="La Romana"
-//                   label="La Romana"
-//                   defaultValue={0}
-//                   inputProps={{ maxLength: 60, min: 1 }}
-//                   required
-//                   {...register("la_romana", {
-//                     required: true,
-//                     maxLength: 80,
-//                     min: 1,
-//                   })}
-//                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-//                   error={!!errors.la_romana}
-//                   helperText={errors.la_romana ? "Cantidad no puede ser 0" : ""}
-//                 />
-//                 <TextField
-//                   variant="filled"
-//                   type="number"
-//                   color="success"
-//                   placeholder="Caleta"
-//                   label="Caleta"
-//                   inputProps={{ maxLength: 60, min: 1 }}
-//                   required
-//                   {...register("caleta", {
-//                     required: true,
-//                     maxLength: 80,
-//                     min: 1,
-//                   })}
-//                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-//                   error={!!errors.caleta}
-//                   helperText={errors.caleta ? "Cantidad no puede ser 0" : ""}
-//                 />
-
-//                 <TextField
-//                   variant="filled"
-//                   type="number"
-//                   color="success"
-//                   placeholder="Villa Hermosa"
-//                   label="Villa Hermosa"
-//                   inputProps={{ maxLength: 60, min: 1 }}
-//                   required
-//                   {...register("villa_hermosa", {
-//                     required: true,
-//                     maxLength: 80,
-//                     min: 1,
-//                   })}
-//                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-//                   error={!!errors.villa_hermosa}
-//                   helperText={
-//                     errors.villa_hermosa ? "Cantidad no puede ser 0" : ""
-//                   }
-//                 />
-//                 <TextField
-//                   variant="filled"
-//                   type="number"
-//                   color="success"
-//                   placeholder="Guaymate"
-//                   label="Guaymate"
-//                   inputProps={{ maxLength: 60, min: 1 }}
-//                   required
-//                   {...register("guaymate", {
-//                     required: true,
-//                     maxLength: 80,
-//                     min: 1,
-//                   })}
-//                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-//                   error={!!errors.guaymate}
-//                   helperText={errors.guaymate ? "Cantidad no puede ser 0" : ""}
-//                 />
-//                 <TextField
-//                   variant="filled"
-//                   type="number"
-//                   color="success"
-//                   placeholder="Cumayasa"
-//                   label="Cumayasa"
-//                   inputProps={{ maxLength: 60, min: 1 }}
-//                   required
-//                   {...register("cumayasa", {
-//                     required: true,
-//                     maxLength: 80,
-//                     min: 1,
-//                   })}
-//                   sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-//                   error={!!errors.cumayasa}
-//                   helperText={errors.cumayasa ? "Cantidad no puede ser 0" : ""}
-//                 />
-//                 <Typography
-//                   gutterBottom
-//                   variant="h5"
-//                   component="div"
-//                   sx={{
-//                     color: "#f69",
-//                     fontWeight: "bold",
-//                     textAlign: "center",
-//                     mt: 5,
-//                   }}
-//                 >
-//                   {" "}
-//                   Total:
-//                 </Typography>
-
-//                 <Button
-//                   variant="contained"
-//                   color="success"
-//                   type="submit"
-//                   sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-//                   onClick={handleSubmit(registerSubmit)}
-//                 >
-//                   Registrar
-//                 </Button>
-//               </form>
-//             </CardContent>
-//           </Card>
-//         </Grid>
-//       </Grid>
-//     </>
-//   );
-// };
-
 import { useEffect, useState, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import Swal from "sweetalert2/dist/sweetalert2.all.js";
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
-
 import RegistrosService from "../../services/RegistrosService";
-import { generateSlug } from "../../utils";
 
-const modelo = {
-  defaultValues: {
-    premio: "",
-    slug_premio: "",
-    la_romana: 0,
-    villa_hermosa: 0,
-    caleta: 0,
-    cumayasa: 0,
-    guaymate: 0,
-  },
+type FormValues = {
+  premio: string;
+  slug_premio: string;
+  la_romana: number;
+  villa_hermosa: number;
+  caleta: number;
+  cumayasa: number;
+  guaymate: number;
+};
+
+// Tipo para los campos de municipios
+type MunicipioField =
+  | "la_romana"
+  | "villa_hermosa"
+  | "caleta"
+  | "cumayasa"
+  | "guaymate";
+
+// Función generateSlug (asegúrate de que esta función exista en tus utils)
+const generateSlug = (text: string): string => {
+  return text
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-")
+    .replace(/^-+/, "")
+    .replace(/-+$/, "");
 };
 
 export const RegistroPremios = () => {
   const {
-    getValues,
     register,
     handleSubmit,
     watch,
     reset,
+    control,
     formState: { errors },
-  } = useForm(modelo);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  } = useForm<FormValues>({
+    defaultValues: {
+      premio: "",
+      slug_premio: "",
+      la_romana: 1,
+      villa_hermosa: 1,
+      caleta: 1,
+      cumayasa: 1,
+      guaymate: 1,
+    },
+  });
 
-  const [total, setTotal] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [total, setTotal] = useState(5); // Inicializado con la suma de los valores predeterminados
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      handleSubmit(registerSubmit)();
-    }
-  };
+  // Array de municipios con tipo explícito
+  const municipios: { name: MunicipioField; label: string }[] = [
+    { name: "la_romana", label: "La Romana" },
+    { name: "villa_hermosa", label: "Villa Hermosa" },
+    { name: "caleta", label: "Caleta" },
+    { name: "cumayasa", label: "Cumayasa" },
+    { name: "guaymate", label: "Guaymate" },
+  ];
 
-  const registerSubmit = async (objeto: any) => {
-    const errorMessages = {
-      invalidMunicipio: "Seleccione un municipio o distrito válido",
-      invalidBoleta: "Ingrese un premio válido ",
-      duplicateBoleta: "Este premio ya ha sido registrado",
-      emptyFields: "Todos los campos son obligatorios",
-      zeroQuantity: "La cantidad de ningun premio puede ser 0",
-    };
-
-    const showError = (title: string) => {
-      Swal.fire({
-        position: "center",
-        icon: "error",
-        title,
-        showConfirmButton: false,
-        timer: 2000,
-      });
-      reset({ premio: "" });
-    };
-
-    if (
-      !objeto.premio ||
-      objeto.la_romana <= 0 ||
-      objeto.villa_hermosa <= 0 ||
-      objeto.caleta <= 0 ||
-      objeto.cumayasa <= 0 ||
-      objeto.guaymate <= 0
-    ) {
-      showError(errorMessages.emptyFields);
-      return;
-    }
-
+  const onSubmit = async (data: FormValues) => {
     try {
-      objeto.status = 1;
-      objeto.slug_premio = generateSlug(objeto.premio);
+      // Genera el slug antes de enviar
+      const slug_premio = generateSlug(data.premio);
 
-      const response = await RegistrosService.regPremio(objeto);
+      const payload = {
+        ...data,
+        status: 1,
+        slug_premio,
+      };
 
-      if (response.status === 203) {
-        showError(errorMessages.duplicateBoleta);
-        reset({ premio: "" });
-      }
+      console.log("Enviando datos:", payload);
 
-      if (response.status === 201) {
+      try {
+        const response = await RegistrosService.regPremio(payload);
+
+        if (response.status === 203) {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Este premio ya ha sido registrado",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+          return;
+        }
+
+        if (response.status === 201) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: `Registro del premio ${data.premio} COMPLETADO`,
+            showConfirmButton: false,
+            timer: 2000,
+          });
+
+          reset({
+            premio: "",
+            slug_premio: "",
+            la_romana: 1,
+            villa_hermosa: 1,
+            caleta: 1,
+            cumayasa: 1,
+            guaymate: 1,
+          });
+
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        }
+      } catch (error: any) {
+        console.error("Error en la respuesta del servicio:", error);
+
         Swal.fire({
           position: "center",
-          icon: "success",
-          title: `Registro del premio ${objeto.premio} COMPLETADO`,
+          icon: "error",
+          title: error.message || "Error al registrar premio",
+          text: "Por favor, intente más tarde",
           showConfirmButton: false,
           timer: 2000,
         });
-
-        if (inputRef.current) {
-          inputRef.current.focus();
-        }
-        reset({
-          premio: "",
-          la_romana: 0,
-          caleta: 0,
-          cumayasa: 0,
-          guaymate: 0,
-          villa_hermosa: 0,
-        });
       }
     } catch (error) {
-      console.log(error);
-      showError("Intente más tarde");
+      console.error("Error general:", error);
+
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Intente más tarde",
+        showConfirmButton: false,
+        timer: 2000,
+      });
     }
   };
 
-  const calculoTotal = () => {
-    const values = getValues();
-    const total =
-      parseInt(values.la_romana) +
-      parseInt(values.caleta) +
-      parseInt(values.cumayasa) +
-      parseInt(values.guaymate) +
-      parseInt(values.villa_hermosa);
-    setTotal(total);
-  };
-
+  // Usar un useEffect para observar cambios en los campos de municipios
   useEffect(() => {
-    const subscription = watch(() => {
-      calculoTotal();
+    const subscription = watch((formValues) => {
+      // Calcular el total sumando los valores de todos los municipios
+      let sum = 0;
+      municipios.forEach(({ name }) => {
+        // Asegurarse de que el valor es un número antes de sumarlo
+        const value = formValues[name];
+        sum += typeof value === "number" ? value : 0;
+      });
+      setTotal(sum);
     });
-    return () => subscription.unsubscribe();
-  }, [watch]);
 
+    // Limpiar la suscripción cuando el componente se desmonte
+    return () => subscription.unsubscribe();
+  }, [watch, municipios]);
+
+  // Enfocar el campo de premio al cargar el componente
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -464,183 +164,115 @@ export const RegistroPremios = () => {
   }, []);
 
   return (
-    <>
-      <Grid
-        container
-        justifyContent="center"
-        alignItems="center"
-        style={{
-          minHeight: "100vh",
-          margin: 0,
-        }}
-      >
-        <Grid item>
-          <Card
-            sx={{
-              padding: "5%",
-              minWidth: "100px",
-              maxWidth: "700px",
-              boxShadow: 20,
-            }}
-          >
-            <Typography
-              gutterBottom
-              variant="h3"
-              component="div"
-              sx={{ color: "#2e7d32", fontWeight: "bold", textAlign: "center" }}
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+      <div className="w-full max-w-2xl bg-white rounded-lg shadow-xl p-6">
+        <h1 className="text-3xl font-bold text-center text-green-800 mb-6">
+          Registro de premios
+        </h1>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <div>
+            <label
+              htmlFor="premio"
+              className="block text-sm font-medium text-gray-700"
             >
-              Registro de premios
-            </Typography>
-            <CardContent>
-              <form onSubmit={(e) => e.preventDefault()}>
-                <TextField
-                  variant="filled"
-                  type="text"
-                  color="success"
-                  placeholder="Premio"
-                  label="Premio"
-                  inputProps={{
-                    maxLength: 60,
-                    style: { textTransform: "uppercase" },
-                  }}
-                  required
-                  {...register("premio", { required: true, maxLength: 80 })}
-                  sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                  error={!!errors.premio}
-                  helperText={errors.premio ? "Campo obligatorio" : ""}
-                />
+              Premio
+            </label>
+            <input
+              id="premio"
+              className={`mt-1 block w-full rounded-md border shadow-sm focus:border-green-500 focus:ring-green-500 p-2 ${
+                errors.premio ? "border-red-500" : "border-gray-300"
+              }`}
+              {...register("premio", {
+                required: "Campo obligatorio",
+              })}
+              onChange={(e) => {
+                e.target.value = e.target.value.toUpperCase();
+              }}
+              ref={(el) => {
+                inputRef.current = el; // Para la referencia manual
+                const { ref } = register("premio"); // Para react-hook-form
+                if (typeof ref === "function") {
+                  ref(el);
+                }
+              }}
+            />
+            {errors.premio && (
+              <p className="mt-1 text-sm text-red-600">
+                {errors.premio.message}
+              </p>
+            )}
+          </div>
 
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  sx={{
-                    color: "#2e7d32",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    mt: 5,
-                  }}
-                >
-                  Cantidad de premios por municipio
-                </Typography>
-                <TextField
-                  variant="filled"
-                  type="number"
-                  color="success"
-                  placeholder="La Romana"
-                  label="La Romana"
-                  defaultValue={0}
-                  inputProps={{ maxLength: 60, min: 1 }}
-                  required
-                  {...register("la_romana", {
-                    required: true,
-                    maxLength: 80,
-                    min: 1,
-                  })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-                  error={!!errors.la_romana}
-                  helperText={errors.la_romana ? "Cantidad no puede ser 0" : ""}
-                />
-                <TextField
-                  variant="filled"
-                  type="number"
-                  color="success"
-                  placeholder="Villa Hermosa"
-                  label="Villa Hermosa"
-                  inputProps={{ maxLength: 60, min: 1 }}
-                  required
-                  {...register("villa_hermosa", {
-                    required: true,
-                    maxLength: 80,
-                    min: 1,
-                  })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-                  error={!!errors.villa_hermosa}
-                  helperText={
-                    errors.villa_hermosa ? "Cantidad no puede ser 0" : ""
-                  }
-                />
-                <TextField
-                  variant="filled"
-                  type="number"
-                  color="success"
-                  placeholder="Caleta"
-                  label="Caleta"
-                  inputProps={{ maxLength: 60, min: 1 }}
-                  required
-                  {...register("caleta", {
-                    required: true,
-                    maxLength: 80,
-                    min: 1,
-                  })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-                  error={!!errors.caleta}
-                  helperText={errors.caleta ? "Cantidad no puede ser 0" : ""}
-                />
+          <div>
+            <h2 className="text-xl font-semibold text-center text-green-800 mb-4">
+              Cantidad de premios por municipio
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              {municipios.map((municipio) => (
+                <div key={municipio.name}>
+                  <label
+                    htmlFor={municipio.name}
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    {municipio.label}
+                  </label>
+                  <Controller
+                    name={municipio.name}
+                    control={control}
+                    rules={{
+                      required: "Campo obligatorio",
+                      min: {
+                        value: 1,
+                        message: "Mínimo 1",
+                      },
+                    }}
+                    render={({ field }) => (
+                      <input
+                        id={municipio.name}
+                        type="number"
+                        min="1"
+                        className={`mt-1 block w-full rounded-md shadow-sm focus:border-green-500 focus:ring-green-500 p-2 ${
+                          errors[municipio.name]
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        }`}
+                        {...field}
+                        onChange={(e) => {
+                          // Asegurarse de que el valor es un número
+                          const value =
+                            e.target.value === ""
+                              ? 0
+                              : parseInt(e.target.value, 10);
+                          field.onChange(value);
+                        }}
+                      />
+                    )}
+                  />
+                  {errors[municipio.name] && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors[municipio.name]?.message}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
 
-                <TextField
-                  variant="filled"
-                  type="number"
-                  color="success"
-                  placeholder="Guaymate"
-                  label="Guaymate"
-                  inputProps={{ maxLength: 60, min: 1 }}
-                  required
-                  {...register("guaymate", {
-                    required: true,
-                    maxLength: 80,
-                    min: 1,
-                  })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-                  error={!!errors.guaymate}
-                  helperText={errors.guaymate ? "Cantidad no puede ser 0" : ""}
-                />
-                <TextField
-                  variant="filled"
-                  type="number"
-                  color="success"
-                  placeholder="Cumayasa"
-                  label="Cumayasa"
-                  inputProps={{ maxLength: 60, min: 1 }}
-                  required
-                  {...register("cumayasa", {
-                    required: true,
-                    maxLength: 80,
-                    min: 1,
-                  })}
-                  sx={{ width: "19%", margin: "5px 5px 15px 0px" }}
-                  error={!!errors.cumayasa}
-                  helperText={errors.cumayasa ? "Cantidad no puede ser 0" : ""}
-                />
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-green-800 mb-2">
+              Total: {total}
+            </h2>
+          </div>
 
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  component="div"
-                  sx={{
-                    color: "#2e7d32",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    mt: 5,
-                  }}
-                >
-                  Total: {total}
-                </Typography>
-
-                <Button
-                  variant="contained"
-                  color="success"
-                  type="submit"
-                  sx={{ minWidth: "100%", margin: "5px 5px 15px 0px" }}
-                  onClick={handleSubmit(registerSubmit)}
-                >
-                  Guardar
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    </>
+          <button
+            type="submit"
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors"
+          >
+            Guardar
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };

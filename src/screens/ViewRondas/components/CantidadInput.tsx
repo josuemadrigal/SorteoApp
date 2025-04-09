@@ -1,5 +1,4 @@
 import React from "react";
-import { TextField } from "@mui/material";
 import { UseFormRegister } from "react-hook-form";
 
 interface CantidadInputProps {
@@ -12,20 +11,24 @@ const CantidadInput: React.FC<CantidadInputProps> = ({
   disabled,
 }) => {
   return (
-    <TextField
-      type="number"
-      placeholder="Cantidad"
-      label="Cantidad"
-      color="success"
-      {...register("cantidad", { required: true, min: 1 })}
-      sx={{
-        minWidth: "20%",
-        width: "100%",
-        margin: "5px 5px 5px 0px",
-        textAlign: "center",
-      }}
-      disabled={disabled}
-    />
+    <div className="w-full mb-2">
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Cantidad
+      </label>
+      <input
+        type="number"
+        placeholder="Cantidad"
+        {...register("cantidad", { required: true, min: 1 })}
+        disabled={disabled}
+        className={`
+          w-full p-3 rounded-lg border border-gray-300 
+          bg-gray-50 text-gray-900 text-center
+          focus:ring-2 focus:ring-green-500 focus:border-transparent
+          ${disabled ? "bg-gray-100 cursor-not-allowed opacity-70" : ""}
+        `}
+        min="1"
+      />
+    </div>
   );
 };
 

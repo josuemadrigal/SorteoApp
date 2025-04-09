@@ -1,5 +1,4 @@
 import React from "react";
-import { Select, MenuItem, SelectChangeEvent, InputLabel } from "@mui/material";
 
 interface Premio {
   premio: string;
@@ -8,9 +7,9 @@ interface Premio {
 
 interface PremioSelectProps {
   value: string;
-  onChange: (event: SelectChangeEvent<string>) => void;
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   premios: Premio[];
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 const PremioSelect: React.FC<PremioSelectProps> = ({
@@ -19,28 +18,30 @@ const PremioSelect: React.FC<PremioSelectProps> = ({
   premios,
   disabled,
 }) => {
+  console.log("Premios en select", premios);
   return (
-    <>
-      <InputLabel sx={{ marginTop: "20px" }}>Premio</InputLabel>
-      <Select
+    <div className="w-full mt-5">
+      <label className="block mb-2 text-sm font-medium text-gray-700">
+        Premio
+      </label>
+      <select
         value={value}
         onChange={onChange}
-        variant="filled"
-        color="success"
-        sx={{ minWidth: "40%", width: "100%", margin: "5px 5px 15px 0px" }}
-        defaultValue=""
         disabled={disabled}
+        className={`w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent ${
+          disabled ? "bg-gray-100 cursor-not-allowed opacity-70" : ""
+        }`}
       >
-        <MenuItem value="" disabled>
+        <option value="" disabled>
           Seleccione el premio
-        </MenuItem>
+        </option>
         {premios.map((e) => (
-          <MenuItem key={e.slug_premio} value={e.slug_premio}>
+          <option key={e.slug_premio} value={e.slug_premio}>
             {e.premio}
-          </MenuItem>
+          </option>
         ))}
-      </Select>
-    </>
+      </select>
+    </div>
   );
 };
 
