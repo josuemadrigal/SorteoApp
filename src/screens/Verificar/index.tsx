@@ -1,19 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import InputMask from "react-input-mask";
-import "../../App.css";
-import gifLoading from "../../../public/loading.gif";
-import "animate.css";
-import {
-  Button,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-  styled,
-} from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
+import gifLoading from "../../../public/loading.gif";
 
 interface FormValues {
   status: number;
@@ -26,34 +16,10 @@ interface Registro {
   nombre: string;
 }
 
-interface GetRegistrosResponse {
-  registros: Registro[];
-}
-
 const defaultValues: FormValues = {
   cedula: "",
   coment: "",
   status: 1,
-};
-
-const showError = (title: string) => {
-  Swal.fire({
-    position: "center",
-    icon: "warning",
-    title,
-    showConfirmButton: false,
-    timer: 2000,
-  });
-};
-
-const success = (title: string) => {
-  Swal.fire({
-    position: "center",
-    icon: "success",
-    title,
-    showConfirmButton: false,
-    timer: 2000,
-  });
 };
 
 const premios = [
@@ -100,7 +66,6 @@ const Verificar = () => {
   };
 
   const inputRef = useRef<HTMLInputElement | null>(null);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [entregadoTrue, setEntregadoTrue] = useState(false);
   const [cedula, setCedula] = useState("");
@@ -114,10 +79,9 @@ const Verificar = () => {
       status: string;
     }[]
   >([]);
-
   const [text, setText] = useState("");
 
-  const handleTextChange = (event) => {
+  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(event.target.value);
   };
 
@@ -127,33 +91,48 @@ const Verificar = () => {
     }
   }, []);
 
+  const showError = (title: string) => {
+    Swal.fire({
+      position: "center",
+      icon: "warning",
+      title,
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  };
+
+  const success = (title: string) => {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title,
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  };
+
   const getByCedula = async (cedula: string) => {
-    setPersona([]); // Clear current persona before fetching new data
-    setIsSubmitting(true); // Disable form while fetching
+    setPersona([]);
+    setIsSubmitting(true);
     try {
       const response = await registrosService.getRegistroByCedula(3, cedula);
 
       if (response.data.registros.length < 1) {
-        console.log("no ganó");
         showError("Esta cedula no fue ganadora");
         return;
       }
 
-      setEntregadoTrue(
-        response.data.registros[0]?.status === "4" ? true : false
-      );
-      console.log(entregadoTrue);
+      setEntregadoTrue(response.data.registros[0]?.status === "4");
       setText(response.data.registros[0].coment);
       setPersona(response.data.registros);
     } catch (error) {
       console.error(error);
     } finally {
-      setIsSubmitting(false); // Enable form after fetching
+      setIsSubmitting(false);
     }
   };
 
   const ActualizarRegistros = async () => {
-    console.log("update: ", text);
     if (!text) {
       showError("Debe escribir un comentario");
       return;
@@ -165,12 +144,11 @@ const Verificar = () => {
       success("Listo!");
       setText("");
       setPersona([]);
-      setIsSubmitting(false);
     } else {
       showError("Intente nuevamente");
       setPersona([]);
-      setIsSubmitting(false);
     }
+    setIsSubmitting(false);
   };
 
   const openSwalForNumber = async () => {
@@ -185,13 +163,13 @@ const Verificar = () => {
       inputLabel: "Sólo guarde cuando entregue el premio (no revele su codigo)",
       inputPlaceholder: "Ingrese su código",
       showCancelButton: true,
-      confirmButtonText: "Guardar", // Texto del botón "Guardar"
+      confirmButtonText: "Guardar",
       cancelButtonText: "Abortar",
       confirmButtonColor: "#06502a",
       cancelButtonColor: "red",
       inputAttributes: {
-        maxlength: 4, // Limitar la longitud máxima si es necesario
-        inputmode: "numeric", // Sugerir teclado numérico en dispositivos móviles
+        maxlength: 4,
+        inputmode: "numeric",
       },
       inputValidator: (value) => {
         if (!value) {
@@ -208,7 +186,7 @@ const Verificar = () => {
     });
 
     if (number === expectedCode) {
-      ActualizarRegistros();
+      await ActualizarRegistros();
     }
   };
 
@@ -234,238 +212,116 @@ const Verificar = () => {
     reset({ ...defaultValues, cedula: "" });
   };
 
-  const Item = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(1),
-    textAlign: "center",
-  }));
-
   return (
-    <Grid
-      container
-      my={1}
-      rowSpacing={2}
-      columnSpacing={1}
-      sx={{
-        alignItems: "center",
+    <div className="flex flex-col items-center justify-center p-4 gap-4">
+      {/* Search Form */}
+      <div className="w-full max-w-md bg-white p-4 rounded-lg shadow-md">
+        <form onSubmit={handleSubmit(registerSubmit)} className="flex gap-2">
+          <InputMask
+            mask="999-9999999-9"
+            maskChar=""
+            {...register("cedula", {
+              required: true,
+              maxLength: 13,
+            })}
+            disabled={isSubmitting}
+          >
+            {(inputProps: any) => (
+              <input
+                {...inputProps}
+                type="text"
+                className={`flex-1 p-2 border rounded focus:ring-2 focus:ring-green-500 ${
+                  errors.cedula ? "border-red-500" : "border-gray-300"
+                }`}
+                placeholder="000-0000000-0"
+                ref={inputRef}
+                onKeyDown={handleKeyPress}
+                disabled={isSubmitting}
+              />
+            )}
+          </InputMask>
+          <button
+            type="submit"
+            className={`px-4 py-2 rounded text-white ${
+              isSubmitting ? "bg-gray-400" : "bg-green-600 hover:bg-green-700"
+            }`}
+            disabled={isSubmitting}
+          >
+            Buscar
+          </button>
+        </form>
+      </div>
 
-        justifyContent: "center",
-      }}
-    >
-      <Grid
-        item
-        md={12}
-        sm={10}
-        sx={{ display: "flex", justifyContent: "center" }}
-      >
-        <Item
-          sx={{
-            minHeight: "100%",
-            width: "400px",
-            justifyContent: "center",
-          }}
-        >
-          <form onSubmit={handleSubmit(registerSubmit)}>
-            <InputMask
-              mask="999-9999999-9"
-              maskChar=""
-              {...register("cedula", {
-                required: true,
-                maxLength: 13,
-              })}
-              disabled={isSubmitting}
-            >
-              {(inputProps) => (
-                <TextField
-                  {...inputProps}
-                  variant="outlined"
-                  color="success"
-                  type="text"
-                  label="Cédula"
-                  sx={{ minWidth: "40%", margin: "5px 5px 15px 0px" }}
-                  inputRef={inputRef}
-                  onKeyDown={handleKeyPress}
-                  disabled={isSubmitting}
-                />
-              )}
-            </InputMask>
-            <Button
-              variant="contained"
-              color="success"
-              type="submit"
-              sx={{ minWidth: "30%", margin: "5px 5px 15px 0px" }}
-              disabled={isSubmitting}
-            >
-              Buscar
-            </Button>
-          </form>
-        </Item>
-      </Grid>
+      {/* Results Section */}
+      <div className="w-full max-w-md">
+        {persona.length > 0 ? (
+          <div className="flex flex-col gap-4">
+            {/* Winner Info Card */}
+            <div className="bg-green-600 p-4 rounded-lg shadow-md text-center">
+              {persona.map((e) => (
+                <div key={e.cedula} className="space-y-3">
+                  <h2 className="text-3xl font-bold uppercase text-yellow-200">
+                    {e.nombre}
+                  </h2>
+                  <p className="text-lg bg-green-700 rounded px-2 py-1 text-white font-bold">
+                    {e.cedula}
+                  </p>
+                  <p className="text-lg bg-or-400 rounded px-2 py-1 text-white font-bold">
+                    {premios.find((premio) => premio.slug === e.premio)?.premio}
+                  </p>
+                  <p className="text-lg bg-green-800 rounded px-2 py-1 text-white font-bold">
+                    {municipios.find((m) => m.slug === e.municipio)?.municipio}
+                  </p>
+                  <p
+                    className={`text-lg rounded px-2 py-1 font-bold ${
+                      e.status === "3"
+                        ? "bg-green-400 text-black"
+                        : "bg-red-800 text-white"
+                    }`}
+                  >
+                    {e.status === "3"
+                      ? "Premio no entregado"
+                      : "Premio entregado"}
+                  </p>
+                </div>
+              ))}
+            </div>
 
-      <Grid
-        item
-        md={12}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        {persona && persona.length > 0 ? (
-          <Grid style={{ justifyContent: "center", alignItems: "center" }}>
-            <Item
-              sx={{
-                height: "70%",
-                width: "400px",
-                backgroundColor: "seagreen",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                marginBottom: 5,
-              }}
-            >
-              <Grid
-                container
-                columnSpacing={1}
-                sx={{
-                  flex: 1,
-                  width: "100%",
-                  minHeight: "200px",
-                  overflowY: "auto",
-                  overflowX: "hidden",
-                  maxHeight: "100%",
-                }}
-              >
-                {persona.map((e) => (
-                  <Grid item md={12} key={e.cedula}>
-                    <Typography
-                      variant="h2"
-                      style={{
-                        fontSize: "52px",
-                        fontWeight: "bold",
-                        color: "wheat",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      {e.nombre}
-                    </Typography>
-                    <Typography
-                      variant="h5"
-                      style={{
-                        marginTop: 5,
-                        backgroundColor: "darkseagreen",
-                        borderRadius: 5,
-                        color: "white",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {e.cedula}
-                    </Typography>
-                    <Typography
-                      variant="h5"
-                      style={{
-                        marginTop: 5,
-                        backgroundColor: "coral",
-                        borderRadius: 5,
-                        color: "white",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {
-                        premios.find((premio) => premio.slug === e.premio)
-                          ?.premio
-                      }
-                    </Typography>
-
-                    <Typography
-                      variant="h5"
-                      style={{
-                        marginTop: 5,
-                        backgroundColor: "darkgreen",
-                        borderRadius: 5,
-                        color: "white",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {
-                        municipios.find(
-                          (municipio) => municipio.slug === e.municipio
-                        )?.municipio
-                      }
-                    </Typography>
-                    <Typography
-                      variant="subtitle1"
-                      style={{
-                        fontWeight: "bold",
-                        borderRadius: 5,
-                        marginTop: 10,
-                        padding: 10,
-                        backgroundColor:
-                          e.status == "3" ? "greenyellow" : "darkred",
-                      }}
-                    >
-                      {e.status == "3"
-                        ? "Premio no entregado"
-                        : "Premio entregado"}
-                    </Typography>
-                  </Grid>
-                ))}
-              </Grid>
-            </Item>
-            <form onSubmit={handleSubmit(ActualizarRegistros)}>
-              <label style={{ width: "100%", marginTop: "15px" }}>
-                <Typography variant="h6">Ingrese algún comentario:</Typography>
+            {/* Comment Form */}
+            <div className="bg-white p-4 rounded-lg shadow-md">
+              <label className="block mb-2">
+                <span className="text-lg font-semibold">
+                  Ingrese algún comentario:
+                </span>
                 <textarea
-                  style={{
-                    width: "100%",
-                    height: "100px",
-                    fontSize: "16px",
-                    padding: "10px",
-                    boxSizing: "border-box",
-                    marginTop: "20px",
-                  }}
+                  className="w-full p-2 border border-gray-300 rounded mt-2 h-24"
                   value={text}
                   onChange={handleTextChange}
                   disabled={isSubmitting || entregadoTrue}
                 />
               </label>
-              <Button
-                variant="contained"
-                color="error"
-                type="submit"
-                sx={{ width: "100%", margin: "5px 5px 15px 0px" }}
+              <button
+                className={`w-full py-2 px-4 rounded text-white ${
+                  isSubmitting || entregadoTrue
+                    ? "bg-gray-400"
+                    : "bg-red-600 hover:bg-red-700"
+                }`}
                 disabled={isSubmitting || entregadoTrue}
                 onClick={openSwalForNumber}
+                type="button"
               >
                 Actualizar
-              </Button>
-            </form>
-          </Grid>
-        ) : (
-          <>
-            {isSubmitting ? (
-              <Grid
-                style={{
-                  display: "block",
-                  alignContent: "center",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <img
-                  src={gifLoading}
-                  alt="loading"
-                  style={{ width: "100px" }}
-                />
-                <Typography style={{ color: "darkgreen" }}>
-                  Cargando...
-                </Typography>
-              </Grid>
-            ) : (
-              ""
-            )}
-          </>
-        )}
-      </Grid>
-    </Grid>
+              </button>
+            </div>
+          </div>
+        ) : isSubmitting ? (
+          <div className="flex flex-col items-center justify-center p-4">
+            <img src={gifLoading} alt="loading" className="w-24" />
+            <p className="text-green-800 mt-2">Cargando...</p>
+          </div>
+        ) : null}
+      </div>
+    </div>
   );
 };
 

@@ -1,24 +1,13 @@
 import React, { useEffect, useState } from "react";
-import "../../App.css";
-import SearchIcon from "@mui/icons-material/Search";
 import { useMutation } from "react-query";
-import "animate.css";
-import {
-  Grid,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  Typography,
-  styled,
-} from "@mui/material";
 import { useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
-import PremioSelect from "./components/PremioSelect";
-import MunicipioSelect from "./components/MunicipioSelect";
-import CustomButton from "./components/CustomButton";
+
 import TableGanadores from "./components/TableGanadores";
+import MunicipioSelect from "../Consulta/components/MunicipioSelect";
+import PremioSelect from "../Consulta/components/PremioSelect";
+import CustomButton from "../Consulta/components/CustomButton";
 
 interface FormValues {
   nombre: string;
@@ -146,100 +135,60 @@ const ViewGanadores: React.FC = () => {
     setRonda(event.target.value as string);
   };
 
-  const Item = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(1),
-    textAlign: "center",
-  }));
-
   return (
-    <Grid container my={1} rowSpacing={1} columnSpacing={1}>
-      <Grid item sm={12} md={2} sx={{ position: "fixed" }}>
-        <Item sx={{ height: "40vh", width: "220px" }}>
-          <MunicipioSelect
-            value={municipioT}
-            onChange={handleMunicipio}
-            register={register}
-          />
-          <div style={{ display: "flex" }}>
-            <InputLabel sx={{ marginTop: "20px", width: "40%" }}>
-              RONDA #
-            </InputLabel>
-            <Select
-              value={ronda}
-              onChange={handleRondaChange}
-              displayEmpty
-              variant="filled"
-              color="success"
-              sx={{ margin: "5px 5px 15px 0px", width: "58%" }}
-              inputProps={{ "aria-label": "Without label" }}
-            >
-              <MenuItem value="" disabled>
-                Seleccione la ronda
-              </MenuItem>
-              {[...Array(10).keys()].map((n) => (
-                <MenuItem key={n + 1} value={n + 1}>
-                  {n + 1}
-                </MenuItem>
-              ))}
-            </Select>
-          </div>
-          <PremioSelect
-            value={premio}
-            onChange={handlePremio}
-            premios={premios}
-          />
+    <div className="flex flex-col md:flex-row p-4 gap-4">
+      {/* Sidebar filters */}
+      <div className="w-full md:w-56 fixed md:relative bg-white p-4 rounded-lg shadow-md h-auto md:h-[40vh] z-10">
+        <MunicipioSelect
+          value={municipioT}
+          onChange={handleMunicipio}
+          register={register}
+        />
 
-          <CustomButton
-            onClick={CustomGetRegistros}
-            icon={<SearchIcon />}
-            text="Buscar"
-            color="success"
-          />
-        </Item>
-      </Grid>
-
-      <Grid item sm={12} md={12}>
-        <Item
-          sx={{
-            height: "100%",
-            marginLeft: "250px",
-            backgroundColor: "#06502a",
-            justifyContent: "center",
-          }}
-        >
-          <Grid
-            container
-            columnSpacing={1}
-            sx={{
-              justifyContent: "center",
-
-              // flex: 1,
-              width: "100%",
-              minHeight: "200px",
-            }}
+        <div className="flex items-center mt-5">
+          <label className="w-2/5 text-sm font-medium text-gray-700">
+            RONDA #
+          </label>
+          <select
+            value={ronda}
+            onChange={handleRondaChange}
+            className="w-3/5 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-transparent bg-gray-50"
           >
-            <Typography
-              style={{
-                fontWeight: "bold",
-                textTransform: "uppercase",
-                fontSize: "25px",
-                marginTop: "55px",
-                color: "white",
-                backgroundColor: "seagreen",
-                padding: "10px",
-                borderRadius: "10px",
-              }}
-              gutterBottom
-              textAlign="center"
-            >
-              Lista de ganadores
-            </Typography>
+            <option value="" disabled>
+              Seleccione la ronda
+            </option>
+            {[...Array(10).keys()].map((n) => (
+              <option key={n + 1} value={n + 1}>
+                {n + 1}
+              </option>
+            ))}
+          </select>
+        </div>
 
-            <TableGanadores premios={ganadores} />
-          </Grid>
-        </Item>
-      </Grid>
-    </Grid>
+        <PremioSelect
+          value={premio}
+          onChange={handlePremio}
+          premios={premios}
+        />
+
+        <CustomButton
+          onClick={CustomGetRegistros}
+          icon="search"
+          text="Buscar"
+          color="success"
+        />
+      </div>
+
+      {/* Main content */}
+      <div className="ml-0 md:ml-64 w-full md:w-[calc(100%-16rem)] bg-green-800 rounded-lg shadow-md p-4 mt-16 md:mt-0">
+        <div className="flex flex-col items-center w-full min-h-[200px]">
+          <h2 className="font-bold uppercase text-xl md:text-2xl my-4 text-white bg-green-600 px-4 py-2 rounded-lg">
+            Lista de ganadores
+          </h2>
+          <TableGanadores premios={ganadores} />
+        </div>
+      </div>
+    </div>
   );
 };
 

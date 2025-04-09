@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../../App.css";
-import { Grid, Paper, Typography, styled } from "@mui/material";
 import registrosService from "../../services/RegistrosService";
 
 interface RegistroCountByMunicipioProps {
@@ -28,43 +26,23 @@ const RegistroCountByMunicipio: React.FC<RegistroCountByMunicipioProps> = ({
   };
 
   return (
-    <div>
-      <Typography
-        style={{
-          fontWeight: "bold",
-          textTransform: "uppercase",
-          fontSize: "20px",
-          marginTop: "20px",
-          color: "black",
-          backgroundColor: "lightgray",
-          padding: "10px",
-          borderRadius: "10px",
-        }}
-        gutterBottom
-        textAlign="center"
-      >
+    <div className="space-y-4">
+      <h2 className="font-bold uppercase text-xl text-center bg-gray-300 p-3 rounded-lg">
         Conteo de Registros por Municipio
-      </Typography>
-      <Grid container spacing={2} justifyContent="center">
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {registros.map((registro) => (
-          <Grid item key={registro.municipio} xs={12} sm={6} md={4}>
-            <Paper
-              style={{
-                padding: "10px",
-                textAlign: "center",
-                backgroundColor: "#f0f0f0",
-              }}
-            >
-              <Typography variant="h6">
-                {formatMunicipioName(registro.municipio)}
-              </Typography>
-              <Typography variant="body1">
-                Cantidad: {registro.count}
-              </Typography>
-            </Paper>
-          </Grid>
+          <div
+            key={registro.municipio}
+            className="bg-gray-100 p-4 rounded-lg text-center shadow-sm"
+          >
+            <h3 className="text-lg font-semibold">
+              {formatMunicipioName(registro.municipio)}
+            </h3>
+            <p className="text-gray-700">Cantidad: {registro.count}</p>
+          </div>
         ))}
-      </Grid>
+      </div>
     </div>
   );
 };
@@ -81,7 +59,6 @@ const ViewRegistros = () => {
         const response = await registrosService.getRegistrosCountByMunicipio();
         if (response.data.ok) {
           setRegistrosCountByMunicipio(response.data.registros);
-          // Calcular el total de registros
           const total = response.data.registros.reduce(
             (accumulator, current) => accumulator + current.count,
             0
@@ -93,61 +70,22 @@ const ViewRegistros = () => {
       }
     };
 
-    // Llamar al método inicialmente
     fetchRegistrosCountByMunicipio();
-
-    // Establecer intervalo para actualizar cada 1 minuto
-    const interval = setInterval(() => {
-      fetchRegistrosCountByMunicipio();
-    }, 60000); // 60000 milisegundos = 1 minuto
-
-    // Limpiar el intervalo cuando el componente se desmonte
+    const interval = setInterval(fetchRegistrosCountByMunicipio, 60000);
     return () => clearInterval(interval);
   }, []);
 
-  const Item = styled(Paper)(({ theme }) => ({
-    padding: theme.spacing(1),
-    textAlign: "center",
-  }));
-
   return (
-    <Grid container my={1} rowSpacing={1} columnSpacing={1}>
-      <Grid item md={12}>
-        <Item
-          sx={{
-            height: "calc(100vh)",
-            marginX: "5%",
-            backgroundColor: "#06502a",
-            justifyContent: "center",
-          }}
-        >
-          <Grid
-            container
-            columnSpacing={1}
-            sx={{
-              justifyContent: "center",
-              flex: 1,
-              width: "100%",
-              minHeight: "200px",
-            }}
-          >
-            <RegistroCountByMunicipio registros={registrosCountByMunicipio} />
-          </Grid>
-          <Typography
-            style={{
-              fontWeight: "bold",
-              fontSize: "32px",
-              marginTop: "20px",
-              color: "white",
-            }}
-            gutterBottom
-            textAlign="center"
-          >
+    <div className="min-h-screen p-4  ">
+      <div className="bg-green-800 rounded-xl p-6 mx-auto max-w-7xl min-h-[80vh] flex flex-col items-center justify-center">
+        <div className="flex flex-col space-y-6 ">
+          <RegistroCountByMunicipio registros={registrosCountByMunicipio} />
+          <h2 className="text-3xl font-bold text-white">
             Total de Registros: {totalRegistros}
-          </Typography>
-        </Item>
-      </Grid>
-    </Grid>
+          </h2>
+        </div>
+      </div>
+    </div>
   );
 };
 

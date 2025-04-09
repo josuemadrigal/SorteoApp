@@ -25,11 +25,11 @@ const Home = () => {
 
   const funcionalidades = [
     {
-      titulo: "Gestión de Lotería",
+      titulo: "Gestión de Sorteos",
       icono: <BanknotesIcon className="text-blue-500" />,
       elementos: [
         {
-          etiqueta: "Nueva Lotería",
+          etiqueta: "Registro Generico",
           ruta: "registroG",
           icono: <BanknotesIcon />,
           descripcion: "Crear y gestionar sorteos de lotería",
@@ -37,8 +37,8 @@ const Home = () => {
           destacado: true,
         },
         {
-          etiqueta: "Datos Municipales",
-          ruta: "registro",
+          etiqueta: "Registro por Municipio",
+          ruta: "select",
           icono: <MapPinIcon />,
           descripcion: "Gestionar registros municipales",
           color: "sky",
@@ -69,7 +69,7 @@ const Home = () => {
     },
     {
       titulo: "Visualización",
-      icono: <EyeIcon className="text-indigo-500" />,
+      icono: <EyeIcon className="text-sky-500" />,
       elementos: [
         {
           etiqueta: "Galería de Premios",
@@ -107,7 +107,7 @@ const Home = () => {
   const estadisticas = [
     {
       valor: "24",
-      etiqueta: "Loterías Activas",
+      etiqueta: "Sorteos Activas",
       icono: <ChartBarIcon />,
       tendencia: "↑ 12%",
       iconColor: "blue", // Added explicit color
@@ -124,10 +124,10 @@ const Home = () => {
       etiqueta: "Premios Disponibles",
       icono: <TrophyIcon />,
       tendencia: "→",
-      iconColor: "emerald",
+      iconColor: "esmerald",
     },
     {
-      valor: "12",
+      valor: "5",
       etiqueta: "Municipios",
       icono: <MapPinIcon />,
       tendencia: "↑ 3%",
@@ -233,17 +233,20 @@ const Home = () => {
             className="inline-flex items-center justify-center mb-6 px-4 py-2 rounded-full bg-white/80 backdrop-blur-md border border-gray-200/50 shadow-sm text-sm font-medium text-gray-600"
           >
             <SparklesIcon className="w-4 h-4 mr-2 text-amber-400" />
-            Versión Premium 2.0
+            Versión 2025
           </motion.div>
 
           <motion.h1
             variants={animacionEntrada}
             transition={{ delay: 0.2 }}
-            className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-transparent bg-clip-text leading-tight"
+            className="text-4xl md:text-6xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-lime-900 via-lime-700 to-lime-600 text-transparent bg-clip-text leading-tight"
           >
             Plataforma de Gestión
             <br />
-            de Lotería <span className="whitespace-nowrap">Premium</span>
+            de Sorteos{" "}
+            <span className="whitespace-nowrap text-lime-600 uppercase italic">
+              Eduard
+            </span>
           </motion.h1>
 
           <motion.p
@@ -288,7 +291,7 @@ const Home = () => {
                     {estadistica.tendencia}
                   </span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900">
+                <h3 className="text-2xl font-bold text-lime-900">
                   {estadistica.valor}
                 </h3>
                 <p className="text-sm text-gray-500">{estadistica.etiqueta}</p>
@@ -313,34 +316,14 @@ const Home = () => {
                 className="flex items-center justify-center gap-3 mb-8"
               >
                 <div
-                  className={`p-3 rounded-xl bg-gradient-to-br from-${
-                    seccion.icono.props.className.includes("text-blue")
-                      ? "blue"
-                      : "indigo"
-                  }-100 to-${
-                    seccion.icono.props.className.includes("text-blue")
-                      ? "blue"
-                      : "indigo"
-                  }-50 border border-${
-                    seccion.icono.props.className.includes("text-blue")
-                      ? "blue"
-                      : "indigo"
-                  }-200/50 shadow-sm`}
+                  className={`p-3 rounded-xl bg-gradient-to-br from-lime-600 to-lime-400 border border-lime-200/50 shadow-sm`}
                 >
                   {React.cloneElement(seccion.icono, {
-                    className: `w-8 h-8 ${seccion.icono.props.className}`,
+                    className: `w-8 h-8 text-lime-50`,
                   })}
                 </div>
                 <h2
-                  className={`text-2xl md:text-3xl font-bold bg-gradient-to-r from-${
-                    seccion.icono.props.className.includes("text-blue")
-                      ? "blue"
-                      : "indigo"
-                  }-600 to-${
-                    seccion.icono.props.className.includes("text-blue")
-                      ? "blue"
-                      : "indigo"
-                  }-800 text-transparent bg-clip-text`}
+                  className={`text-2xl md:text-3xl font-bold bg-gradient-to-r from-lime-600 to-lime-800 text-transparent bg-clip-text`}
                 >
                   {seccion.titulo}
                 </h2>
@@ -433,14 +416,14 @@ const Home = () => {
           <div className="relative z-10 text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center justify-center mb-4 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-sm font-medium text-white">
               <SparklesIcon className="w-4 h-4 mr-2 text-amber-300" />
-              ¿Listo para la transformación?
+              ¿Necesite soporte o ayúda?
             </div>
             <h3 className="text-3xl md:text-4xl font-bold mb-4">
-              Lleve su gestión de lotería al siguiente nivel
+              Pongase en contacto con soporte técnico
             </h3>
             <p className="text-lg text-gray-300 mb-8">
-              Descubra cómo nuestra plataforma puede optimizar sus operaciones y
-              mejorar la experiencia de sus participantes.
+              Daremos atención lo mas pronto posible a su solicitud. Si tiene
+              alguna duda o pregunta, no dude en contactarnos.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <motion.button
@@ -448,7 +431,7 @@ const Home = () => {
                 whileTap={{ scale: 0.98 }}
                 className="px-8 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2"
               >
-                Comenzar ahora
+                (829) 230-3288
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"

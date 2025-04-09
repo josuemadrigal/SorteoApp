@@ -5,7 +5,7 @@ interface MunicipioSelectProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   register: UseFormRegister<any>;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 const MunicipioSelect: React.FC<MunicipioSelectProps> = ({
