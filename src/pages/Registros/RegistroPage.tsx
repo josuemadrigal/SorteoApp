@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import InputMask from "react-input-mask";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import Swal from "sweetalert2";
 import RegistrosService from "../../services/RegistrosService";
 import { useLocation, useParams } from "react-router-dom";
