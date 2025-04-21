@@ -32,7 +32,7 @@ const Home = () => {
           etiqueta: "Registro Generico",
           ruta: "registroG",
           icono: <BanknotesIcon />,
-          descripcion: "Crear y gestionar sorteos de lotería",
+          descripcion: "Crear y gestionar sorteos",
           color: "blue",
           destacado: true,
         },
@@ -44,25 +44,25 @@ const Home = () => {
           color: "sky",
         },
         {
-          etiqueta: "Centro de Premios",
+          etiqueta: "Registro de Premios",
           ruta: "reg-premios",
           icono: <TrophyIcon />,
-          descripcion: "Configurar asignaciones de premios",
+          descripcion: "Regristrar premios para el sorteo",
           color: "emerald",
           destacado: true,
         },
         {
-          etiqueta: "Verificación de ID",
+          etiqueta: "Registro de cédula",
           ruta: "reg-cedula",
           icono: <IdentificationIcon />,
-          descripcion: "Verificar identidades de participantes",
+          descripcion: "Registrar cédulas que no aparecen en la base de datos",
           color: "amber",
         },
         {
           etiqueta: "Configuración de Ronda",
           ruta: "reg-ronda",
           icono: <ArrowPathIcon />,
-          descripcion: "Configurar rondas de lotería",
+          descripcion: "Configurar rondas del sorteo",
           color: "rose",
         },
       ],
@@ -72,29 +72,29 @@ const Home = () => {
       icono: <EyeIcon className="text-sky-500" />,
       elementos: [
         {
-          etiqueta: "Galería de Premios",
+          etiqueta: "Listado de Premios",
           ruta: "viewPremios",
           icono: <TrophyIcon className="text-esmerald-600" />,
           descripcion: "Explorar todos los premios disponibles",
           color: "violet",
         },
         {
-          etiqueta: "Salón de Ganadores",
+          etiqueta: "Lista de Ganadores",
           ruta: "viewGanadores",
           icono: <AcademicCapIcon className="text-esmerald-600" />,
-          descripcion: "Ver todos los ganadores de la lotería",
+          descripcion: "Ver todos los ganadores del sorteo",
           color: "emerald",
           destacado: true,
         },
+        // {
+        //   etiqueta: "Pantalla en Vivo",
+        //   ruta: "view-Ganadores",
+        //   icono: <ComputerDesktopIcon className="text-esmerald-600" />,
+        //   descripcion: "Visualización pública de ganadores",
+        //   color: "sky",
+        // },
         {
-          etiqueta: "Pantalla en Vivo",
-          ruta: "view-Ganadores",
-          icono: <ComputerDesktopIcon className="text-esmerald-600" />,
-          descripcion: "Visualización pública de ganadores",
-          color: "sky",
-        },
-        {
-          etiqueta: "Validación",
+          etiqueta: "Validación de Ganadores",
           ruta: "verificar",
           icono: <ShieldCheckIcon className="text-esmerald-600" />,
           descripcion: "Verificar detalles de participantes",
@@ -425,7 +425,7 @@ const Home = () => {
               Daremos atención lo mas pronto posible a su solicitud. Si tiene
               alguna duda o pregunta, no dude en contactarnos.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
+            {/* <div className="flex flex-col sm:flex-row justify-center gap-4">
               <motion.button
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -474,7 +474,7 @@ const Home = () => {
                   />
                 </svg>
               </motion.button>
-            </div>
+            </div> */}
           </div>
         </motion.section>
       </div>
