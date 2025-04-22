@@ -53,6 +53,91 @@ const Consulta = () => {
   >([]);
   const [cantiRonda, setCantiRonda] = useState("");
 
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      // Entrar en pantalla completa
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.error(`Error al intentar pantalla completa: ${err.message}`);
+      });
+      setIsFullscreen(true);
+    } else {
+      // Salir de pantalla completa
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+        setIsFullscreen(false);
+      }
+    }
+  };
+
+  // Escuchar cambios en el estado de pantalla completa
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isFullscreen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [isFullscreen]);
+
+  // Puedes agregar esto en tu archivo de componentes
+  const FullscreenButton = ({
+    isFullscreen,
+    onClick,
+  }: {
+    isFullscreen: boolean;
+    onClick: () => void;
+  }) => (
+    <button
+      onClick={onClick}
+      className="absolute bottom-4 left-4 bg-gray-800 text-white p-3 rounded-full shadow-lg hover:bg-gray-700 transition-colors z-50"
+      title={isFullscreen ? "Salir de pantalla completa" : "Pantalla completa"}
+    >
+      {isFullscreen ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      ) : (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+          />
+        </svg>
+      )}
+    </button>
+  );
+
   useEffect(() => {
     const fetchPremios = async () => {
       try {
@@ -214,6 +299,10 @@ const Consulta = () => {
   return (
     <div className="flex md:flex-row p-2 bg-emerald-900 min-h-screen overflow-auto">
       {/* Sidebar */}
+      <FullscreenButton
+        isFullscreen={isFullscreen}
+        onClick={toggleFullscreen}
+      />
       <div className="w-full md:w-56 h-[94vh] bg-white shadow-md rounded-lg p-4 fixed md:relative ">
         <img src={GifTombola} alt="TOMBOLA" className="w-[90%] mx-auto" />
 

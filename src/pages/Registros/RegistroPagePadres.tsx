@@ -19,7 +19,7 @@ const defaultValues: FormValues = {
   nombre: "",
   cedula: "",
   municipio: "",
-  boleto: "",
+  boleto: "N/A",
   telefono: "",
   status: 1,
   premio: "-",
@@ -380,24 +380,28 @@ const RegistroPadres: React.FC = () => {
             )}
 
             {cedulaNotFound && (
-              <div className="relative">
+              <div>
                 <input
                   {...register("nombre", {
                     required: errorMessages.nombreRequerido,
-                    validate: (value) =>
-                      /^[A-Za-z\s]{3,}(\s[A-Za-z\s]{3,})+$/.test(value) ||
-                      "Debe ingresar nombre y apellido, o nombre completo",
+                    pattern: {
+                      value:
+                        /^[A-Za-zÁÉÍÓÚáéíóúÑñ]{2,}(?:\s+[A-Za-zÁÉÍÓÚáéíóúÑñ]{2,})+$/,
+                      message: "Debe ingresar al menos nombre y apellido",
+                    },
                   })}
+                  onInput={(e) => {
+                    // Elimina todo excepto letras, espacios y caracteres acentuados
+                    e.currentTarget.value = e.currentTarget.value.replace(
+                      /[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g,
+                      ""
+                    );
+                  }}
+                  disabled={isSubmitting}
                   className={`w-full p-3 rounded-lg border ${
                     errors.nombre ? "border-red-500" : "border-gray-300"
                   } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
-                  placeholder="Nombre y Apellido"
-                  ref={nombreRef}
-                  onInput={(e) => {
-                    const input = e.target as HTMLInputElement;
-                    input.value = input.value.replace(/[^a-zA-Z\s]/g, "");
-                  }}
-                  disabled={isSubmitting}
+                  placeholder="Nombre"
                 />
                 {errors.nombre && (
                   <p className="mt-1 text-sm text-red-500">
