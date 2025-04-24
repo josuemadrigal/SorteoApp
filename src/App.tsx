@@ -1,13 +1,18 @@
+import { useLocation } from "react-router-dom";
 import WhatsAppButton from "./components/WhatsAppButton";
 import { AppRouter } from "./router/AppRouter";
 
 function App() {
-  //const [count, setCount] = useState(0)
+  const location = useLocation();
+
+  const whatsappRoutes = ["/consulta"];
+
+  const showWhatsAppButton = whatsappRoutes.includes(location.pathname);
 
   return (
     <>
       {/* <AppLayout > */}
-      <WhatsAppButton />
+      {!showWhatsAppButton && <WhatsAppButton />}
       <AppRouter />
       {/* </AppLayout> */}
     </>
