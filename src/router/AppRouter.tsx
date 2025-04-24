@@ -19,6 +19,7 @@ import RegistroPadres from "../pages/Registros/RegistroPagePadres";
 import ViewRegistros from "../screens/ViewRegistros";
 import Codigo from "../screens/Codigo";
 import ViewRondas from "../screens/ViewRondas";
+import ActivarPersona from "../pages/ActivarPersona";
 
 export const AppRouter = (): any => {
   return (
@@ -26,6 +27,7 @@ export const AppRouter = (): any => {
       <Route path="/" element={<Home />} />
       <Route path="/registroG" element={<RegistroPadres />} />
       <Route path="/select" element={<SelectMunicio />} />
+      <Route path="/activar" element={<ActivarPersona />} />
       <Route path="/registro/:id" element={<Registro />} />
       <Route path="/consulta" element={<Consulta />} />
       <Route path="/reg-ronda" element={<RegistroRonda />} />

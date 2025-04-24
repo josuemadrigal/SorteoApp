@@ -33,7 +33,7 @@ const Consulta = () => {
     defaultValues: {
       municipio: "",
       premio: "",
-      status: 1,
+      status: 2,
       cantidad: 4,
       ronda: "1",
     },
