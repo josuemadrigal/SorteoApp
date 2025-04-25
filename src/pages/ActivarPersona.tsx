@@ -270,10 +270,16 @@ const ActivarPersona: React.FC = () => {
             <div>
               <InputMask
                 mask="999-9999999-9"
+                placeholder="___-_______-_"
                 maskChar=""
                 disabled={isSubmitting}
                 {...register("cedula", {
-                  required: true,
+                  required: "La cédula obligatoria",
+                  pattern: {
+                    value: /^\d{3}-\d{7}-\d{1}$/,
+                    message: "Formato de cédula inválido",
+                  },
+                  minLength: 13,
                   maxLength: 13,
                   onBlur: handleBlur,
                 })}
@@ -281,12 +287,10 @@ const ActivarPersona: React.FC = () => {
                 {(inputProps: any) => (
                   <input
                     {...inputProps}
-                    ref={inputRef}
                     onKeyDown={handleKeyPress}
                     className={`w-full p-3 rounded-lg border ${
                       errors.cedula ? "border-red-500" : "border-gray-300"
                     } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
-                    placeholder="Cédula (___-_______-_)"
                     inputMode="numeric"
                   />
                 )}
@@ -320,7 +324,7 @@ const ActivarPersona: React.FC = () => {
                 isSubmitting ? "bg-gray-400" : "bg-green-500 hover:bg-green-600"
               } transition-colors`}
             >
-              {isSubmitting ? "Procesando..." : "Registrar"}
+              {isSubmitting ? "Procesando..." : "Activar Participante"}
             </button>
           </form>
         </div>
