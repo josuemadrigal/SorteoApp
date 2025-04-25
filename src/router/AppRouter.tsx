@@ -24,8 +24,8 @@ import ActivarPersona from "../pages/ActivarPersona";
 export const AppRouter = (): any => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/registroG" element={<RegistroPadres />} />
+      <Route path="/home" element={<Home />} />
+      <Route path="/" element={<RegistroPadres />} />
       <Route path="/select" element={<SelectMunicio />} />
       <Route path="/activar" element={<ActivarPersona />} />
       <Route path="/registro/:id" element={<Registro />} />
