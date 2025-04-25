@@ -287,6 +287,7 @@ const ActivarPersona: React.FC = () => {
                       errors.cedula ? "border-red-500" : "border-gray-300"
                     } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
                     placeholder="Cédula (___-_______-_)"
+                    inputMode="numeric"
                   />
                 )}
               </InputMask>
