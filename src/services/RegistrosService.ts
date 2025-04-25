@@ -74,6 +74,12 @@ interface GetRegistrosCountByMunicipioResponse {
 //   premio: Premio;
 // }
 
+interface ActivarParticipanteResponse {
+  ok: boolean;
+  msg: string;
+  participante?: any;
+}
+
 class RegistrosService {
   public async getRegistros(
     status: number,
@@ -246,6 +252,18 @@ class RegistrosService {
   > {
     const response = await http.get<GetRegistrosCountByMunicipioResponse>(
       "/registros/countByMunicipio"
+    );
+    return response;
+  }
+
+  public async activarParticipante(
+    cedula: string
+  ): Promise<AxiosResponse<ActivarParticipanteResponse>> {
+    const jsonPar: any = { cedula };
+    const params = new URLSearchParams(jsonPar);
+    const response = await http.get<ActivarParticipanteResponse>(
+      `/registros/activar`,
+      { params }
     );
     return response;
   }

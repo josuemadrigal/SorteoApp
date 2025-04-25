@@ -40,6 +40,10 @@ const ActivarPersona: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cedulaNotFound, setCedulaNotFound] = useState(false);
   const [cedulaParticipando, setCedulaParticipando] = useState(false);
+  const [activationStatus, setActivationStatus] = useState<{
+    message: string;
+    type: "success" | "error" | "warning" | "info" | null;
+  }>({ message: "", type: null });
 
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
@@ -83,6 +87,56 @@ const ActivarPersona: React.FC = () => {
     });
   };
 
+  const showWarning = (title: string) => {
+    Swal.fire({
+      position: "center",
+      icon: "warning",
+      title,
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  };
+
+  const activarCedula = async (cedula: string) => {
+    try {
+      setIsSubmitting(true);
+      setActivationStatus({ message: "", type: null });
+
+      const res = await RegistrosService.activarParticipante(cedula);
+
+      if (res.data.ok) {
+        if (res.data.msg === "Cédula activada") {
+          showSuccess(res.data.msg + ": " + res.data.participante);
+          setActivationStatus({ message: res.data.msg, type: "success" });
+        } else if (res.data.msg === "Cédula ya ha sido activada") {
+          showWarning(res.data.msg + ": " + res.data.participante.nombre);
+          setActivationStatus({ message: res.data.msg, type: "warning" });
+        }
+      } else {
+        if (res.data.msg === "Cédula no está participando") {
+          showError(res.data.msg);
+          setCedulaNotFound(true);
+          setActivationStatus({ message: res.data.msg, type: "error" });
+        } else {
+          showError(res.data.msg);
+          setActivationStatus({ message: res.data.msg, type: "error" });
+        }
+      }
+
+      return res.data;
+    } catch (error) {
+      console.error("Error al activar cédula:", error);
+      showError("Error al procesar la solicitud");
+      setActivationStatus({
+        message: "Error al procesar la solicitud",
+        type: "error",
+      });
+      return { ok: false, msg: "Error al procesar la solicitud" };
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const checkParticipando = async (cedula: string) => {
     const res = await RegistrosService.checkParticipando(cedula);
     if (res.data.participando) {
@@ -94,43 +148,48 @@ const ActivarPersona: React.FC = () => {
 
   const checkCedula = async (cedula: string) => {
     try {
-      const participando = await checkParticipando(cedula);
-      if (participando) {
-        reset({ ...defaultValues, municipio: municipioNombre });
-        setNombre("");
-        setCedula("");
-        setCedulaNotFound(false);
-        setCedulaParticipando(false);
-        setIsSubmitting(false);
-        return;
-      }
+      setIsSubmitting(true);
 
-      const res = await RegistrosService.getCedula(cedula);
-      const reg = res.data.registro;
+      // Intentar activar la cédula primero
+      const activacionResult = await activarCedula(cedula);
 
-      if (reg?.nombre) {
-        const nombre = reg.nombre.toUpperCase();
-        setNombre(nombre);
-        setNombreDB(nombre);
-        setCedula(cedula);
-        setCedulaNotFound(false);
-      } else {
-        setNombreDB(nombre);
-        setCedulaNotFound(true);
-        setNombre("");
-        setCedula(cedula);
-        if (nombre) {
-          await handleRegister({
-            nombre,
-            cedula,
-            municipio: municipioNombre,
-            premio: "-",
-            status: 1,
-          });
+      // Si la cédula no está registrada y necesitamos registrarla
+      if (activacionResult.msg === "Cédula no registrada") {
+        try {
+          const res = await RegistrosService.getCedula(cedula);
+          const reg = res.data.registro;
+
+          if (reg?.nombre) {
+            const nombre = reg.nombre.toUpperCase();
+            setNombre(nombre);
+            setNombreDB(nombre);
+            setCedula(cedula);
+            setCedulaNotFound(false);
+          } else {
+            setNombreDB(nombre);
+            setCedulaNotFound(true);
+            setNombre("");
+            setCedula(cedula);
+            if (nombre) {
+              await handleRegister({
+                nombre,
+                cedula,
+                municipio: municipioNombre,
+                premio: "-",
+                status: 1,
+              });
+            }
+          }
+        } catch (err) {
+          console.error("Error al verificar cédula:", err);
         }
+      } else {
+        // Cédula ya está registrada y fue activada o ya estaba activada
+        reset({ ...defaultValues, municipio: municipioNombre });
+        inputRef.current?.focus();
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error al procesar cédula:", err);
     } finally {
       setIsSubmitting(false);
     }
@@ -144,6 +203,9 @@ const ActivarPersona: React.FC = () => {
         showError(errorMessages.cedulaParticipando);
       } else if (res.status === 201) {
         showSuccess(`Registro de ${data.cedula} COMPLETADO (${data.nombre})`);
+
+        // Después de registrar, intentamos activar la cédula
+        await activarCedula(data.cedula);
       }
       reset({ ...defaultValues, municipio: municipioNombre });
       setNombre("");
@@ -161,7 +223,6 @@ const ActivarPersona: React.FC = () => {
   const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (value.length === 13) {
-      setIsSubmitting(true);
       await checkCedula(value);
     }
   };
@@ -232,46 +293,22 @@ const ActivarPersona: React.FC = () => {
             </div>
 
             {isSubmitting && (
-              <p className="text-sm text-yellow-600">
-                Buscando cédula en la base de datos...
-              </p>
+              <p className="text-sm text-yellow-600">Procesando cédula...</p>
             )}
 
-            {nombre && !cedulaNotFound && !cedulaParticipando && (
-              <div className="p-3 bg-gray-100 rounded-lg">
-                <p className="font-medium">Nombre: {nombre}</p>
-              </div>
-            )}
-
-            {cedulaNotFound && (
-              <div>
-                <input
-                  {...register("nombre", {
-                    required: errorMessages.nombreRequerido,
-                    pattern: {
-                      value:
-                        /^[A-Za-zÁÉÍÓÚáéíóúÑñ]{2,}(?:\s+[A-Za-zÁÉÍÓÚáéíóúÑñ]{2,})+$/,
-                      message: "Debe ingresar al menos nombre y apellido",
-                    },
-                  })}
-                  onInput={(e) => {
-                    // Elimina todo excepto letras, espacios y caracteres acentuados
-                    e.currentTarget.value = e.currentTarget.value.replace(
-                      /[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g,
-                      ""
-                    );
-                  }}
-                  disabled={isSubmitting}
-                  className={`w-full p-3 rounded-lg border ${
-                    errors.nombre ? "border-red-500" : "border-gray-300"
-                  } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
-                  placeholder="Nombre"
-                />
-                {errors.nombre && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {errors.nombre.message}
-                  </p>
-                )}
+            {activationStatus.type && (
+              <div
+                className={`p-3 rounded-lg ${
+                  activationStatus.type === "success"
+                    ? "bg-green-100 text-green-800"
+                    : activationStatus.type === "warning"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : activationStatus.type === "error"
+                    ? "bg-red-100 text-red-800"
+                    : "bg-blue-100 text-blue-800"
+                }`}
+              >
+                <p className="font-medium">{activationStatus.message}</p>
               </div>
             )}
 
