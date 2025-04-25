@@ -100,6 +100,13 @@ const Home = () => {
           descripcion: "Verificar detalles de participantes",
           color: "amber",
         },
+        {
+          etiqueta: "Lista de registrados",
+          ruta: "registrados",
+          icono: <ShieldCheckIcon className="text-esmerald-600" />,
+          descripcion: "Verificar detalles de participantes",
+          color: "amber",
+        },
       ],
     },
   ];
