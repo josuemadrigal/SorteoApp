@@ -256,6 +256,15 @@ class RegistrosService {
     return response;
   }
 
+  public async getRegistrosCountByMunicipioActivo(): Promise<
+    AxiosResponse<GetRegistrosCountByMunicipioResponse>
+  > {
+    const response = await http.get<GetRegistrosCountByMunicipioResponse>(
+      "/registros/countByMunicipioActivo"
+    );
+    return response;
+  }
+
   public async activarParticipante(
     cedula: string
   ): Promise<AxiosResponse<ActivarParticipanteResponse>> {
