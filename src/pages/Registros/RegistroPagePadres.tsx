@@ -330,40 +330,77 @@ const RegistroPadres: React.FC = () => {
 
           <form onSubmit={handleSubmit(registerSubmit)} className="space-y-4">
             <div className="relative">
-              <InputMask
-                mask="999-9999999-9"
-                placeholder="___-_______-_"
-                maskChar=""
-                {...register("cedula", {
-                  required: "La cédula obligatoria",
-                  pattern: {
-                    value: /^\d{3}-\d{7}-\d{1}$/,
-                    message: "Formato de cédula inválido",
-                  },
-                  minLength: 13,
-                  maxLength: 13,
-                  onBlur: handleBlur,
-                })}
-                disabled={isSubmitting}
-              >
-                {(inputProps: any) => (
-                  <input
-                    {...inputProps}
-                    className={`w-full p-3 rounded-lg border ${
-                      errors.cedula ? "border-red-500" : "border-gray-300"
-                    } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
-                    onKeyDown={handleKeyPress}
-                  />
+              <div className="flex">
+                <div className="flex-grow relative">
+                  <InputMask
+                    mask="999-9999999-9"
+                    placeholder="___-_______-_"
+                    maskChar=""
+                    {...register("cedula", {
+                      required: "La cédula obligatoria",
+                      pattern: {
+                        value: /^\d{3}-\d{7}-\d{1}$/,
+                        message: "Formato de cédula inválido",
+                      },
+                      minLength: 13,
+                      maxLength: 13,
+                      onBlur: handleBlur,
+                    })}
+                    disabled={isSubmitting}
+                  >
+                    {(inputProps: any) => (
+                      <input
+                        {...inputProps}
+                        className={`w-full p-3 rounded-lg border ${
+                          errors.cedula ? "border-red-500" : "border-gray-300"
+                        } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
+                        inputMode="numeric"
+                        onKeyDown={handleKeyPress}
+                      />
+                    )}
+                  </InputMask>
+                  <label className="absolute left-3 -top-2 bg-white px-1 text-sm text-gray-500">
+                    Cédula
+                  </label>
+                </div>
+                <button
+                  type="button"
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 rounded-r-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                  onClick={() => {
+                    const cedulaValue = (
+                      document.querySelector(
+                        'input[name="cedula"]'
+                      ) as HTMLInputElement
+                    )?.value;
+                    if (cedulaValue && cedulaValue.length === 13) {
+                      checkCedula(cedulaValue);
+                    } else {
+                      showError(errorMessages.cedulaNoValida);
+                    }
+                  }}
+                  disabled={isSubmitting}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                  </svg>
+                </button>
+                {errors.cedula && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.cedula.message}
+                  </p>
                 )}
-              </InputMask>
-              <label className="absolute left-3 -top-2 bg-white px-1 text-sm text-gray-500">
-                Cédula
-              </label>
-              {errors.cedula && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.cedula.message}
-                </p>
-              )}
+              </div>
             </div>
 
             {isSubmitting && (
