@@ -66,10 +66,10 @@ const RegistroPadres: React.FC = () => {
   const [cedulaParticipando, setCedulaParticipando] = useState(false);
   const [buttonText, setButtonText] = useState("Buscar");
   const [modalOpen, setModalOpen] = useState(false);
-  const [muniColor, setMuniColor] = useState("");
+  const [selectedMunicipio, setSelectedMunicipio] = useState("");
 
   const errorMessages = {
-    invalidMunicipio: "Seleccione un municipio o distrito válido",
+    invalidMunicipio: "Seleccione el color de su boleta",
     invalidBoleta: "Ingrese una cédula válida",
     duplicateBoleta: "Esta cédula ya ha sido registrada",
     cedulaNotFound: "No se encontró un registro con esa cédula",
@@ -91,6 +91,45 @@ const RegistroPadres: React.FC = () => {
       nombreRef.current.focus();
     }
   }, [cedulaNotFound]);
+
+  const municipios = [
+    {
+      id: "la-romana",
+      name: "La Romana",
+      color: "bg-red-600",
+      textColor: "text-red-600",
+    },
+    {
+      id: "villa-hermosa",
+      name: "Villa Hermosa",
+      color: "bg-sky-600",
+      textColor: "text-sky-600",
+    },
+    {
+      id: "caleta",
+      name: "Caleta",
+      color: "bg-lime-600",
+      textColor: "text-lime-600",
+    },
+    {
+      id: "cumayasa",
+      name: "Cumayasa",
+      color: "bg-purple-600",
+      textColor: "text-purple-600",
+    },
+    {
+      id: "guaymate",
+      name: "Guaymate",
+      color: "bg-amber-600",
+      textColor: "text-amber-600",
+    },
+  ];
+
+  const resetMunicipioButtons = () => {
+    setSelectedMunicipio("");
+    setMunicipio("");
+    setValue("municipio", "");
+  };
 
   const checkParticipando = async (cedula: string) => {
     const participandoResponse = await RegistrosService.checkParticipando(
@@ -212,7 +251,10 @@ const RegistroPadres: React.FC = () => {
         title: "¿Están correctos sus datos?",
         html: ` <p> Nombre: <b>${data.nombre}</b></p>
                 <p> Cédula: <b>${data.cedula}</b></p>
-                <p> Municipio: <b>${data.municipio}</b></p>`,
+                <p> Municipio: <b>${data.municipio
+                  .split("-")
+                  .join(" ")
+                  .toUpperCase()}</b></p>`,
         icon: "question",
         showCancelButton: true,
         cancelButtonText: "Editar datos",
@@ -231,6 +273,7 @@ const RegistroPadres: React.FC = () => {
             setCedulaNotFound(false);
             setCedulaParticipando(false);
             setButtonText("Buscar");
+            resetMunicipioButtons();
           }
 
           if (response.status === 203) {
@@ -241,6 +284,7 @@ const RegistroPadres: React.FC = () => {
             setCedulaNotFound(false);
             setCedulaParticipando(false);
             setButtonText("Buscar");
+            resetMunicipioButtons();
           } else if (response.status === 206) {
             showError("Esta participando");
           } else if (response.status === 201) {
@@ -253,12 +297,16 @@ const RegistroPadres: React.FC = () => {
             setCedulaNotFound(false);
             setCedulaParticipando(false);
             setButtonText("Buscar");
+            resetMunicipioButtons();
             return setTimeout(() => {
               window.location.replace(
                 "https://www.instagram.com/eduardespiritusanto/"
               );
             }, 2000);
           }
+        } else {
+          // Si el usuario elige "Editar datos", resetear los botones de municipio
+          resetMunicipioButtons();
         }
       });
     } catch (error) {
@@ -292,11 +340,10 @@ const RegistroPadres: React.FC = () => {
     }
   };
 
-  const handleMunicipioChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setMunicipio(event.target.value);
-    setValue("municipio", event.target.value);
+  const handleMunicipioSelect = (municipioId: string) => {
+    setSelectedMunicipio(municipioId);
+    setMunicipio(municipioId);
+    setValue("municipio", municipioId);
   };
 
   const handleBoletoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -306,10 +353,14 @@ const RegistroPadres: React.FC = () => {
 
   const registerSubmit: SubmitHandler<FormValues> = async (data) => {
     if (data.cedula.length === 13 && (nombre || cedulaNotFound)) {
+      if (!data.municipio) {
+        showError(errorMessages.invalidMunicipio);
+        return;
+      }
       await handleRegister({
         ...data,
         nombre: nombre || data.nombre,
-        municipio: municipioNombre,
+        municipio: data.municipio,
         premio: "-",
         status: 1,
       });
@@ -357,6 +408,7 @@ const RegistroPadres: React.FC = () => {
                         } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
                         inputMode="numeric"
                         onKeyDown={handleKeyPress}
+                        ref={inputRef}
                       />
                     )}
                   </InputMask>
@@ -366,7 +418,7 @@ const RegistroPadres: React.FC = () => {
                 </div>
                 <button
                   type="button"
-                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 rounded-r-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-4 rounded-lg ml-2 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
                   onClick={() => {
                     const cedulaValue = (
                       document.querySelector(
@@ -396,12 +448,12 @@ const RegistroPadres: React.FC = () => {
                     />
                   </svg>
                 </button>
-                {errors.cedula && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {errors.cedula.message}
-                  </p>
-                )}
               </div>
+              {errors.cedula && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.cedula.message}
+                </p>
+              )}
             </div>
 
             {isSubmitting && (
@@ -440,6 +492,7 @@ const RegistroPadres: React.FC = () => {
                     errors.nombre ? "border-red-500" : "border-gray-300"
                   } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
                   placeholder="Nombre"
+                  ref={nombreRef}
                 />
                 {errors.nombre && (
                   <p className="mt-1 text-sm text-red-500">
@@ -484,25 +537,44 @@ const RegistroPadres: React.FC = () => {
             </div>
 
             <div className="relative">
-              <select
-                value={municipio}
-                onChange={handleMunicipioChange}
-                className={`w-full p-3 rounded-lg border ${
-                  errors.municipio ? "border-red-500" : "border-gray-300"
-                } focus:ring-2 focus:ring-green-500 focus:border-transparent appearance-none bg-white`}
-              >
-                <option value="" disabled>
-                  Seleccione el municipio
-                </option>
-                <option value="la-romana">La Romana</option>
-                <option value="caleta">Caleta</option>
-                <option value="guaymate">Guaymate</option>
-                <option value="villa-hermosa">Villa Hermosa</option>
-                <option value="cumayasa">Cumayasa</option>
-              </select>
-              <label className="absolute left-3 -top-2 bg-white px-1 text-sm text-gray-500">
-                Municipio
+              <label className="block text-sm text-gray-500 mb-2">
+                Seleccione el color de su boleta
               </label>
+
+              {selectedMunicipio && (
+                <h2 className="text-center text-gray-900 text-2xl font-black uppercase mb-4">
+                  {municipios.find((muni) => muni.id === selectedMunicipio)
+                    ?.name || ""}
+                </h2>
+              )}
+
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                {municipios.map((muni) => (
+                  <button
+                    key={muni.id}
+                    type="button"
+                    className={`p-3 rounded-md ${
+                      selectedMunicipio === muni.id
+                        ? `${muni.color} ${muni.textColor} font-bold`
+                        : selectedMunicipio
+                        ? "bg-gray-300 text-gray-300" // Deshabilitado si hay otro seleccionado
+                        : `${muni.color} ${muni.textColor}`
+                    } transition-colors`}
+                    onClick={() => handleMunicipioSelect(muni.id)}
+                    disabled={
+                      selectedMunicipio !== "" && selectedMunicipio !== muni.id
+                    }
+                  >
+                    {muni.name}
+                  </button>
+                ))}
+              </div>
+
+              {errors.municipio && (
+                <p className="mt-1 text-sm text-red-500">
+                  {errors.municipio.message || errorMessages.invalidMunicipio}
+                </p>
+              )}
             </div>
 
             <button
@@ -520,41 +592,6 @@ const RegistroPadres: React.FC = () => {
             >
               {buttonText}
             </button>
-            <h1 className="text-center text-gray-900 text-2xl font-black uppercase">
-              {muniColor}
-            </h1>
-            <div className="gap-2 flex flex-row">
-              <button
-                className="bg-red-600 p-5 rounded-md text-red-600"
-                onClick={() => setMuniColor("La Romana")}
-              >
-                La Romana
-              </button>
-              <button
-                className="bg-sky-600 p-5 rounded-md text-sky-600"
-                onClick={() => setMuniColor("Villa Hermosa")}
-              >
-                Villa hermosa
-              </button>
-              <button
-                className="bg-lime-600 p-5 rounded-md text-lime-600"
-                onClick={() => setMuniColor("Caleta")}
-              >
-                Caleta
-              </button>
-              <button
-                className="bg-purple-600 p-5 rounded-md text-purple-600"
-                onClick={() => setMuniColor("Cumayasa")}
-              >
-                Cuamayasa
-              </button>
-              <button
-                className="bg-amber-600 p-5 rounded-md text-amber-600"
-                onClick={() => setMuniColor("Guayamate")}
-              >
-                Guayamate
-              </button>
-            </div>
           </form>
         </div>
       </div>
