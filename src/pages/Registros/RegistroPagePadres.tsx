@@ -377,7 +377,7 @@ const RegistroPadres: React.FC = () => {
           <img
             src="/registrate-aqui-app.jpeg"
             alt="Padres banner"
-            className="w-full h-auto rounded-lg mb-6"
+            className="w-full h-auto rounded-lg mb-3"
           />
 
           <form onSubmit={handleSubmit(registerSubmit)} className="space-y-4">
@@ -388,33 +388,35 @@ const RegistroPadres: React.FC = () => {
                 </label>
 
                 {selectedMunicipio && (
-                  <h2 className="text-center text-gray-900 text-2xl font-black uppercase mb-4">
+                  <h2 className="text-center text-gray-900 text-2xl font-black uppercase mb-3">
                     {municipios.find((muni) => muni.id === selectedMunicipio)
                       ?.name || ""}
                   </h2>
                 )}
 
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                  {municipios.map((muni) => (
-                    <button
-                      key={muni.id}
-                      type="button"
-                      className={`p-3 rounded-md ${
-                        selectedMunicipio === muni.id
-                          ? `${muni.color} ${muni.textColor} font-bold`
-                          : selectedMunicipio
-                          ? "bg-gray-300 text-gray-300" // Deshabilitado si hay otro seleccionado
-                          : `${muni.color} ${muni.textColor}`
-                      } transition-colors`}
-                      onClick={() => handleMunicipioSelect(muni.id)}
-                      disabled={
-                        selectedMunicipio !== "" &&
-                        selectedMunicipio !== muni.id
-                      }
-                    >
-                      {muni.name}
-                    </button>
-                  ))}
+                  {municipios
+                    .map((muni) => (
+                      <button
+                        key={muni.id}
+                        type="button"
+                        className={`p-3 rounded-md ${
+                          selectedMunicipio === muni.id
+                            ? `${muni.color} ${muni.textColor} font-bold`
+                            : selectedMunicipio
+                            ? "bg-gray-300 text-gray-300" // Deshabilitado si hay otro seleccionado
+                            : `${muni.color} ${muni.textColor}`
+                        } transition-colors`}
+                        onClick={() => handleMunicipioSelect(muni.id)}
+                        disabled={
+                          selectedMunicipio !== "" &&
+                          selectedMunicipio !== muni.id
+                        }
+                      >
+                        {muni.name}
+                      </button>
+                    ))
+                    .sort(() => Math.random() - 0.5)}
                 </div>
 
                 {errors.municipio && (
