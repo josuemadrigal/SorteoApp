@@ -66,6 +66,7 @@ const RegistroPadres: React.FC = () => {
   const [cedulaParticipando, setCedulaParticipando] = useState(false);
   const [buttonText, setButtonText] = useState("Buscar");
   const [modalOpen, setModalOpen] = useState(false);
+  const [muniColor, setMuniColor] = useState("");
 
   const errorMessages = {
     invalidMunicipio: "Seleccione un municipio o distrito válido",
@@ -519,6 +520,41 @@ const RegistroPadres: React.FC = () => {
             >
               {buttonText}
             </button>
+            <h1 className="text-center text-gray-900 text-2xl font-black uppercase">
+              {muniColor}
+            </h1>
+            <div className="gap-2 flex flex-row">
+              <button
+                className="bg-red-600 p-5 rounded-md text-red-600"
+                onClick={() => setMuniColor("La Romana")}
+              >
+                La Romana
+              </button>
+              <button
+                className="bg-sky-600 p-5 rounded-md text-sky-600"
+                onClick={() => setMuniColor("Villa Hermosa")}
+              >
+                Villa hermosa
+              </button>
+              <button
+                className="bg-lime-600 p-5 rounded-md text-lime-600"
+                onClick={() => setMuniColor("Caleta")}
+              >
+                Caleta
+              </button>
+              <button
+                className="bg-purple-600 p-5 rounded-md text-purple-600"
+                onClick={() => setMuniColor("Cumayasa")}
+              >
+                Cuamayasa
+              </button>
+              <button
+                className="bg-amber-600 p-5 rounded-md text-amber-600"
+                onClick={() => setMuniColor("Guayamate")}
+              >
+                Guayamate
+              </button>
+            </div>
           </form>
         </div>
       </div>
