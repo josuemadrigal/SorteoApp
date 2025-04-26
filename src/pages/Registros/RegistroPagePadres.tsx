@@ -382,6 +382,47 @@ const RegistroPadres: React.FC = () => {
 
           <form onSubmit={handleSubmit(registerSubmit)} className="space-y-4">
             <div className="relative">
+              <div className="relative mb-5 ">
+                <label className="block text-sm text-gray-500 mb-2">
+                  Seleccione el color de su boleta
+                </label>
+
+                {selectedMunicipio && (
+                  <h2 className="text-center text-gray-900 text-2xl font-black uppercase mb-4">
+                    {municipios.find((muni) => muni.id === selectedMunicipio)
+                      ?.name || ""}
+                  </h2>
+                )}
+
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                  {municipios.map((muni) => (
+                    <button
+                      key={muni.id}
+                      type="button"
+                      className={`p-3 rounded-md ${
+                        selectedMunicipio === muni.id
+                          ? `${muni.color} ${muni.textColor} font-bold`
+                          : selectedMunicipio
+                          ? "bg-gray-300 text-gray-300" // Deshabilitado si hay otro seleccionado
+                          : `${muni.color} ${muni.textColor}`
+                      } transition-colors`}
+                      onClick={() => handleMunicipioSelect(muni.id)}
+                      disabled={
+                        selectedMunicipio !== "" &&
+                        selectedMunicipio !== muni.id
+                      }
+                    >
+                      {muni.name}
+                    </button>
+                  ))}
+                </div>
+
+                {errors.municipio && (
+                  <p className="mt-1 text-sm text-red-500">
+                    {errors.municipio.message || errorMessages.invalidMunicipio}
+                  </p>
+                )}
+              </div>
               <div className="flex">
                 <div className="flex-grow relative">
                   <InputMask
@@ -532,47 +573,6 @@ const RegistroPadres: React.FC = () => {
               {errors.telefono && (
                 <p className="mt-1 text-sm text-red-500">
                   {errors.telefono.message}
-                </p>
-              )}
-            </div>
-
-            <div className="relative">
-              <label className="block text-sm text-gray-500 mb-2">
-                Seleccione el color de su boleta
-              </label>
-
-              {selectedMunicipio && (
-                <h2 className="text-center text-gray-900 text-2xl font-black uppercase mb-4">
-                  {municipios.find((muni) => muni.id === selectedMunicipio)
-                    ?.name || ""}
-                </h2>
-              )}
-
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                {municipios.map((muni) => (
-                  <button
-                    key={muni.id}
-                    type="button"
-                    className={`p-3 rounded-md ${
-                      selectedMunicipio === muni.id
-                        ? `${muni.color} ${muni.textColor} font-bold`
-                        : selectedMunicipio
-                        ? "bg-gray-300 text-gray-300" // Deshabilitado si hay otro seleccionado
-                        : `${muni.color} ${muni.textColor}`
-                    } transition-colors`}
-                    onClick={() => handleMunicipioSelect(muni.id)}
-                    disabled={
-                      selectedMunicipio !== "" && selectedMunicipio !== muni.id
-                    }
-                  >
-                    {muni.name}
-                  </button>
-                ))}
-              </div>
-
-              {errors.municipio && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.municipio.message || errorMessages.invalidMunicipio}
                 </p>
               )}
             </div>
