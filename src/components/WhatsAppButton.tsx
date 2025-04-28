@@ -23,6 +23,7 @@ const WhatsAppButton = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
     // Detener el pulso cuando se abre el menú
+    setShowMessage(false);
     setIsPulsing(false);
   };
 
@@ -140,7 +141,7 @@ const WhatsAppButton = () => {
               },
             }}
             exit={{ opacity: 0, y: 20 }}
-            className="absolute bottom-16 right-0 bg-white shadow-md rounded-md overflow-hidden w-48"
+            className="absolute top-16 right-0 bg-white shadow-md rounded-md overflow-hidden w-48"
           >
             <motion.button
               whileHover={{ scale: 1.02 }}
