@@ -54,7 +54,7 @@ const WhatsAppButton = () => {
               },
             }}
             exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-24 right-6 bg-white shadow-lg rounded-lg p-3 max-w-xs z-50"
+            className="fixed top-24 right-6 bg-white shadow-lg rounded-lg p-3 max-w-xs z-50"
           >
             <div className="flex justify-between items-center">
               <p className="text-sm font-medium mr-2">
@@ -71,7 +71,7 @@ const WhatsAppButton = () => {
         )}
       </AnimatePresence>
 
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed top-6 right-6 z-50">
         {/* Pulso alrededor del botón */}
         <AnimatePresence>
           {isPulsing && (
