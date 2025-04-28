@@ -96,32 +96,32 @@ const RegistroPadres: React.FC = () => {
     {
       id: "la-romana",
       name: "La Romana",
-      color: "bg-red-600",
-      textColor: "text-red-600",
+      color: "bg-[#f86e51]",
+      textColor: "text-[#f86e51]",
     },
     {
       id: "villa-hermosa",
       name: "Villa Hermosa",
-      color: "bg-sky-600",
-      textColor: "text-sky-600",
+      color: "bg-[#1c9143]",
+      textColor: "text-[#1c9143]",
     },
     {
       id: "caleta",
       name: "Caleta",
-      color: "bg-lime-600",
-      textColor: "text-lime-600",
+      color: "bg-[#81360d]",
+      textColor: "text-[#81360d]",
     },
     {
       id: "cumayasa",
       name: "Cumayasa",
-      color: "bg-purple-600",
-      textColor: "text-purple-600",
+      color: "bg-[#14348e]",
+      textColor: "text-[#14348e]",
     },
     {
       id: "guaymate",
       name: "Guaymate",
-      color: "bg-amber-600",
-      textColor: "text-amber-600",
+      color: "bg-[#7b827e]",
+      textColor: "text-[#7b827e]",
     },
   ];
 
@@ -382,7 +382,7 @@ const RegistroPadres: React.FC = () => {
 
           <form onSubmit={handleSubmit(registerSubmit)} className="space-y-4">
             <div className="relative">
-              <div className="relative mb-5 ">
+              <div className="relative mb-5">
                 <label className="block text-sm text-gray-500 mb-2">
                   Seleccione el color de su boleta
                 </label>
