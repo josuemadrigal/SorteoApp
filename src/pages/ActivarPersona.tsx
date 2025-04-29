@@ -240,14 +240,8 @@ const ActivarPersona: React.FC = () => {
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    if (data.cedula.length === 13 && (nombre || cedulaNotFound)) {
-      await handleRegister({
-        ...data,
-        nombre: nombre || data.nombre,
-        municipio: municipioNombre,
-        premio: "-",
-        status: 1,
-      });
+    if (data.cedula.length === 13) {
+      await checkCedula(data.cedula);
     } else {
       showError(errorMessages.cedulaNoValida);
     }
