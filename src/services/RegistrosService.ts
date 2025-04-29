@@ -276,6 +276,19 @@ class RegistrosService {
     );
     return response;
   }
+
+  public async activarParticipanteByMunicipio(
+    cedula: string,
+    municipio: string
+  ): Promise<AxiosResponse<ActivarParticipanteResponse>> {
+    const jsonPar: any = { cedula, municipio };
+    const params = new URLSearchParams(jsonPar);
+    const response = await http.get<ActivarParticipanteResponse>(
+      `/registros/activarBy`,
+      { params }
+    );
+    return response;
+  }
 }
 
 export default new RegistrosService();

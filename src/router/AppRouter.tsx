@@ -20,6 +20,8 @@ import ViewRegistros from "../screens/ViewRegistros";
 import Codigo from "../screens/Codigo";
 import ViewRondas from "../screens/ViewRondas";
 import ActivarPersona from "../pages/ActivarPersona";
+import ActivarByMunicipio from "../pages/Registros/ActivarByMunicipio";
+import ActivarPersonaBy from "../pages/ActivarPersonaBy";
 
 export const AppRouter = (): any => {
   return (
@@ -27,6 +29,8 @@ export const AppRouter = (): any => {
       <Route path="/home" element={<Home />} />
       <Route path="/" element={<RegistroPadres />} />
       <Route path="/select" element={<SelectMunicio />} />
+      <Route path="/activarBy" element={<ActivarByMunicipio />} />
+      <Route path="/activarBy/:id" element={<ActivarPersonaBy />} />
       <Route path="/activar" element={<ActivarPersona />} />
       <Route path="/registro/:id" element={<Registro />} />
       <Route path="/consulta" element={<Consulta />} />
