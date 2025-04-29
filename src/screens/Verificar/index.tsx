@@ -21,7 +21,6 @@ const defaultValues: FormValues = {
   coment: "",
   status: 1,
 };
-
 const premios = [
   { premio: "Abanico", slug: "abanicos" },
   { premio: "Bono de $5 mil pesos", slug: "bonos_de_$5_mil_pesos" },
@@ -36,12 +35,15 @@ const premios = [
   { premio: "Nevera", slug: "nevera" },
   { premio: "Olla de presión", slug: "ollas_de_presion" },
   { premio: "Televisor", slug: "televisores" },
+  { premio: "CRV KARLOS", slug: "CRV 2025" },
 ];
 
 const municipios = [
   { municipio: "La Romana", slug: "la-romana" },
   { municipio: "Villa Hermosa", slug: "villa-hermosa" },
   { municipio: "Guaymate", slug: "guaymate" },
+  { municipio: "Caleta", slug: "caleta" },
+  { municipio: "Cumayasa", slug: "cumayasa" },
 ];
 
 const Verificar = () => {
@@ -116,6 +118,8 @@ const Verificar = () => {
     setIsSubmitting(true);
     try {
       const response = await registrosService.getRegistroByCedula(3, cedula);
+
+      console.log(response.data.registros);
 
       if (response.data.registros.length < 1) {
         showError("Esta cedula no fue ganadora");

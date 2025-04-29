@@ -28,14 +28,14 @@ const ActivarByMunicipio = () => {
         Seleccione el municipio que va activar
       </h1>
 
-      <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5   w-full max-w-4xl">
+      <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-10 w-full max-w-4xl">
         {municipios.map((item) => (
-          <div key={item.value} className="flex justify-center">
+          <div key={item.value} className="flex justify-center gap-">
             <button
               onClick={() => handleClick(item)}
               className="p-0 border-none bg-transparent cursor-pointer focus:outline-none"
             >
-              <div className="w-44 h-44 flex justify-center items-center bg-green-500 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-green-600">
+              <div className="w-32 h-32 sm:w-44 sm:h-44 flex justify-center items-center bg-green-500 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 hover:bg-green-600">
                 <span className="font-bold text-xl text-white text-center px-2">
                   {item.municipio}
                 </span>
