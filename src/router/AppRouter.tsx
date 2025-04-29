@@ -33,7 +33,7 @@ export const AppRouter = (): any => {
       <Route path="/activarBy/:id" element={<ActivarPersonaBy />} />
       <Route path="/activar" element={<ActivarPersona />} />
       <Route path="/registro/:id" element={<Registro />} />
-      <Route path="/consulta" element={<Consulta />} />
+      <Route path="/sortear2025" element={<Consulta />} />
       <Route path="/reg-ronda" element={<RegistroRonda />} />
       <Route path="/viewRondas" element={<ViewRondas />} />
       <Route path="/reg-premios" element={<RegistroPremios />} />

@@ -5,7 +5,7 @@ import { AppRouter } from "./router/AppRouter";
 function App() {
   const location = useLocation();
 
-  const whatsappRoutes = ["/consulta"];
+  const whatsappRoutes = ["/sortear2025"];
 
   const showWhatsAppButton = whatsappRoutes.includes(location.pathname);
 

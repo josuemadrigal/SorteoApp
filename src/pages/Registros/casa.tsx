@@ -30,10 +30,18 @@ const Home = () => {
       elementos: [
         {
           etiqueta: "Registro Generico",
-          ruta: "registroG",
+          ruta: "",
           icono: <BanknotesIcon />,
           descripcion: "Crear y gestionar sorteos",
           color: "blue",
+          destacado: true,
+        },
+        {
+          etiqueta: "Activar Cédula por Municipio",
+          ruta: "activarBy",
+          icono: <TrophyIcon />,
+          descripcion: "Regristrar premios para el sorteo",
+          color: "green",
           destacado: true,
         },
         {
@@ -49,7 +57,6 @@ const Home = () => {
           icono: <TrophyIcon />,
           descripcion: "Regristrar premios para el sorteo",
           color: "emerald",
-          destacado: true,
         },
         {
           etiqueta: "Registro de cédula",
@@ -65,12 +72,28 @@ const Home = () => {
           descripcion: "Configurar rondas del sorteo",
           color: "rose",
         },
+        {
+          etiqueta: "Iniciar Sorteo",
+          ruta: "sortear2025",
+          icono: <ArrowPathIcon />,
+          descripcion: "Iniciar con el sorteo de premios",
+          color: "yellow",
+          destacado: true,
+        },
       ],
     },
     {
       titulo: "Visualización",
       icono: <EyeIcon className="text-sky-500" />,
       elementos: [
+        {
+          etiqueta: "Lista de registrados",
+          ruta: "registrados",
+          icono: <ShieldCheckIcon className="text-esmerald-600" />,
+          descripcion: "Verificar detalles de participantes",
+          color: "amber",
+          destacado: true,
+        },
         {
           etiqueta: "Listado de Premios",
           ruta: "viewPremios",
@@ -84,7 +107,6 @@ const Home = () => {
           icono: <AcademicCapIcon className="text-esmerald-600" />,
           descripcion: "Ver todos los ganadores del sorteo",
           color: "emerald",
-          destacado: true,
         },
         // {
         //   etiqueta: "Pantalla en Vivo",
@@ -96,13 +118,6 @@ const Home = () => {
         {
           etiqueta: "Validación de Ganadores",
           ruta: "verificar",
-          icono: <ShieldCheckIcon className="text-esmerald-600" />,
-          descripcion: "Verificar detalles de participantes",
-          color: "amber",
-        },
-        {
-          etiqueta: "Lista de registrados",
-          ruta: "registrados",
           icono: <ShieldCheckIcon className="text-esmerald-600" />,
           descripcion: "Verificar detalles de participantes",
           color: "amber",
