@@ -64,7 +64,7 @@ const RegistroPadres: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [cedulaNotFound, setCedulaNotFound] = useState(false);
   const [cedulaParticipando, setCedulaParticipando] = useState(false);
-  const [buttonText, setButtonText] = useState("Buscar");
+  const [buttonText, setButtonText] = useState("Buscar cédula");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedMunicipio, setSelectedMunicipio] = useState("");
 
@@ -159,7 +159,7 @@ const RegistroPadres: React.FC = () => {
         setCedulaParticipando(false);
         setCedulaNotFound(false);
         setIsSubmitting(false);
-        setButtonText("Buscar");
+        setButtonText("Buscar cédula");
         return;
       }
 
@@ -212,12 +212,12 @@ const RegistroPadres: React.FC = () => {
           setCedula("");
           setCedulaNotFound(false);
           setCedulaParticipando(false);
-          setButtonText("Buscar");
+          setButtonText("Buscar cédula");
         }
       }
     } catch (error) {
       console.error(error);
-      setButtonText("Buscar");
+      setButtonText("Buscar cédula");
     }
   };
 
@@ -272,7 +272,7 @@ const RegistroPadres: React.FC = () => {
             setCedula("");
             setCedulaNotFound(false);
             setCedulaParticipando(false);
-            setButtonText("Buscar");
+            setButtonText("Buscar cédula");
             resetMunicipioButtons();
           }
 
@@ -283,7 +283,7 @@ const RegistroPadres: React.FC = () => {
             setCedula("");
             setCedulaNotFound(false);
             setCedulaParticipando(false);
-            setButtonText("Buscar");
+            setButtonText("Buscar cédula");
             resetMunicipioButtons();
           } else if (response.status === 206) {
             showError("Esta participando");
@@ -296,7 +296,7 @@ const RegistroPadres: React.FC = () => {
             setCedula("");
             setCedulaNotFound(false);
             setCedulaParticipando(false);
-            setButtonText("Buscar");
+            setButtonText("Buscar cédula");
             resetMunicipioButtons();
             return setTimeout(() => {
               window.location.replace(
@@ -312,7 +312,7 @@ const RegistroPadres: React.FC = () => {
     } catch (error) {
       console.error(error);
       showError(`Intente más tarde ${municipioNombre}`);
-      setButtonText("Buscar");
+      setButtonText("Buscar cédula");
     } finally {
       setIsSubmitting(false);
     }
@@ -379,12 +379,11 @@ const RegistroPadres: React.FC = () => {
             alt="Padres banner"
             className="w-full h-auto rounded-lg mb-3"
           />
-
           <form onSubmit={handleSubmit(registerSubmit)} className="space-y-4">
             <div className="relative">
               <div className="relative mb-5">
-                <label className="block text-sm text-gray-500 mb-2">
-                  Seleccione el color de su boleta
+                <label className="block text-lg font-bold text-gray-900 mb-2 uppercase">
+                  Seleccione el color de su boleta:
                 </label>
 
                 {selectedMunicipio && (
@@ -395,14 +394,14 @@ const RegistroPadres: React.FC = () => {
                 )}
 
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                  {municipios
-                    .map((muni) => (
+                  {
+                    municipios.map((muni) => (
                       <button
                         key={muni.id}
                         type="button"
                         className={`p-3 rounded-md ${
                           selectedMunicipio === muni.id
-                            ? `${muni.color} ${muni.textColor} font-bold`
+                            ? `${muni.color} ${muni.textColor} font-bold uppercase`
                             : selectedMunicipio
                             ? "bg-gray-300 text-gray-300" // Deshabilitado si hay otro seleccionado
                             : `${muni.color} ${muni.textColor}`
@@ -416,7 +415,8 @@ const RegistroPadres: React.FC = () => {
                         {muni.name}
                       </button>
                     ))
-                    .sort(() => Math.random() - 0.5)}
+                    // .sort(() => Math.random() - 0.5)
+                  }
                 </div>
 
                 {errors.municipio && (
@@ -455,7 +455,7 @@ const RegistroPadres: React.FC = () => {
                       />
                     )}
                   </InputMask>
-                  <label className="absolute left-3 -top-2 bg-white px-1 text-sm text-gray-500">
+                  <label className="absolute left-3 -top-2 bg-white px-1 text-sm font-bold uppercase text-gray-700">
                     Cédula
                   </label>
                 </div>
@@ -534,7 +534,7 @@ const RegistroPadres: React.FC = () => {
                   className={`w-full p-3 rounded-lg border ${
                     errors.nombre ? "border-red-500" : "border-gray-300"
                   } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
-                  placeholder="Nombre"
+                  placeholder="NOMBRE Y APELLIDO"
                   ref={nombreRef}
                 />
                 {errors.nombre && (
@@ -565,15 +565,15 @@ const RegistroPadres: React.FC = () => {
                     className={`w-full p-3 rounded-lg border ${
                       errors.telefono ? "border-red-500" : "border-gray-300"
                     } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
-                    placeholder="Número de celular"
+                    placeholder="(000) 000-0000"
                   />
                 )}
               </InputMask>
-              <label className="absolute left-3 -top-2 bg-white px-1 text-sm text-gray-500">
-                Teléfono
+              <label className="absolute left-3 -top-2 bg-white px-1 text-sm text-gray-700 uppercase font-bold">
+                Celular
               </label>
               {errors.telefono && (
-                <p className="mt-1 text-sm text-red-500">
+                <p className="mt-1 text-sm text-red-500 ">
                   {errors.telefono.message}
                 </p>
               )}
@@ -581,12 +581,12 @@ const RegistroPadres: React.FC = () => {
 
             <button
               type="submit"
-              className={`w-full p-3 rounded-lg font-medium text-white ${
-                buttonText === "Buscar"
+              className={`w-full p-3 uppercase rounded-lg font-medium text-white ${
+                buttonText === "Buscar cédula"
                   ? "bg-blue-500 hover:bg-blue-600"
                   : "bg-green-500 hover:bg-green-600"
               } transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                buttonText === "Buscar"
+                buttonText === "Buscar cédula"
                   ? "focus:ring-blue-500"
                   : "focus:ring-green-500"
               } disabled:opacity-50`}
@@ -602,7 +602,7 @@ const RegistroPadres: React.FC = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-lg w-full max-w-md max-h-[80vh] overflow-auto">
             <div className="p-6 text-center">
-              <h3 className="text-lg font-medium mb-4">
+              <h3 className="text-lg font-medium mb-4 uppercase">
                 Redireccionando a Instagram...
               </h3>
             </div>

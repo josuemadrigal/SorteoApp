@@ -220,12 +220,12 @@ const ActivarPersona: React.FC = () => {
     }
   };
 
-  const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value.length === 13) {
-      await checkCedula(value);
-    }
-  };
+  // const handleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   if (value.length === 13) {
+  //     await checkCedula(value);
+  //   }
+  // };
 
   const handleKeyPress = async (
     event: React.KeyboardEvent<HTMLInputElement>
@@ -281,7 +281,6 @@ const ActivarPersona: React.FC = () => {
                   },
                   minLength: 13,
                   maxLength: 13,
-                  onBlur: handleBlur,
                 })}
               >
                 {(inputProps: any) => (
