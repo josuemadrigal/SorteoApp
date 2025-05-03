@@ -562,6 +562,7 @@ const RegistroPadres: React.FC = () => {
                       errors.telefono ? "border-red-500" : "border-gray-300"
                     } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
                     placeholder="(000) 000-0000"
+                    inputMode="numeric"
                   />
                 )}
               </InputMask>
