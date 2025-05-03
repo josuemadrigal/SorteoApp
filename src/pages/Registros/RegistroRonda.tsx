@@ -84,7 +84,6 @@ export const RegistroRonda = () => {
       ...formData,
       cantidad: Number(formData.cantidad),
     };
-    console.log("Form data:", payload);
     if (!payload.municipio || !formData.premio) {
       return Swal.fire({
         icon: "error",
