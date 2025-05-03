@@ -21,7 +21,7 @@ const MunicipioSelect: React.FC<MunicipioSelectProps> = ({
       </label>
       <select
         value={value}
-        {...register("municipio", { required: true, maxLength: 10 })}
+        {...register("municipio", { required: true, maxLength: 20 })}
         onChange={onChange}
         disabled={disabled}
         className={`w-full p-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-900 focus:ring-2 focus:ring-green-500 focus:border-transparent ${
