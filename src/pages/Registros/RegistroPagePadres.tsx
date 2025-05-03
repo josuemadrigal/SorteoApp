@@ -224,7 +224,6 @@ const RegistroPadres: React.FC = () => {
   const handleRegister = async (data: FormValues) => {
     try {
       setIsSubmitting(true);
-      console.log(data);
       const municipioValido =
         data.municipio === "la-romana" ||
         data.municipio === "caleta" ||
@@ -266,7 +265,6 @@ const RegistroPadres: React.FC = () => {
           const response = await RegistrosService.crearRegistrosPadres(data);
           if (response.status !== 203) {
             const responseCedula = await RegistrosService.regCedula(data);
-            console.log(responseCedula);
             reset({ ...defaultValues, municipio: municipioNombre });
             setNombre("");
             setCedula("");
@@ -322,8 +320,6 @@ const RegistroPadres: React.FC = () => {
     const cedulaValue = event.target.value;
     if (cedulaValue.length === 13) {
       const serieCedula = cedulaValue.slice(0, 3);
-      console.log(serieCedula);
-
       await checkCedula(cedulaValue);
     }
   };

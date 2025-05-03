@@ -78,7 +78,6 @@ export const ViewPremios = () => {
         reset({ premio: "" });
       }
     } catch (error) {
-      console.log(error);
       showError("Intente más tarde");
     }
   };

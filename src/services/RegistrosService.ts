@@ -176,8 +176,6 @@ class RegistrosService {
 
   public async regCedula(param: any): Promise<AxiosResponse<any>> {
     const response = await http.post<any>("/registros/regCedula", param);
-    console.log("param: ", param);
-    console.log(response);
     return response;
   }
 
@@ -202,9 +200,7 @@ class RegistrosService {
   }
 
   public async regRonda(param: any): Promise<AxiosResponse<any>> {
-    console.log("param: ", param);
     const response = await http.post<any>("/registros/regRonda", param);
-    console.log("res: ", response);
     return response;
   }
 

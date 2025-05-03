@@ -144,7 +144,6 @@ const Consulta = () => {
         const response = await registrosService.getPremios();
         if (response.data.ok) {
           setPremios(response.data.premios);
-          console.log("Premios", response.data.premios);
         }
       } catch (error) {
         console.error("Error fetching premios", error);

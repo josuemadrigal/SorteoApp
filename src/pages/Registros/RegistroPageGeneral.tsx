@@ -167,8 +167,6 @@ const RegistroGeneral: React.FC = () => {
   const handleRegister = async (data: FormValues) => {
     try {
       setIsSubmitting(true);
-      console.log(data);
-
       const response = await RegistrosService.crearRegistros(data);
       if (response.status === 203) {
         showError(errorMessages.cedulaParticipando);

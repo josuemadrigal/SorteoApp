@@ -47,7 +47,6 @@ const ActivarPersonaBy: React.FC = () => {
 
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
-  console.log("location", location);
   const municipioNombre = id || "";
   const objeto = location.state?.parametros || {};
   const municipio = objeto.value || "";
@@ -118,12 +117,10 @@ const ActivarPersonaBy: React.FC = () => {
         }
       } else {
         if (res.data.msg === "Cédula no está participando") {
-          console.log("resp1", res.data.msg);
           showError(res.data.msg);
           setCedulaNotFound(true);
           setActivationStatus({ message: res.data.msg, type: "error" });
         } else {
-          console.log("resp2", res.data.msg);
           showError(res.data.msg.toUpperCase());
           setActivationStatus({ message: res.data.msg, type: "error" });
         }
