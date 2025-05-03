@@ -18,7 +18,6 @@ const PremioSelect: React.FC<PremioSelectProps> = ({
   premios,
   disabled,
 }) => {
-  console.log("Premios en select", premios);
   return (
     <div className="w-full mt-5">
       <label className="block mb-2 text-sm font-medium text-gray-700">

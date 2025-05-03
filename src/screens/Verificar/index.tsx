@@ -119,8 +119,6 @@ const Verificar = () => {
     try {
       const response = await registrosService.getRegistroByCedula(3, cedula);
 
-      console.log(response.data.registros);
-
       if (response.data.registros.length < 1) {
         showError("Esta cedula no fue ganadora");
         return;

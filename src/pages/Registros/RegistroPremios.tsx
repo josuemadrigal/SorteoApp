@@ -74,9 +74,6 @@ export const RegistroPremios = () => {
         status: 1,
         slug_premio,
       };
-
-      console.log("Enviando datos:", payload);
-
       try {
         const response = await RegistrosService.regPremio(payload);
 
