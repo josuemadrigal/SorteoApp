@@ -7,7 +7,8 @@ const WhatsAppButton = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPulsing, setIsPulsing] = useState(false);
-  const phoneNumber = "18092846378";
+  const phoneNumber = "18293088432";
+
   const message = "Hola, necesito ayuda para registrarme en el sorteo.";
 
   useEffect(() => {
@@ -21,8 +22,9 @@ const WhatsAppButton = () => {
   }, []);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    //setIsMenuOpen(!isMenuOpen);
     // Detener el pulso cuando se abre el menú
+    handleWhatsAppRedirect(phoneNumber);
     setShowMessage(false);
     setIsPulsing(false);
   };
