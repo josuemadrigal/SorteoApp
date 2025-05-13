@@ -515,17 +515,30 @@ const RegistroPadres: React.FC = () => {
                     required: errorMessages.nombreRequerido,
                     pattern: {
                       value:
-                        /^[A-Za-zÁÉÍÓÚáéíóúÑñ]{2,}(?:\s+[A-Za-zÁÉÍÓÚáéíóúÑñ]{2,})+$/,
-                      message: "Debe ingresar al menos nombre y apellido",
+                        /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{3,}(?:\s+[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{3,})+$/,
+                      message:
+                        "Debe ingresar al menos nombre y apellido (sin números/símbolos)",
                     },
                   })}
-                  onInput={(e) => {
-                    // Elimina todo excepto letras, espacios y caracteres acentuados
-                    e.currentTarget.value = e.currentTarget.value.replace(
-                      /[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g,
-                      ""
-                    );
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setNombre(value); // Actualiza el estado local
+                    setValue("nombre", value); // Actualiza react-hook-form
                   }}
+                  onInput={(e) => {
+                    // Permite letras, espacios y caracteres acentuados
+                    e.currentTarget.value = e.currentTarget.value
+                      .replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g, "")
+                      .replace(/\s+/g, " ")
+                      .trimStart();
+                  }}
+                  // onInput={(e) => {
+                  //   // Elimina todo excepto letras, espacios y caracteres acentuados
+                  //   e.currentTarget.value = e.currentTarget.value.replace(
+                  //     /[^A-Za-zÁÉÍÓÚáéíóúÑñ\s]/g,
+                  //     ""
+                  //   );
+                  // }}
                   disabled={isSubmitting}
                   className={`w-full p-3 rounded-lg border ${
                     errors.nombre ? "border-red-500" : "border-gray-300"
