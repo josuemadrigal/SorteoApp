@@ -3,7 +3,7 @@ import InputMask from "react-input-mask";
 import { SubmitHandler, useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
-import gifLoading from "../../../public/loading.gif";
+// import gifLoading from "../../../public/loading.gif";
 
 interface FormValues {
   status: number;
@@ -318,7 +318,7 @@ const Verificar = () => {
           </div>
         ) : isSubmitting ? (
           <div className="flex flex-col items-center justify-center p-4">
-            <img src={gifLoading} alt="loading" className="w-24" />
+            <img src="/loading.gif" alt="loading" className="w-24" />
             <p className="text-green-800 mt-2">Cargando...</p>
           </div>
         ) : null}

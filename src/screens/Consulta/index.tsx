@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import GifTombola from "../../../public/gif-TOMBOLA.gif";
+// import GifTombola from "../../../public/gif-TOMBOLA.gif";
 import { SearchIcon, SaveIcon } from "@heroicons/react/solid";
 import { useMutation } from "react-query";
 import { useForm } from "react-hook-form";
@@ -22,6 +22,7 @@ interface FormValues {
 interface Registro {
   cedula: any;
   nombre: string;
+  telefono: string;
 }
 
 interface GetRegistrosResponse {
@@ -44,6 +45,7 @@ const Consulta = () => {
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
   const [unCheckList, setUnCheckList] = useState<string[]>([]);
   const [premio, setPremio] = useState("Motor");
+  const [premioSlug, setPremioSlug] = useState("Motor");
   const [premioTitle, setPremioTitle] = useState("");
   const [municipioT, setMunicipioT] = useState("");
   const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(true);
@@ -170,9 +172,11 @@ const Consulta = () => {
     const selectedPremio = premios.find(
       (item) => item.slug_premio === selectedPremioValue
     );
+
     if (selectedPremio) {
       setPremioTitle(selectedPremio.premio);
       setPremio(selectedPremioValue);
+      setPremioSlug(selectedPremio.slug_premio);
     }
     setIsSearchButtonDisabled(false);
     setIsSaveButtonDisabled(true);
@@ -189,6 +193,7 @@ const Consulta = () => {
         param.municipio,
         param.cantidad
       );
+      console.log("Response", response);
       return response.data;
     },
     {
@@ -271,7 +276,10 @@ const Consulta = () => {
         String(element.cedula),
         status,
         premioText,
-        ronda
+        ronda,
+        premioSlug,
+        String(element.telefono),
+        String(element.nombre)
       );
     }
 
@@ -303,7 +311,7 @@ const Consulta = () => {
         onClick={toggleFullscreen}
       />
       <div className="w-16 md:w-56 sm:h-[94vh] bg-white shadow-md rounded-lg p-4 fixed md:relative ">
-        <img src={GifTombola} alt="TOMBOLA" className="w-[90%] mx-auto" />
+        <img src="/gif-TOMBOLA.gif" alt="TOMBOLA" className="w-[90%] mx-auto" />
 
         <MunicipioSelect
           value={municipioT}
