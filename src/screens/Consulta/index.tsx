@@ -22,7 +22,7 @@ interface FormValues {
 interface Registro {
   cedula: any;
   nombre: string;
-  telefono: string;
+  phone: string;
 }
 
 interface GetRegistrosResponse {
@@ -278,7 +278,7 @@ const Consulta = () => {
         premioText,
         ronda,
         premioSlug,
-        String(element.telefono),
+        String(element.phone),
         String(element.nombre)
       );
     }
