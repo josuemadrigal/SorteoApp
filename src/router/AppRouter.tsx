@@ -2,21 +2,21 @@ import { Route, Routes } from "react-router-dom";
 //import  Registros  from '../pages/Registros/Formulario'
 import Registro from "../pages/Registros/RegistroPage";
 
-import { View } from "../pages/Registros/View";
+// import { View } from "../pages/Registros/View";
 import SelectMunicio from "../pages/Registros/SelectMunicio";
 import { RegistroPremios } from "../pages/Registros/RegistroPremios";
 import { RegistroCedula } from "../pages/Registros/RegistroCedula";
 import Consulta from "../screens/Consulta";
 import Verificar from "../screens/Verificar";
 import Home from "../pages/Registros/casa";
-import RegistroGeneral from "../pages/Registros/RegistroPageGeneral";
+// import RegistroGeneral from "../pages/Registros/RegistroPageGeneral";
 import ViewPremios from "../screens/ViewPremios";
 import ViewGanadores from "../screens/ViewGanadores";
 import { RegistroRonda } from "../pages/Registros/RegistroRonda";
 import ViewGanadoresBoleta from "../screens/ViewGanadoresBoleta";
-import HomePadres from "../pages/Registros/padres";
+// import HomePadres from "../pages/Registros/padres";
 import RegistroPadres from "../pages/Registros/RegistroPagePadres";
-import ViewRegistros from "../screens/ViewRegistros";
+// import ViewRegistros from "../screens/ViewRegistros";
 import Codigo from "../screens/Codigo";
 import ViewRondas from "../screens/ViewRondas";
 import ActivarPersona from "../pages/ActivarPersona";

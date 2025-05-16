@@ -5,7 +5,7 @@ interface Registro {
   nombre: string;
   boleta: string;
   cedula: string;
-  telefono: string;
+  phone: string;
 }
 
 interface RegistroByCedula {
@@ -16,7 +16,7 @@ interface RegistroByCedula {
   status: string;
   coment: string;
   boleto: string;
-  telefono: string;
+  phone: string;
 }
 
 interface Ronda {

@@ -10,7 +10,7 @@ interface FormValues {
   cedula: string;
   municipio: string;
   boleto: string;
-  telefono: string;
+  phone: string;
   status: number;
   premio: string;
 }
@@ -20,7 +20,7 @@ const defaultValues: FormValues = {
   cedula: "",
   municipio: "",
   boleto: "N/A",
-  telefono: "",
+  phone: "",
   status: 1,
   premio: "-",
 };
@@ -192,7 +192,7 @@ const RegistroPadres: React.FC = () => {
               cedula,
               municipio: municipioNombre,
               boleto: "",
-              telefono: "",
+              phone: "",
               premio: "-",
               status: 1,
             });
@@ -558,7 +558,7 @@ const RegistroPadres: React.FC = () => {
               <InputMask
                 mask="(999) 999-9999"
                 maskChar=""
-                {...register("telefono", {
+                {...register("phone", {
                   required: "El número de teléfono es obligatorio",
                   pattern: {
                     value: /^\(\d{3}\) \d{3}-\d{4}$/,
@@ -572,7 +572,7 @@ const RegistroPadres: React.FC = () => {
                   <input
                     {...inputProps}
                     className={`w-full p-3 rounded-lg border ${
-                      errors.telefono ? "border-red-500" : "border-gray-300"
+                      errors.phone ? "border-red-500" : "border-gray-300"
                     } focus:ring-2 focus:ring-green-500 focus:border-transparent`}
                     placeholder="(000) 000-0000"
                     inputMode="numeric"
@@ -582,9 +582,9 @@ const RegistroPadres: React.FC = () => {
               <label className="absolute left-3 -top-2 bg-white px-1 text-sm text-gray-700 uppercase font-bold">
                 Celular
               </label>
-              {errors.telefono && (
+              {errors.phone && (
                 <p className="mt-1 text-sm text-red-500 ">
-                  {errors.telefono.message}
+                  {errors.phone.message}
                 </p>
               )}
             </div>
