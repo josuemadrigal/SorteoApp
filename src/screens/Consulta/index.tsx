@@ -22,7 +22,7 @@ interface FormValues {
 interface Registro {
   cedula: any;
   nombre: string;
-  phone: string;
+  telefono: string;
 }
 
 interface GetRegistrosResponse {
@@ -272,14 +272,17 @@ const Consulta = () => {
       const premioText = checkedItems.has(element.cedula)
         ? premio
         : "No presente";
+
+      console.log("este es el telefono", element);
       await registrosService.startUpdate(
         String(element.cedula),
         status,
         premioText,
         ronda,
         premioSlug,
-        String(element.phone),
-        String(element.nombre)
+        String(element.telefono),
+        String(element.nombre),
+        municipioT
       );
     }
 
