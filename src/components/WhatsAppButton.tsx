@@ -7,7 +7,7 @@ const WhatsAppButton = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPulsing, setIsPulsing] = useState(false);
-  const phoneNumber = "18293088432";
+  const telefonoNumber = "18293088432";
 
   const message = "Hola, necesito ayuda para registrarme en el sorteo.";
 
@@ -24,18 +24,18 @@ const WhatsAppButton = () => {
   const toggleMenu = () => {
     //setIsMenuOpen(!isMenuOpen);
     // Detener el pulso cuando se abre el menú
-    handleWhatsAppRedirect(phoneNumber);
+    handleWhatsAppRedirect(telefonoNumber);
     setShowMessage(false);
     setIsPulsing(false);
   };
 
-  const handleContact = (phoneNumber) => {
+  const handleContact = (telefonoNumber) => {
     setIsMenuOpen(false);
-    handleWhatsAppRedirect(phoneNumber);
+    handleWhatsAppRedirect(telefonoNumber);
   };
 
-  const handleWhatsAppRedirect = (phoneNumber) => {
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+  const handleWhatsAppRedirect = (telefonoNumber) => {
+    const whatsappUrl = `https://wa.me/${telefonoNumber}?text=${encodeURIComponent(
       message
     )}`;
     window.open(whatsappUrl, "_blank");

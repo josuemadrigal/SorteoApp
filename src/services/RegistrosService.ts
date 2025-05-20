@@ -5,7 +5,7 @@ interface Registro {
   nombre: string;
   boleta: string;
   cedula: string;
-  phone: string;
+  telefono: string;
 }
 
 interface RegistroByCedula {
@@ -16,7 +16,7 @@ interface RegistroByCedula {
   status: string;
   coment: string;
   boleto: string;
-  phone: string;
+  telefono: string;
 }
 
 interface Ronda {
@@ -186,16 +186,18 @@ class RegistrosService {
     premio: string,
     ronda: string,
     slug_premio: string,
-    phone: string,
-    name: string
+    telefono: string,
+    name: string,
+    municipio: string
   ): Promise<AxiosResponse<any>> {
     return await http.put(`registros/` + cedula, {
       status,
       premio,
       ronda,
       slug_premio,
-      phone,
+      telefono,
       name,
+      municipio,
     });
   }
 
