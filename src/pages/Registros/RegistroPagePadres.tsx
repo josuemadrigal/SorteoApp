@@ -397,10 +397,10 @@ const RegistroPadres: React.FC = () => {
                         type="button"
                         className={`p-3 rounded-md uppercase font-bold ${
                           selectedMunicipio === muni.id
-                            ? `${muni.color} ${muni.textColor} `
+                            ? `${muni.color}  text-white`
                             : selectedMunicipio
                             ? "bg-gray-300 text-gray-300" // Deshabilitado si hay otro seleccionado
-                            : `${muni.color} ${muni.textColor}`
+                            : `${muni.color} text-white`
                         } transition-colors`}
                         onClick={() => handleMunicipioSelect(muni.id)}
                         disabled={
