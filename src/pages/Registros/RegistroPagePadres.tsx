@@ -97,31 +97,31 @@ const RegistroPadres: React.FC = () => {
       id: "la-romana",
       name: "La Romana",
       color: "bg-[#f86e51]",
-      textColor: "text-[#f86e51]",
+      textColor: "text-[#fff]",
     },
     {
       id: "villa-hermosa",
       name: "Villa Hermosa",
       color: "bg-[#1c9143]",
-      textColor: "text-[#1c9143]",
+      textColor: "text-[#fff]",
     },
     {
       id: "caleta",
       name: "Caleta",
       color: "bg-[#81360d]",
-      textColor: "text-[#81360d]",
+      textColor: "text-[#fff]",
     },
     {
       id: "cumayasa",
       name: "Cumayasa",
       color: "bg-[#14348e]",
-      textColor: "text-[#14348e]",
+      textColor: "text-[#fff]",
     },
     {
       id: "guaymate",
       name: "Guaymate",
       color: "bg-[#7b827e]",
-      textColor: "text-[#7b827e]",
+      textColor: "text-[#fff]",
     },
   ];
 
@@ -395,9 +395,9 @@ const RegistroPadres: React.FC = () => {
                       <button
                         key={muni.id}
                         type="button"
-                        className={`p-3 rounded-md ${
+                        className={`p-3 rounded-md uppercase font-bold ${
                           selectedMunicipio === muni.id
-                            ? `${muni.color} ${muni.textColor} font-bold uppercase`
+                            ? `${muni.color} ${muni.textColor} `
                             : selectedMunicipio
                             ? "bg-gray-300 text-gray-300" // Deshabilitado si hay otro seleccionado
                             : `${muni.color} ${muni.textColor}`
