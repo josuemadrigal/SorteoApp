@@ -40,6 +40,7 @@ const Consulta = () => {
     },
   });
   const [ronda, setRonda] = useState("");
+  const [guardado, setGuardado] = useState(true);
   const [rondaId, setRondaId] = useState(0);
   const [checkList, setCheckList] = useState<Registro[]>([]);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
@@ -242,6 +243,7 @@ const Consulta = () => {
     param.cantidad = cantiRonda ? parseInt(cantiRonda) : 0;
 
     if (param.cantidad <= 0) {
+      setGuardado(true);
       return Swal.fire({
         position: "center",
         icon: "error",
@@ -252,10 +254,12 @@ const Consulta = () => {
     }
 
     if (param.municipio !== "" && param.premio !== "") {
+      setGuardado(false);
       setIsSearchButtonDisabled(false);
       setIsSaveButtonDisabled(true);
       getRegistros(param);
     } else {
+      setGuardado(true);
       return Swal.fire({
         position: "center",
         icon: "error",
@@ -275,7 +279,6 @@ const Consulta = () => {
         ? premio
         : "No presente";
 
-      console.log("este es el telefono", element);
       await registrosService.startUpdate(
         String(element.cedula),
         status,
@@ -302,6 +305,7 @@ const Consulta = () => {
     setCheckedItems(new Set());
     setUnCheckList([]);
     setIsSearchButtonDisabled(true);
+    setGuardado(true);
   };
 
   const filteredCheckList = checkList.filter((item) =>
@@ -309,27 +313,31 @@ const Consulta = () => {
   );
 
   return (
-    <div className="flex flex-col md:flex-row p-2 bg-emerald-900 min-h-screen overflow-auto">
+    <div className="flex flex-col md:flex-row p-2 bg-emerald-900 min-h-screen max-h-screen overflow-hidden">
       {/* Sidebar */}
       <FullscreenButton
         isFullscreen={isFullscreen}
         onClick={toggleFullscreen}
       />
-      <div className="w-16 md:w-56 sm:h-[94vh] bg-white shadow-md rounded-lg p-4 fixed md:relative ">
+      <div className="w-16 md:w-56 sm:h-[94vh] bg-white shadow-md rounded-lg p-4  md:relative overflow-hidden sticky">
         <img src="/gif-TOMBOLA.gif" alt="TOMBOLA" className="w-[90%] mx-auto" />
 
-        <MunicipioSelect
-          value={municipioT}
-          onChange={handleMunicipio}
-          register={register}
-          disabled={!isSaveButtonDisabled}
-        />
+        {guardado && (
+          <div>
+            <MunicipioSelect
+              value={municipioT}
+              onChange={handleMunicipio}
+              register={register}
+              disabled={!isSaveButtonDisabled}
+            />
 
-        <PremioSelect
-          value={premio}
-          onChange={handlePremio}
-          premios={premios}
-        />
+            <PremioSelect
+              value={premio}
+              onChange={handlePremio}
+              premios={premios}
+            />
+          </div>
+        )}
 
         <CustomButton
           onClick={buscarRegistros}
@@ -349,7 +357,7 @@ const Consulta = () => {
       </div>
 
       {/* Main Content */}
-      <div className="md:ml-5 w-80 md:w-[calc(100%-10rem)] min-h-full bg-green-800 rounded-lg p-4 overflow-y-scroll">
+      <div className="md:ml-5 w-80 md:w-[calc(100%-10rem)] min-h-full  bg-green-800 rounded-lg p-4 overflow-hidden sticky pb-20">
         <div className="w-full bg-pink-600 min-h-[50px] py-2 px-0 rounded-t-lg">
           <div className="text-white text-center uppercase text-xl md:text-3xl">
             {cantiRonda
@@ -363,7 +371,7 @@ const Consulta = () => {
           </div>
         </div>
 
-        <div className="flex justify-center w-full  overflow-y-auto  bg-green-800 rounded-b-lg">
+        <div className="flex justify-center w-full    bg-green-800 rounded-b-lg max-h-[100%]  overflow-y-scroll pb-60">
           {filteredCheckList.length <= 0 && isSearchButtonDisabled ? (
             <p className="opacity-50 uppercase tracking-wider mt-40 text-gray-300">
               Presiona el botón buscar

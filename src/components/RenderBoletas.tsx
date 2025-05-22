@@ -9,6 +9,8 @@ const RenderBoletasComponent = ({ items }: Props) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [renderedItems, setRenderedItems] = useState<any[]>([]);
 
+  const intervaloBoleta = items.length > 20 ? 600 : 1000;
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (currentIndex < items.length) {
@@ -16,7 +18,7 @@ const RenderBoletasComponent = ({ items }: Props) => {
         setRenderedItems((prevItems) => [...prevItems, currentItem]);
         setCurrentIndex((prevIndex) => prevIndex + 1);
       }
-    }, 2000); // Wait for 2 seconds between each item
+    }, intervaloBoleta); // Wait for 2 seconds between each item
 
     return () => {
       clearInterval(interval);
