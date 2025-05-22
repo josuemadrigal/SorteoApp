@@ -58,6 +58,10 @@ const Consulta = () => {
 
   const [isFullscreen, setIsFullscreen] = useState(false);
 
+  const handleReload = () => {
+    window.location.reload();
+  };
+
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
       // Entrar en pantalla completa
@@ -354,6 +358,13 @@ const Consulta = () => {
           color="error"
           disabled={isSaveButtonDisabled}
         />
+
+        <h2
+          className="bg-sky-100 mt-10 text-sky-400 hover:bg-sky-800 cursor-pointer text-center text-sm p-3 rounded-md "
+          onClick={handleReload}
+        >
+          Cancelar
+        </h2>
       </div>
 
       {/* Main Content */}
