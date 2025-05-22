@@ -44,8 +44,8 @@ const Consulta = () => {
   const [checkList, setCheckList] = useState<Registro[]>([]);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
   const [unCheckList, setUnCheckList] = useState<string[]>([]);
-  const [premio, setPremio] = useState("Motor");
-  const [premioSlug, setPremioSlug] = useState("Motor");
+  const [premio, setPremio] = useState("-");
+  const [premioSlug, setPremioSlug] = useState("-");
   const [premioTitle, setPremioTitle] = useState("");
   const [municipioT, setMunicipioT] = useState("");
   const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(true);
@@ -161,8 +161,8 @@ const Consulta = () => {
 
   const handleMunicipio = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setMunicipioT(event.target.value);
-    setPremioTitle("Motor");
-    setPremio("motor");
+    setPremioTitle(premio);
+    setPremio(premio);
     setIsSearchButtonDisabled(false);
     setIsSaveButtonDisabled(true);
   };
@@ -234,6 +234,8 @@ const Consulta = () => {
 
   const buscarRegistros = async () => {
     const param: FormValues = getValues();
+
+    if (param.municipio === "NADA") return;
     param.municipio = municipioT;
     param.ronda = ronda;
     param.premio = premio;

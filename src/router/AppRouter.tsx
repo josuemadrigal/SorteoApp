@@ -22,6 +22,7 @@ import ViewRondas from "../screens/ViewRondas";
 import ActivarPersona from "../pages/ActivarPersona";
 import ActivarByMunicipio from "../pages/Registros/ActivarByMunicipio";
 import ActivarPersonaBy from "../pages/ActivarPersonaBy";
+import EnviarRecordatorio from "../pages/Registros/EnviarRecordatorio";
 
 export const AppRouter = (): any => {
   return (
@@ -43,6 +44,7 @@ export const AppRouter = (): any => {
       <Route path="/verificar" element={<Verificar />} />
       <Route path="/viewPremios" element={<ViewPremios />} />
       <Route path="/registrados" element={<Codigo />} />
+      <Route path="/recordatorio" element={<EnviarRecordatorio />} />
 
       {/* 
   

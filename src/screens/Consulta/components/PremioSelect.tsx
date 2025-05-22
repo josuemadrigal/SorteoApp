@@ -31,7 +31,7 @@ const PremioSelect: React.FC<PremioSelectProps> = ({
           disabled ? "bg-gray-100 cursor-not-allowed opacity-70" : ""
         }`}
       >
-        <option value="" disabled>
+        <option key={0} value={"NADA"}>
           Seleccione el premio
         </option>
         {premios.map((e) => (
