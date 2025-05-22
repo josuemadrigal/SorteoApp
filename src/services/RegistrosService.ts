@@ -171,12 +171,18 @@ class RegistrosService {
 
   public async regPremio(param: any): Promise<AxiosResponse<any>> {
     const response = await http.post<any>("/registros/regPremio", param);
-
     return response;
   }
 
   public async regCedula(param: any): Promise<AxiosResponse<any>> {
     const response = await http.post<any>("/registros/regCedula", param);
+    return response;
+  }
+
+  public async recordatorio(municipio: string): Promise<AxiosResponse<any>> {
+    const response = await http.post<any>("/registros/recordatorio", {
+      municipio,
+    });
     return response;
   }
 
