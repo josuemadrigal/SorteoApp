@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import Swal from "sweetalert2";
 import RegistrosService from "../../services/RegistrosService";
 import WhatsAppButton from "../../components/WhatsAppButton";
+import { useLocation } from "react-router-dom";
 
 interface FormValues {
   nombre: string;
@@ -221,6 +222,12 @@ const RegistroPadres: React.FC = () => {
     }
   };
 
+  const location = useLocation();
+
+  const noRedirectURL = ["/registroLocal"];
+
+  const noRedirect = noRedirectURL.includes(location.pathname);
+
   const handleRegister = async (data: FormValues) => {
     try {
       setIsSubmitting(true);
@@ -297,9 +304,11 @@ const RegistroPadres: React.FC = () => {
             setButtonText("Buscar cédula");
             resetMunicipioButtons();
             return setTimeout(() => {
-              window.location.replace(
-                "https://www.instagram.com/eduardespiritusanto/"
-              );
+              noRedirect
+                ? ""
+                : window.location.replace(
+                    "https://www.instagram.com/eduardespiritusanto/"
+                  );
             }, 2000);
           }
         } else {
