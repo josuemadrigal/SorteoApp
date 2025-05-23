@@ -39,7 +39,7 @@ const Consulta = () => {
       ronda: "1",
     },
   });
-  const [ronda, setRonda] = useState("");
+  const [ronda, setRonda] = useState("1");
   const [guardado, setGuardado] = useState(true);
   const [rondaId, setRondaId] = useState(0);
   const [checkList, setCheckList] = useState<Registro[]>([]);
@@ -307,7 +307,7 @@ const Consulta = () => {
     //   premio
     // );
     setCantiRonda("");
-    setRonda("");
+    setRonda("1");
     setPremio("");
     setCheckList([]);
     setCheckedItems(new Set());
@@ -349,6 +349,8 @@ const Consulta = () => {
   const filteredCheckList = checkList.filter((item) =>
     checkedItems.has(item.cedula)
   );
+
+  const rondaTexto = ronda && ronda !== "1" ? `(Ronda #${ronda})` : "";
 
   return (
     <div className="flex flex-col md:flex-row p-2 bg-emerald-900 min-h-screen max-h-screen overflow-hidden">
@@ -404,14 +406,17 @@ const Consulta = () => {
       {/* Main Content */}
       <div className="md:ml-5 w-80 md:w-[calc(100%-10rem)] min-h-full  bg-green-800 rounded-lg p-4 overflow-hidden sticky pb-20">
         <div className="w-full bg-pink-600 min-h-[50px] py-2 px-0 rounded-t-lg">
-          <div className="text-white text-center uppercase text-xl md:text-3xl">
+          <div className="text-white text-center uppercase text-xl md:text-3xl flex flex-row items-center justify-center">
             {cantiRonda
               ? `${cantiRonda} ${
-                  parseInt(cantiRonda) > 1 ? "ganadoras de:" : "ganadora de:"
+                  parseInt(cantiRonda) > 1 ? "ganadoras de: " : "ganadora de: "
                 } `
               : ""}
-            <span className="font-bold text-2xl md:text-4xl">
+            <span className="font-bold text-2xl md:text-4xl ml-5">
               {cantiRonda ? premioTitle : ""}
+            </span>
+            <span className="font-bold text-2xl md:text-xl ml-5">
+              {rondaTexto}
             </span>
           </div>
         </div>
