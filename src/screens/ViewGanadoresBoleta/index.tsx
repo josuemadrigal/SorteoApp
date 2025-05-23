@@ -156,7 +156,7 @@ const ViewGanadoresBoleta: React.FC = () => {
             <option value="" disabled>
               Seleccione la ronda
             </option>
-            {[...Array(10).keys()].map((n) => (
+            {[...Array(20).keys()].map((n) => (
               <option key={n + 1} value={n + 1}>
                 {n + 1}
               </option>
