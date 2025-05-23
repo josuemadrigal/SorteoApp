@@ -23,6 +23,7 @@ import ActivarPersona from "../pages/ActivarPersona";
 import ActivarByMunicipio from "../pages/Registros/ActivarByMunicipio";
 import ActivarPersonaBy from "../pages/ActivarPersonaBy";
 import EnviarRecordatorio from "../pages/Registros/EnviarRecordatorio";
+import { ReporteGanadores } from "../screens/reporteGanadores/ReporteGanadores";
 
 export const AppRouter = (): any => {
   return (
@@ -30,6 +31,7 @@ export const AppRouter = (): any => {
       <Route path="/home" element={<Home />} />
       <Route path="/" element={<RegistroPadres />} />
       <Route path="/registroLocal" element={<RegistroPadres />} />
+      <Route path="/reportes" element={<ReporteGanadores />} />
       <Route path="/select" element={<SelectMunicio />} />
       <Route path="/activarBy" element={<ActivarByMunicipio />} />
       <Route path="/activarBy/:id" element={<ActivarPersonaBy />} />

@@ -119,6 +119,17 @@ class RegistrosService {
     return response;
   }
 
+  public async getRegistrosGanadoresMunicipio(
+    municipio: any
+  ): Promise<AxiosResponse<GetRegistrosResponse>> {
+    const jsonPar: any = { municipio };
+    const params = new URLSearchParams(jsonPar);
+    const response = await http.get<any>(
+      `/registros/getGanadoresMunicipio?${params}`
+    );
+    return response;
+  }
+
   public async getCedula(
     cedula: string
   ): Promise<AxiosResponse<GetCedulaResponse>> {
