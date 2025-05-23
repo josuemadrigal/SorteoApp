@@ -209,9 +209,11 @@ const Consulta = () => {
           registros.map((registro) => registro.cedula)
         );
         setCheckedItems(checkedNames);
+
         setUnCheckList([]);
         setIsSearchButtonDisabled(true);
         setIsSaveButtonDisabled(false);
+        autoActualizarRegistros(registros);
       },
       onError: () => {
         Swal.fire({
@@ -277,31 +279,33 @@ const Consulta = () => {
   const ActualizarRegistros = async () => {
     setIsSaveButtonDisabled(true);
 
-    for (const element of checkList) {
-      const status = checkedItems.has(element.cedula) ? 3 : 0;
-      const premioText = checkedItems.has(element.cedula)
-        ? premio
-        : "No presente";
+    // console.log("Del boton guardar");
+    // console.log(checkList);
+    // for (const element of checkList) {
+    //   const status = checkedItems.has(element.cedula) ? 3 : 0;
+    //   const premioText = checkedItems.has(element.cedula)
+    //     ? premio
+    //     : "No presente";
 
-      await registrosService.startUpdate(
-        String(element.cedula),
-        status,
-        premioText,
-        ronda,
-        premioSlug,
-        String(element.telefono),
-        String(element.nombre),
-        municipioT
-      );
-    }
+    //   await registrosService.startUpdate(
+    //     String(element.cedula),
+    //     status,
+    //     premioText,
+    //     ronda,
+    //     premioSlug,
+    //     String(element.telefono),
+    //     String(element.nombre),
+    //     municipioT
+    //   );
+    // }
 
-    await registrosService.updateRonda(
-      rondaId,
-      "no activa",
-      municipioT,
-      ronda,
-      premio
-    );
+    // await registrosService.updateRonda(
+    //   rondaId,
+    //   "no activa",
+    //   municipioT,
+    //   ronda,
+    //   premio
+    // );
     setCantiRonda("");
     setRonda("");
     setPremio("");
@@ -310,6 +314,36 @@ const Consulta = () => {
     setUnCheckList([]);
     setIsSearchButtonDisabled(true);
     setGuardado(true);
+  };
+
+  const autoActualizarRegistros = async (registros: Registro[]) => {
+    console.log("GUARDANDO ----");
+    console.log(registros);
+    if (registros.length > 0) {
+      for (const element of registros) {
+        const status = 3;
+        const premioText = premio;
+
+        await registrosService.startUpdate(
+          String(element.cedula),
+          status,
+          premioText,
+          ronda,
+          premioSlug,
+          String(element.telefono),
+          String(element.nombre),
+          municipioT
+        );
+      }
+
+      await registrosService.updateRonda(
+        rondaId,
+        "no activa",
+        municipioT,
+        ronda,
+        premio
+      );
+    }
   };
 
   const filteredCheckList = checkList.filter((item) =>
@@ -354,17 +388,17 @@ const Consulta = () => {
         <CustomButton
           onClick={ActualizarRegistros}
           icon="save"
-          text="Guardar"
-          color="error"
+          text="Continuar"
+          color="warning"
           disabled={isSaveButtonDisabled}
         />
 
-        <h2
+        {/* <h2
           className="bg-sky-100 mt-10 text-sky-400 hover:bg-sky-800 cursor-pointer text-center text-sm p-3 rounded-md "
           onClick={handleReload}
         >
           Cancelar
-        </h2>
+        </h2> */}
       </div>
 
       {/* Main Content */}
