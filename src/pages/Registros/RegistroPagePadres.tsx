@@ -224,7 +224,7 @@ const RegistroPadres: React.FC = () => {
 
   const location = useLocation();
 
-  const noRedirectURL = ["/registroLocal"];
+  const noRedirectURL = ["/registroLocal", "/registrolocal"];
 
   const noRedirect = noRedirectURL.includes(location.pathname);
 
