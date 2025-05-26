@@ -3,7 +3,6 @@ import InputMask from "react-input-mask";
 import { SubmitHandler, useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
-// import gifLoading from "../../../public/loading.gif";
 
 interface FormValues {
   status: number;
@@ -45,7 +44,7 @@ const municipios = [
   { municipio: "Cumayasa", slug: "cumayasa" },
 ];
 
-const Verificar = () => {
+const Verificate = () => {
   const {
     register,
     handleSubmit,
@@ -214,9 +213,16 @@ const Verificar = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 gap-4">
+    <div className="flex flex-col justify-center items-center bg-green-950 h-dvh p-4 gap-4">
       {/* Search Form */}
       <div className="w-full max-w-md bg-white p-4 rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold text-center text-green-700 mb-4 ">
+          Verifica si fuiste ganadora
+        </h1>
+        <h4 className="font-bold text-center mb-4 text-green-900">
+          Ingresa tu numero de cedula
+        </h4>
+
         <form onSubmit={handleSubmit(registerSubmit)} className="flex gap-2">
           <InputMask
             mask="999-9999999-9"
@@ -267,7 +273,7 @@ const Verificar = () => {
                   <p className="text-lg bg-green-700 rounded px-2 py-1 text-white font-bold">
                     {e.cedula}
                   </p>
-                  <p className="text-lg bg-or-400 rounded px-2 py-1 text-white font-bold">
+                  <p className="text-2xl bg-or-400 uppercase bg-rose-500 rounded px-2 py-1 text-white font-bold">
                     {premios.find((premio) => premio.slug === e.premio)?.premio}
                   </p>
                   <p className="text-lg bg-green-800 rounded px-2 py-1 text-white font-bold">
@@ -287,33 +293,6 @@ const Verificar = () => {
                 </div>
               ))}
             </div>
-
-            {/* Comment Form */}
-            <div className="bg-white p-4 rounded-lg shadow-md">
-              <label className="block mb-2">
-                <span className="text-lg font-semibold">
-                  Ingrese algún comentario:
-                </span>
-                <textarea
-                  className="w-full p-2 border border-gray-300 rounded mt-2 h-24"
-                  value={text}
-                  onChange={handleTextChange}
-                  disabled={isSubmitting || entregadoTrue}
-                />
-              </label>
-              <button
-                className={`w-full py-2 px-4 rounded text-white ${
-                  isSubmitting || entregadoTrue
-                    ? "bg-gray-400"
-                    : "bg-red-600 hover:bg-red-700"
-                }`}
-                disabled={isSubmitting || entregadoTrue}
-                onClick={openSwalForNumber}
-                type="button"
-              >
-                Actualizar
-              </button>
-            </div>
           </div>
         ) : isSubmitting ? (
           <div className="flex flex-col items-center justify-center p-4">
@@ -326,4 +305,4 @@ const Verificar = () => {
   );
 };
 
-export default Verificar;
+export default Verificate;

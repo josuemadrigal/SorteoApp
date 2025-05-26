@@ -24,20 +24,21 @@ import ActivarByMunicipio from "../pages/Registros/ActivarByMunicipio";
 import ActivarPersonaBy from "../pages/ActivarPersonaBy";
 import EnviarRecordatorio from "../pages/Registros/EnviarRecordatorio";
 import { ReporteGanadores } from "../screens/reporteGanadores/ReporteGanadores";
+import Verificate from "../screens/Verificate";
 
 export const AppRouter = (): any => {
   return (
     <Routes>
       <Route path="/home" element={<Home />} />
-      <Route path="/" element={<RegistroPadres />} />
-      <Route path="/registroLocal" element={<RegistroPadres />} />
+      {/* <Route path="/" element={<RegistroPadres />} /> */}
+      {/* <Route path="/registroLocal" element={<RegistroPadres />} /> */}
       <Route path="/reportes" element={<ReporteGanadores />} />
       <Route path="/select" element={<SelectMunicio />} />
-      <Route path="/activarBy" element={<ActivarByMunicipio />} />
-      <Route path="/activarBy/:id" element={<ActivarPersonaBy />} />
-      <Route path="/activar" element={<ActivarPersona />} />
+      {/* <Route path="/activarBy" element={<ActivarByMunicipio />} /> */}
+      {/* <Route path="/activarBy/:id" element={<ActivarPersonaBy />} /> */}
+      {/* <Route path="/activar" element={<ActivarPersona />} /> */}
       <Route path="/registro/:id" element={<Registro />} />
-      <Route path="/sortear2025" element={<Consulta />} />
+      {/* <Route path="/sortear2025" element={<Consulta />} /> */}
       <Route path="/reg-ronda" element={<RegistroRonda />} />
       <Route path="/viewRondas" element={<ViewRondas />} />
       <Route path="/reg-premios" element={<RegistroPremios />} />
@@ -45,9 +46,11 @@ export const AppRouter = (): any => {
       <Route path="/view-Ganadores" element={<ViewGanadoresBoleta />} />
       <Route path="/viewGanadores" element={<ViewGanadores />} />
       <Route path="/verificar" element={<Verificar />} />
+      <Route path="/verificate" element={<Verificate />} />
+      <Route path="/" element={<Verificate />} />
       <Route path="/viewPremios" element={<ViewPremios />} />
       <Route path="/registrados" element={<Codigo />} />
-      <Route path="/recordatorio" element={<EnviarRecordatorio />} />
+      {/* <Route path="/recordatorio" element={<EnviarRecordatorio />} /> */}
 
       {/* 
   
