@@ -61,7 +61,7 @@ const WhatsAppButton = () => {
           >
             <div className="flex justify-between items-center">
               <p className="text-sm font-medium mr-2">
-                🌟 ¿Necesitas ayuda para registrarte? ¡Escríbenos! 📲
+                🌟 ¿Necesitas ayuda? ¡Escríbenos! 📲
               </p>
               <button
                 onClick={() => setShowMessage(false)}
