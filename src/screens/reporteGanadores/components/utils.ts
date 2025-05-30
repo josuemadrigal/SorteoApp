@@ -46,3 +46,16 @@ export const getContrastTextColor = (
     (0.299 * bgColor[0] + 0.587 * bgColor[1] + 0.114 * bgColor[2]) / 255;
   return luminance > 0.5 ? [0, 0, 0] : [255, 255, 255]; // Negro o blanco
 };
+
+export const loadImage = async (url: string): Promise<HTMLImageElement> => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = "Anonymous"; // Para evitar problemas con CORS
+    img.onload = () => resolve(img);
+    img.onerror = (e) => {
+      console.warn("No se pudo cargar el logo:", e);
+      reject(new Error(`Error al cargar la imagen: ${url}`));
+    };
+    img.src = url;
+  });
+};
