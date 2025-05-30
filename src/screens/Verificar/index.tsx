@@ -262,7 +262,7 @@ const Verificar = () => {
             <div className="bg-green-600 p-4 rounded-lg shadow-md text-center">
               {persona.map((e) => (
                 <div key={e.cedula} className="space-y-3">
-                  <button
+                  {/* <button
                     className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow"
                     onClick={() =>
                       generarActaEntregaPDF({
@@ -279,7 +279,7 @@ const Verificar = () => {
                     }
                   >
                     Descargar PDF
-                  </button>
+                  </button> */}
                   <h2 className="text-3xl font-bold uppercase text-yellow-200">
                     {e.nombre}
                   </h2>
