@@ -3,6 +3,7 @@ import InputMask from "react-input-mask";
 import { SubmitHandler, useForm } from "react-hook-form";
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
+import { generarActaEntregaPDF } from "./components/generateWinnerPdf";
 // import gifLoading from "../../../public/loading.gif";
 
 interface FormValues {
@@ -214,7 +215,7 @@ const Verificar = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 gap-4">
+    <div className="flex flex-col justify-center items-center bg-green-950 h-dvh p-4 gap-4">
       {/* Search Form */}
       <div className="w-full max-w-md bg-white p-4 rounded-lg shadow-md">
         <form onSubmit={handleSubmit(registerSubmit)} className="flex gap-2">
@@ -261,6 +262,24 @@ const Verificar = () => {
             <div className="bg-green-600 p-4 rounded-lg shadow-md text-center">
               {persona.map((e) => (
                 <div key={e.cedula} className="space-y-3">
+                  <button
+                    className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow"
+                    onClick={() =>
+                      generarActaEntregaPDF({
+                        nombre: persona[0].nombre,
+                        cedula: persona[0].cedula,
+                        premio:
+                          premios.find((p) => p.slug === persona[0].premio)
+                            ?.premio || "N/A",
+                        municipio:
+                          municipios.find(
+                            (m) => m.slug === persona[0].municipio
+                          )?.municipio || "N/A",
+                      })
+                    }
+                  >
+                    Descargar PDF
+                  </button>
                   <h2 className="text-3xl font-bold uppercase text-yellow-200">
                     {e.nombre}
                   </h2>

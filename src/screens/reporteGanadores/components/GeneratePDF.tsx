@@ -1,6 +1,6 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-import { formatPremio, getContrastTextColor } from "./utils";
+import { formatPremio, getContrastTextColor, loadImage } from "./utils";
 
 interface Registro {
   id: number;
@@ -46,19 +46,6 @@ export const GeneratePDF = ({
   loading = false,
   onError,
 }: Props) => {
-  const loadImage = async (url: string): Promise<HTMLImageElement> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.crossOrigin = "Anonymous"; // Para evitar problemas con CORS
-      img.onload = () => resolve(img);
-      img.onerror = (e) => {
-        console.warn("No se pudo cargar el logo:", e);
-        reject(new Error(`Error al cargar la imagen: ${url}`));
-      };
-      img.src = url;
-    });
-  };
-
   const generatePDF = async () => {
     if (loading) return;
 
