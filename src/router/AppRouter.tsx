@@ -31,6 +31,7 @@ export const AppRouter = (): any => {
     <Routes>
       <Route path="/home" element={<Home />} />
       <Route path="/" element={<RegistroPadres />} />
+      <Route path="/sorteo" element={<RegistroPadres />} />
       {/* <Route path="/registroLocal" element={<RegistroPadres />} /> */}
       <Route path="/reportes" element={<ReporteGanadores />} />
       <Route path="/select" element={<SelectMunicio />} />
