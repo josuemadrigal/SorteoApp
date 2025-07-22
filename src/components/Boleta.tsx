@@ -19,7 +19,7 @@ export const Boleta = ({ item, index }: Props) => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="absolute -top-2 -right-2 z-10 bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md">
+        <div className="absolute -top-2 -right-2 z-10 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md">
           <span className="font-bold text-sm">{index + 1}</span>
         </div>
         {/* Contenido compacto */}
@@ -30,14 +30,14 @@ export const Boleta = ({ item, index }: Props) => {
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <h3 className="text-lg text-center uppercase font-black text-pink-900 line-clamp-3">
+            <h3 className="text-lg text-center uppercase font-black text-blue-900 line-clamp-3">
               {item.nombre}
             </h3>
           </motion.div>
 
           {/* Pie pequeño */}
           <motion.div
-            className="mt-1  text-center bg-pink-900 px-2 py-1 rounded border border-pink-900"
+            className="mt-1  text-center bg-blue-900 px-2 py-1 rounded border border-blue-900"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6 }}

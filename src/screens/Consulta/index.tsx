@@ -405,11 +405,11 @@ const Consulta = () => {
 
       {/* Main Content */}
       <div className="md:ml-5 w-80 md:w-[calc(100%-10rem)] min-h-full  bg-green-800 rounded-lg p-4 overflow-hidden sticky pb-20">
-        <div className="w-full bg-pink-600 min-h-[50px] py-2 px-0 rounded-t-lg">
+        <div className="w-full bg-blue-600 min-h-[50px] py-2 px-0 rounded-t-lg">
           <div className="text-white text-center uppercase text-xl md:text-3xl flex flex-row items-center justify-center">
             {cantiRonda
               ? `${cantiRonda} ${
-                  parseInt(cantiRonda) > 1 ? "ganadoras de: " : "ganadora de: "
+                  parseInt(cantiRonda) > 1 ? "ganadores de: " : "ganador de: "
                 } `
               : ""}
             <span className="font-bold text-2xl md:text-4xl ml-5">
