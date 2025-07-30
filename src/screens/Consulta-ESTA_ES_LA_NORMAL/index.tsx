@@ -9,7 +9,6 @@ import { RenderBoletas } from "../../components/RenderBoletas";
 import PremioSelect from "./components/PremioSelect";
 import MunicipioSelect from "./components/MunicipioSelect";
 import CustomButton from "./components/CustomButton";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 interface FormValues {
   municipio: string;
@@ -31,26 +30,26 @@ interface GetRegistrosResponse {
 }
 
 const Consulta = () => {
-  // const { getValues, register } = useForm<FormValues>({
-  //   defaultValues: {
-  //     municipio: "",
-  //     premio: "",
-  //     status: 2,
-  //     cantidad: 4,
-  //     ronda: "1",
-  //   },
-  // });
+  const { getValues, register } = useForm<FormValues>({
+    defaultValues: {
+      municipio: "",
+      premio: "",
+      status: 2,
+      cantidad: 4,
+      ronda: "1",
+    },
+  });
   const [ronda, setRonda] = useState("1");
   const [guardado, setGuardado] = useState(true);
   const [rondaId, setRondaId] = useState(0);
   const [checkList, setCheckList] = useState<Registro[]>([]);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
   const [unCheckList, setUnCheckList] = useState<string[]>([]);
-  const [premio, setPremio] = useState("Motor");
-  const [premioSlug, setPremioSlug] = useState("motor");
+  const [premio, setPremio] = useState("-");
+  const [premioSlug, setPremioSlug] = useState("-");
   const [premioTitle, setPremioTitle] = useState("");
   const [municipioT, setMunicipioT] = useState("");
-  const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
+  const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(true);
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
   const [premios, setPremios] = useState<
     { slug_premio: string; premio: string }[]
@@ -58,8 +57,6 @@ const Consulta = () => {
   const [cantiRonda, setCantiRonda] = useState("");
 
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [terminado, setTerminado] = useState(false);
 
   const handleReload = () => {
     window.location.reload();
@@ -190,9 +187,17 @@ const Consulta = () => {
     setIsSaveButtonDisabled(true);
   };
 
-  const { mutate: getRegistros } = useMutation<GetRegistrosResponse, Error>(
-    async () => {
-      const response = await registrosService.getRegistros();
+  const { mutate: getRegistros } = useMutation<
+    GetRegistrosResponse,
+    Error,
+    FormValues
+  >(
+    async (param: FormValues) => {
+      const response = await registrosService.getRegistros(
+        param.status,
+        param.municipio,
+        param.cantidad
+      );
       console.log("Response", response);
       return response.data;
     },
@@ -209,8 +214,6 @@ const Consulta = () => {
         setIsSearchButtonDisabled(true);
         setIsSaveButtonDisabled(false);
         autoActualizarRegistros(registros);
-        setIsLoading(false);
-        setTerminado(true);
       },
       onError: () => {
         Swal.fire({
@@ -237,12 +240,40 @@ const Consulta = () => {
   };
 
   const buscarRegistros = async () => {
-    setIsLoading(true);
+    const param: FormValues = getValues();
 
-    setGuardado(true);
-    getRegistros();
-    setIsSearchButtonDisabled(false);
-    setIsSaveButtonDisabled(true);
+    if (param.municipio === "NADA") return;
+    param.municipio = municipioT;
+    param.ronda = ronda;
+    param.premio = premio;
+    param.cantidad = cantiRonda ? parseInt(cantiRonda) : 0;
+
+    if (param.cantidad <= 0) {
+      setGuardado(true);
+      return Swal.fire({
+        position: "center",
+        icon: "error",
+        title: `Al parecer no hay mas rondas para ${premio.toUpperCase()} en ${municipioT.toUpperCase()}`,
+        showConfirmButton: false,
+        timer: 5000,
+      });
+    }
+
+    if (param.municipio !== "" && param.premio !== "") {
+      setGuardado(false);
+      setIsSearchButtonDisabled(false);
+      setIsSaveButtonDisabled(true);
+      getRegistros(param);
+    } else {
+      setGuardado(true);
+      return Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Verifique los filtros",
+        showConfirmButton: false,
+        timer: 7000,
+      });
+    }
   };
 
   const ActualizarRegistros = async () => {
@@ -305,13 +336,13 @@ const Consulta = () => {
         );
       }
 
-      // await registrosService.updateRonda(
-      //   rondaId,
-      //   "no activa",
-      //   municipioT,
-      //   ronda,
-      //   premio
-      // );
+      await registrosService.updateRonda(
+        rondaId,
+        "no activa",
+        municipioT,
+        ronda,
+        premio
+      );
     }
   };
 
@@ -331,32 +362,38 @@ const Consulta = () => {
       <div className="w-16 md:w-56 sm:h-[94vh] bg-white shadow-md rounded-lg p-4  md:relative overflow-hidden sticky">
         <img src="/gif-TOMBOLA.gif" alt="TOMBOLA" className="w-[90%] mx-auto" />
 
-        <button
-          disabled={isLoading || terminado}
+        {guardado && (
+          <div>
+            <MunicipioSelect
+              value={municipioT}
+              onChange={handleMunicipio}
+              register={register}
+              disabled={!isSaveButtonDisabled}
+            />
+
+            <PremioSelect
+              value={premio}
+              onChange={handlePremio}
+              premios={premios}
+            />
+          </div>
+        )}
+
+        <CustomButton
           onClick={buscarRegistros}
-          className={`
-        ${
-          isLoading || terminado
-            ? "bg-gray-400 cursor-not-allowed opacity-50"
-            : "bg-lime-500 hover:bg-lime-600 cursor-pointer"
-        } 
-        text-emerald-50 mt-10 font-black items-center flex flex-col justify-center h-36 w-44 rounded-xl shadow-xl transition-all duration-200
-      `}
-        >
-          {isLoading ? (
-            <>
-              BUSCANDO...
-              <div className="animate-spin h-8 w-8 border-2 border-emerald-50 border-t-transparent rounded-full mt-1"></div>
-            </>
-          ) : terminado ? (
-            <> FINALIZADO</>
-          ) : (
-            <>
-              SORTEAR
-              <MagnifyingGlassIcon className="h-8 w-8 font-black" />
-            </>
-          )}
-        </button>
+          icon="search"
+          text="Buscar"
+          color="success"
+          disabled={isSearchButtonDisabled}
+        />
+
+        <CustomButton
+          onClick={ActualizarRegistros}
+          icon="save"
+          text="Continuar"
+          color="warning"
+          disabled={isSaveButtonDisabled}
+        />
 
         {/* <h2
           className="bg-sky-100 mt-10 text-sky-400 hover:bg-sky-800 cursor-pointer text-center text-sm p-3 rounded-md "
@@ -370,7 +407,13 @@ const Consulta = () => {
       <div className="md:ml-5 w-80 md:w-[calc(100%-10rem)] min-h-full  bg-green-800 rounded-lg p-4 overflow-hidden sticky pb-20">
         <div className="w-full bg-blue-600 min-h-[50px] py-2 px-0 rounded-t-lg">
           <div className="text-white text-center uppercase text-xl md:text-3xl flex flex-row items-center justify-center">
-            GANADORES
+            {`${municipioT} • ${
+              cantiRonda
+                ? ` ${cantiRonda} ${
+                    parseInt(cantiRonda) > 1 ? "ganadores de: " : "ganador de: "
+                  } `
+                : "--"
+            }`}
             <span className="font-bold text-2xl md:text-4xl ml-5">
               {cantiRonda ? premioTitle : ""}
             </span>
