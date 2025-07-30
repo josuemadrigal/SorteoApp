@@ -22,7 +22,7 @@ const defaultValues: FormValues = {
   municipio: "",
   boleto: "N/A",
   telefono: "",
-  status: 1,
+  status: 2,
   premio: "-",
 };
 

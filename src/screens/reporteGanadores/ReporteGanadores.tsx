@@ -51,7 +51,7 @@ export const ReporteGanadores = () => {
 
         <GeneratePDF
           registros={registros}
-          title="Listado Oficial de Ganadoras"
+          title="Listado Oficial de Ganadores"
           municipio={municipio.toLocaleUpperCase()}
         />
       </div>
