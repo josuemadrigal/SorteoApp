@@ -17,29 +17,24 @@ interface Registro {
 export const ReporteGanadores = () => {
   const [registros, setRegistros] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [municipio, setMunicipio] = useState("");
+  const fetchData = async () => {
+    try {
+      const response = await RegistrosService.getRegistrosGanadoresMunicipio();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await RegistrosService.getRegistrosGanadoresMunicipio(
-          municipio
-        );
-
-        setRegistros(response.data.registros);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [municipio]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setMunicipio(e.target.value);
+      setRegistros(response.data.registros);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
   };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   setMunicipio(e.target.value);
+  // };
   if (loading) return <div>Cargando...</div>;
 
   return (
@@ -47,12 +42,20 @@ export const ReporteGanadores = () => {
       <h1 className="text-2xl font-bold mb-4">Reporte de Ganadores</h1>
 
       <div className="mb-4 flex justify-between">
-        <MunicipioSelectReport value={municipio} onChange={handleChange} />
+        {/* <MunicipioSelectReport value={municipio} onChange={handleChange} /> */}
+
+        <div
+          onClick={() => fetchData()}
+          className="bg-green-800 cursor-pointer hover:shadow-xl hover:bg-green-900 p-2 px-5 text-white font-medium text-md rounded-md"
+        >
+          Actualizar lista
+        </div>
 
         <GeneratePDF
           registros={registros}
           title="Listado Oficial de Ganadores"
-          municipio={municipio.toLocaleUpperCase()}
+          //municipio={municipio.toLocaleUpperCase()}
+          municipio={""}
         />
       </div>
 
@@ -63,6 +66,7 @@ export const ReporteGanadores = () => {
             <tr className="bg-gray-100">
               <th className="py-2 px-4 border">Nombre</th>
               <th className="py-2 px-4 border">Cédula</th>
+              <th className="py-2 px-4 border">Telefono</th>
               <th className="py-2 px-4 border">Premio</th>
               <th className="py-2 px-4 border">Municipio</th>
             </tr>
@@ -74,6 +78,7 @@ export const ReporteGanadores = () => {
                   {registro.nombre}
                 </td>
                 <td className="py-2 px-4 border">{registro.cedula}</td>
+                <td className="py-2 px-4 border">{registro.telefono}</td>
                 <td className="py-2 px-4 border">
                   {formatPremio(registro.premio)}
                 </td>

@@ -142,14 +142,11 @@ class RegistrosService {
     return response;
   }
 
-  public async getRegistrosGanadoresMunicipio(
-    municipio: any
-  ): Promise<AxiosResponse<GetRegistrosResponse>> {
-    const jsonPar: any = { municipio };
-    const params = new URLSearchParams(jsonPar);
-    const response = await http.get<any>(
-      `/registros/getGanadoresMunicipio?${params}`
-    );
+  public async getRegistrosGanadoresMunicipio(): // municipio: any
+  Promise<AxiosResponse<GetRegistrosResponse>> {
+    // const jsonPar: any = { municipio };
+    // const params = new URLSearchParams(jsonPar);
+    const response = await http.get<any>(`/registros/getGanadoresMunicipio`);
     return response;
   }
 
