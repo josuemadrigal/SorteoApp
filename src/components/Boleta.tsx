@@ -15,9 +15,9 @@ export const Boleta = ({ item, index }: Props) => {
     <div className="w-full p-1 items-center justify-center">
       <motion.div
         className="bg-blue-100 rounded-md max-w-xl shadow-sm overflow-hidden border border-gray-200 relative min-h-40 items-center justify-center  flex flex-col"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.5 }}
+        initial={{ scale: 0.8, opacity: 0, rotate: 500 }}
+        animate={{ scale: 1, opacity: 1, rotate: 0 }}
+        transition={{ duration: 3 }}
       >
         {/* <div className="absolute -top-2 -right-2 z-10 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md">
           <span className="font-bold text-sm">{index + 1}</span>
@@ -28,7 +28,7 @@ export const Boleta = ({ item, index }: Props) => {
             className=" text-center items-center"
             initial={{ x: -10, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.2 }}
+            transition={{ delay: 2 }}
           >
             <h3 className="text-5xl text-center uppercase font-black text-blue-900 line-clamp-3">
               {item.nombre}

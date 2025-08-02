@@ -31,7 +31,7 @@ const RenderBoletasComponent = ({ items }: Props) => {
   }, [items]);
 
   return (
-    <div className="grid grid-cols-1 justify-center items-center ">
+    <div className="flex justify-center items-center min-h-96 ">
       {renderedItems.map((item, index) => (
         <Boleta key={index} item={item} index={index} />
       ))}
