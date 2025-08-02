@@ -46,10 +46,10 @@ export const Boleta = ({ item, index }: Props) => {
               {codigoVerificacion}
             </p>
           </motion.div>
-          <p className="text-xs">
+          {/* <p className="text-xs">
             Esto solo es para pruebas-{" "}
             <span className="text-red-600">{item.municipio} </span>
-          </p>
+          </p> */}
         </div>
       </motion.div>
     </div>
