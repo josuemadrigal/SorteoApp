@@ -264,6 +264,35 @@ const Consulta = () => {
     }
   };
 
+  const actualizarRegistrosMujer = async (registros: Registro[]) => {
+    console.log("GUARDANDO ----");
+    console.log(registros);
+    if (registros.length > 0) {
+      for (const element of registros) {
+        const status = 1;
+
+        try {
+          await registrosService.startUpdate(
+            String(element.cedula),
+            status,
+            "mujer",
+            "-",
+            "mujer",
+            String(element.telefono),
+            String(element.nombre),
+            municipioT
+          );
+          console.log(`Registro actualizado: ${element.nombre}`);
+        } catch (error) {
+          console.error(
+            `Error actualizando registro ${element.cedula}:`,
+            error
+          );
+        }
+      }
+    }
+  };
+
   const filteredCheckList = checkList.filter((item) =>
     checkedItems.has(String(item.cedula))
   );
@@ -321,18 +350,33 @@ const Consulta = () => {
 
         {/* Botón de reinicio */}
         {terminado && (
-          <button
-            onClick={() => {
-              setTerminado(false);
-              setIsSearchButtonDisabled(false);
-              setCheckList([]);
-              setCheckedItems(new Set());
-              setMunicipioT("");
-            }}
-            className="bg-green-700 hover:bg-green-800 text-white mt-4 font-bold py-2 px-4 rounded-lg w-44 transition-all duration-200"
-          >
-            NUEVO SORTEO
-          </button>
+          <>
+            <button
+              onClick={() => {
+                setTerminado(false);
+                setIsSearchButtonDisabled(false);
+                setCheckList([]);
+                setCheckedItems(new Set());
+                setMunicipioT("");
+              }}
+              className="bg-green-700 hover:bg-green-800 text-white mt-4 font-bold py-2 px-4 rounded-lg w-44 transition-all duration-200"
+            >
+              NUEVO SORTEO
+            </button>
+            <button
+              onClick={() => {
+                actualizarRegistrosMujer(checkList);
+                setTerminado(false);
+                setIsSearchButtonDisabled(false);
+                setCheckList([]);
+                setCheckedItems(new Set());
+                setMunicipioT("");
+              }}
+              className="bg-red-900 hover:bg-red-950 text-white mt-4 font-bold py-2 px-4 rounded-lg w-44 transition-all duration-200"
+            >
+              No valido{" "}
+            </button>
+          </>
         )}
 
         <div className="flex space-x-3 bottom-0 right-0 absolute">
