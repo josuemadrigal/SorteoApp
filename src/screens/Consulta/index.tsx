@@ -1,24 +1,12 @@
 import React, { useEffect, useState } from "react";
 // import GifTombola from "../../../public/gif-TOMBOLA.gif";
-import { SearchIcon, SaveIcon } from "@heroicons/react/solid";
 import { useMutation } from "react-query";
-import { useForm } from "react-hook-form";
+
 import registrosService from "../../services/RegistrosService";
 import Swal from "sweetalert2";
 import { RenderBoletas } from "../../components/RenderBoletas";
-import PremioSelect from "./components/PremioSelect";
-import MunicipioSelect from "./components/MunicipioSelect";
-import CustomButton from "./components/CustomButton";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
-interface FormValues {
-  municipio: string;
-  premio: string;
-  status: number;
-  cantidad: number;
-  ronda: string;
-  cedula: string;
-}
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 interface Registro {
   cedula: any;
@@ -26,44 +14,28 @@ interface Registro {
   telefono: string;
 }
 
-interface GetRegistrosResponse {
-  registros: Registro[];
+// Definir la interfaz local para evitar conflictos
+interface ApiRegistrosResponse {
+  ok: boolean;
+  registro?: Registro; // Cambiado: ahora es un solo registro
+  registros?: Registro[]; // Mantener por compatibilidad
+  municipio?: string;
+  msg?: string;
 }
 
 const Consulta = () => {
-  // const { getValues, register } = useForm<FormValues>({
-  //   defaultValues: {
-  //     municipio: "",
-  //     premio: "",
-  //     status: 2,
-  //     cantidad: 4,
-  //     ronda: "1",
-  //   },
-  // });
-  const [ronda, setRonda] = useState("1");
   const [guardado, setGuardado] = useState(true);
-  const [rondaId, setRondaId] = useState(0);
   const [checkList, setCheckList] = useState<Registro[]>([]);
   const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
   const [unCheckList, setUnCheckList] = useState<string[]>([]);
   const [premio, setPremio] = useState("Motor");
   const [premioSlug, setPremioSlug] = useState("motor");
-  const [premioTitle, setPremioTitle] = useState("");
   const [municipioT, setMunicipioT] = useState("");
   const [isSearchButtonDisabled, setIsSearchButtonDisabled] = useState(false);
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
-  const [premios, setPremios] = useState<
-    { slug_premio: string; premio: string }[]
-  >([]);
-  const [cantiRonda, setCantiRonda] = useState("");
-
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [terminado, setTerminado] = useState(false);
-
-  const handleReload = () => {
-    window.location.reload();
-  };
 
   const toggleFullscreen = () => {
     if (!document.fullscreenElement) {
@@ -81,7 +53,6 @@ const Consulta = () => {
     }
   };
 
-  // Escuchar cambios en el estado de pantalla completa
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -101,7 +72,6 @@ const Consulta = () => {
     }
   }, [isFullscreen]);
 
-  // Puedes agregar esto en tu archivo de componentes
   const FullscreenButton = ({
     isFullscreen,
     onClick,
@@ -148,60 +118,66 @@ const Consulta = () => {
     </button>
   );
 
-  useEffect(() => {
-    const fetchPremios = async () => {
-      try {
-        const response = await registrosService.getPremios();
-        if (response.data.ok) {
-          setPremios(response.data.premios);
-        }
-      } catch (error) {
-        console.error("Error fetching premios", error);
-      }
-    };
-
-    fetchPremios();
-  }, []);
-
-  useEffect(() => {
-    fetchRonda();
-  }, [premio, municipioT]);
-
-  const handleMunicipio = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setMunicipioT(event.target.value);
-    setPremioTitle(premio);
-    setPremio(premio);
+  const municipioHandle = (municipio: string) => {
+    setMunicipioT(municipio);
+    // Reset estados cuando se cambie municipio
+    setTerminado(false);
     setIsSearchButtonDisabled(false);
-    setIsSaveButtonDisabled(true);
+    setCheckList([]);
+    setCheckedItems(new Set());
   };
 
-  const handlePremio = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedPremioValue = event.target.value;
-    const selectedPremio = premios.find(
-      (item) => item.slug_premio === selectedPremioValue
-    );
-
-    if (selectedPremio) {
-      setPremioTitle(selectedPremio.premio);
-      setPremio(selectedPremioValue);
-      setPremioSlug(selectedPremio.slug_premio);
-    }
-    setIsSearchButtonDisabled(false);
-    setIsSaveButtonDisabled(true);
-  };
-
-  const { mutate: getRegistros } = useMutation<GetRegistrosResponse, Error>(
+  const { mutate: getRegistros } = useMutation(
     async () => {
-      const response = await registrosService.getRegistros();
-      console.log("Response", response);
-      return response.data;
+      if (!municipioT) {
+        throw new Error("Debe seleccionar un municipio");
+      }
+      console.log("Buscando registros para municipio:", municipioT);
+      const response = await registrosService.getRegistros(municipioT);
+      console.log("Response completa:", response);
+      console.log("Response.data:", response.data);
+      return response.data as ApiRegistrosResponse;
     },
     {
-      onSuccess: (data) => {
-        const registros = data.registros || [];
+      onSuccess: (data: ApiRegistrosResponse) => {
+        console.log("Datos recibidos:", data);
+
+        // Verificar si la respuesta es exitosa
+        if (!data.ok) {
+          throw new Error(data.msg || "Error en la respuesta del servidor");
+        }
+
+        // Manejar tanto el formato nuevo (un registro) como el viejo (múltiples)
+        let registros: Registro[] = [];
+
+        if (data.registro) {
+          // Formato nuevo: un solo registro
+          registros = [data.registro];
+          console.log("Registro único encontrado:", data.registro);
+        } else if (data.registros && Array.isArray(data.registros)) {
+          // Formato viejo: múltiples registros
+          registros = data.registros;
+          console.log("Múltiples registros encontrados:", data.registros);
+        }
+
+        console.log("Registros procesados:", registros);
+
+        if (registros.length === 0) {
+          Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: `No se encontraron registros para ${municipioT}`,
+            text: "Intenta con otro municipio",
+            showConfirmButton: true,
+          });
+          setIsLoading(false);
+          setIsSearchButtonDisabled(false);
+          return;
+        }
+
         setCheckList(registros);
         const checkedNames = new Set(
-          registros.map((registro) => registro.cedula)
+          registros.map((registro) => String(registro.cedula))
         );
         setCheckedItems(checkedNames);
 
@@ -212,77 +188,50 @@ const Consulta = () => {
         setIsLoading(false);
         setTerminado(true);
       },
-      onError: () => {
+      onError: (error) => {
+        console.error("Error en la consulta:", error);
+
+        let errorMessage = "Error al obtener los registros";
+        if (error.message.includes("404")) {
+          errorMessage = `No hay registros disponibles para ${municipioT}`;
+        } else if (error.message.includes("400")) {
+          errorMessage = "Municipio no válido";
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
         Swal.fire({
           position: "center",
           icon: "error",
-          title: "Error al obtener los registros",
-          showConfirmButton: false,
-          timer: 7000,
+          title: errorMessage,
+          showConfirmButton: true,
         });
+
         setIsSearchButtonDisabled(false);
+        setIsLoading(false);
       },
     }
   );
 
-  const fetchRonda = async () => {
-    try {
-      const response = await registrosService.getRonda(municipioT, premio);
-      setCantiRonda(response.data.ronda[0]?.cantidad);
-      setRonda(response.data.ronda[0]?.ronda);
-      setRondaId(response.data.ronda[0]?.id);
-    } catch (error) {
-      console.error("Error fetching premios", error);
-    }
-  };
-
   const buscarRegistros = async () => {
+    if (!municipioT) {
+      Swal.fire({
+        position: "center",
+        icon: "warning",
+        title: "Selecciona un municipio",
+        text: "Haz clic en uno de los cuadros de colores",
+        showConfirmButton: true,
+      });
+      return;
+    }
+
     setIsLoading(true);
-
     setGuardado(true);
+    setCheckList([]); // Limpiar lista anterior
+    setCheckedItems(new Set()); // Limpiar checked items
+
+    console.log("Iniciando búsqueda para municipio:", municipioT);
     getRegistros();
-    setIsSearchButtonDisabled(false);
-    setIsSaveButtonDisabled(true);
-  };
-
-  const ActualizarRegistros = async () => {
-    setIsSaveButtonDisabled(true);
-
-    // console.log("Del boton guardar");
-    // console.log(checkList);
-    // for (const element of checkList) {
-    //   const status = checkedItems.has(element.cedula) ? 3 : 0;
-    //   const premioText = checkedItems.has(element.cedula)
-    //     ? premio
-    //     : "No presente";
-
-    //   await registrosService.startUpdate(
-    //     String(element.cedula),
-    //     status,
-    //     premioText,
-    //     ronda,
-    //     premioSlug,
-    //     String(element.telefono),
-    //     String(element.nombre),
-    //     municipioT
-    //   );
-    // }
-
-    // await registrosService.updateRonda(
-    //   rondaId,
-    //   "no activa",
-    //   municipioT,
-    //   ronda,
-    //   premio
-    // );
-    setCantiRonda("");
-    setRonda("1");
-    setPremio("");
-    setCheckList([]);
-    setCheckedItems(new Set());
-    setUnCheckList([]);
-    setIsSearchButtonDisabled(true);
-    setGuardado(true);
   };
 
   const autoActualizarRegistros = async (registros: Registro[]) => {
@@ -293,33 +242,43 @@ const Consulta = () => {
         const status = 3;
         const premioText = premio;
 
-        await registrosService.startUpdate(
-          String(element.cedula),
-          status,
-          premioText,
-          ronda,
-          premioSlug,
-          String(element.telefono),
-          String(element.nombre),
-          municipioT
-        );
+        try {
+          await registrosService.startUpdate(
+            String(element.cedula),
+            status,
+            premioText,
+            "-",
+            premioSlug,
+            String(element.telefono),
+            String(element.nombre),
+            municipioT
+          );
+          console.log(`Registro actualizado: ${element.nombre}`);
+        } catch (error) {
+          console.error(
+            `Error actualizando registro ${element.cedula}:`,
+            error
+          );
+        }
       }
-
-      // await registrosService.updateRonda(
-      //   rondaId,
-      //   "no activa",
-      //   municipioT,
-      //   ronda,
-      //   premio
-      // );
     }
   };
 
   const filteredCheckList = checkList.filter((item) =>
-    checkedItems.has(item.cedula)
+    checkedItems.has(String(item.cedula))
   );
 
-  const rondaTexto = ronda && ronda !== "1" ? `(Ronda #${ronda})` : "";
+  // Función para obtener el nombre del municipio
+  const getMunicipioNombre = (municipio: string) => {
+    const nombres = {
+      "la-romana": "La Romana",
+      "villa-hermosa": "Villa Hermosa",
+      guaymate: "Guaymate",
+      caleta: "Caleta",
+      cumayasa: "Cumayasa",
+    };
+    return nombres[municipio as keyof typeof nombres] || municipio;
+  };
 
   return (
     <div className="flex flex-col md:flex-row p-2 bg-emerald-900 min-h-screen max-h-screen overflow-hidden">
@@ -331,12 +290,14 @@ const Consulta = () => {
       <div className="w-16 md:w-56 sm:h-[94vh] bg-white shadow-md rounded-lg p-4  md:relative overflow-hidden sticky">
         <img src="/gif-TOMBOLA.gif" alt="TOMBOLA" className="w-[90%] mx-auto" />
 
+        {/* Mostrar municipio seleccionado */}
+
         <button
-          disabled={isLoading || terminado}
+          disabled={isLoading || terminado || !municipioT}
           onClick={buscarRegistros}
           className={`
         ${
-          isLoading || terminado
+          isLoading || terminado || !municipioT
             ? "bg-gray-400 cursor-not-allowed opacity-50"
             : "bg-lime-500 hover:bg-lime-600 cursor-pointer"
         } 
@@ -358,36 +319,76 @@ const Consulta = () => {
           )}
         </button>
 
-        {/* <h2
-          className="bg-sky-100 mt-10 text-sky-400 hover:bg-sky-800 cursor-pointer text-center text-sm p-3 rounded-md "
-          onClick={handleReload}
-        >
-          Cancelar
-        </h2> */}
+        {/* Botón de reinicio */}
+        {terminado && (
+          <button
+            onClick={() => {
+              setTerminado(false);
+              setIsSearchButtonDisabled(false);
+              setCheckList([]);
+              setCheckedItems(new Set());
+              setMunicipioT("");
+            }}
+            className="bg-green-700 hover:bg-green-800 text-white mt-4 font-bold py-2 px-4 rounded-lg w-44 transition-all duration-200"
+          >
+            NUEVO SORTEO
+          </button>
+        )}
+
+        <div className="flex space-x-3 bottom-0 right-0 absolute">
+          <div
+            className={`w-5 h-5 rounded-md cursor-pointer transition-all bg-gray-200 `}
+            onClick={() => municipioHandle("la-romana")}
+            title="La Romana"
+          />
+          <div
+            className={`w-5 h-5 rounded-md cursor-pointer transition-all bg-gray-200 `}
+            onClick={() => municipioHandle("villa-hermosa")}
+            title="Villa Hermosa"
+          />
+          <div
+            className={`w-5 h-5 rounded-md cursor-pointer transition-all bg-gray-200 `}
+            onClick={() => municipioHandle("guaymate")}
+            title="Guaymate"
+          />
+          <div
+            className={`w-5 h-5 rounded-md cursor-pointer transition-all bg-gray-200 `}
+            onClick={() => municipioHandle("caleta")}
+            title="Caleta"
+          />
+          <div
+            className={`w-5 h-5 rounded-md cursor-pointer transition-all bg-gray-200 `}
+            onClick={() => municipioHandle("cumayasa")}
+            title="Cumayasa"
+          />
+        </div>
       </div>
 
       {/* Main Content */}
       <div className="md:ml-5 w-80 md:w-[calc(100%-10rem)] min-h-full  bg-green-800 rounded-lg p-4 overflow-hidden sticky pb-20">
         <div className="w-full bg-blue-600 min-h-[50px] py-2 px-0 rounded-t-lg">
-          <div className="text-white text-center uppercase text-xl md:text-3xl flex flex-row items-center justify-center">
-            GANADORES
-            <span className="font-bold text-2xl md:text-4xl ml-5">
-              {cantiRonda ? premioTitle : ""}
-            </span>
-            <span className="font-bold text-2xl md:text-xl ml-5">
-              {rondaTexto}
-            </span>
+          <div className="text-white text-center uppercase font-bold text-xl md:text-3xl flex flex-row items-center justify-center">
+            GANADOR DE UN MOTOR
           </div>
         </div>
 
-        <div className="flex justify-center w-full    bg-green-800 rounded-b-lg max-h-[100%]  overflow-y-scroll pb-60">
-          {filteredCheckList.length <= 0 && isSearchButtonDisabled ? (
-            <p className="opacity-50 uppercase tracking-wider mt-40 text-gray-300">
-              Presiona el botón buscar
+        <div className="flex justify-center w-full bg-green-800 rounded-b-lg max-h-[100%] overflow-y -scroll pb-60">
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center mt-40">
+              <div className="animate-spin h-12 w-12 border-4 border-white border-t-transparent rounded-full"></div>
+              <p className="text-white mt-4">Buscando ganador...</p>
+            </div>
+          ) : filteredCheckList.length <= 0 && !terminado ? (
+            <p className="opacity-25 uppercase tracking-wider mt-40 text-gray-300">
+              Presiona sortear
             </p>
-          ) : (
+          ) : filteredCheckList.length > 0 ? (
             <RenderBoletas items={filteredCheckList} />
-          )}
+          ) : terminado && filteredCheckList.length === 0 ? (
+            <p className="opacity-50 uppercase tracking-wider mt-40 text-gray-300">
+              No se encontraron registros
+            </p>
+          ) : null}
         </div>
       </div>
     </div>

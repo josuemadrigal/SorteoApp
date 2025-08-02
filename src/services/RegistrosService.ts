@@ -95,8 +95,26 @@ class RegistrosService {
   //   return response;
   // }
 
-  public async getRegistros(): Promise<AxiosResponse<GetRegistrosResponse>> {
-    const response = await http.get<GetRegistrosResponse>(`/registros`);
+  // public async getRegistros(
+  //   status: number,
+  //   municipio: string,
+  //   cantidad: number
+  // ): Promise<AxiosResponse<GetRegistrosResponse>> {
+  //   const jsonPar: any = { status, municipio, cantidad };
+  //   const params = new URLSearchParams(jsonPar);
+  //   const response = await http.get<GetRegistrosResponse>(
+  //     `/registros?${params}`
+  //   );
+  //   return response;
+  // }
+
+  public async getRegistros(
+    municipio: string
+  ): Promise<AxiosResponse<GetRegistrosResponse>> {
+    const params = new URLSearchParams({ municipio });
+    const response = await http.get<GetRegistrosResponse>(
+      `/registros?${params}`
+    );
     return response;
   }
   public async getRegistroByCedula(
